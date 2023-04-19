@@ -50,6 +50,16 @@ Public Module Keywords
     Public ReadOnly PublicKeyword As New KeywordToken("Public")
 
     ''' <summary>
+    '''     The <c>ReadOnly</c> keyword.
+    ''' </summary>
+    Public ReadOnly ReadOnlyKeyword As New KeywordToken("ReadOnly")
+
+    ''' <summary>
+    '''     The <c>Shared</c> keyword.
+    ''' </summary>
+    Public ReadOnly SharedKeyword As New KeywordToken("Shared")
+
+    ''' <summary>
     '''     The <c>True</c> keyword.
     ''' </summary>
     Public ReadOnly TrueKeyword As New KeywordToken("True")

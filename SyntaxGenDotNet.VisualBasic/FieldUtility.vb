@@ -10,6 +10,15 @@ Friend Module FieldUtility
     Public Sub WriteModifiers(declaration As SyntaxNode, fieldInfo As FieldInfo)
         If fieldInfo.IsLiteral Then
             declaration.AddChild(ConstKeyword)
+            Return
+        End If
+        
+        If fieldInfo.IsStatic Then
+            declaration.AddChild(SharedKeyword)
+        End If
+        
+        If fieldInfo.IsInitOnly Then
+            declaration.AddChild(ReadOnlyKeyword)
         End If
     End Sub
 
