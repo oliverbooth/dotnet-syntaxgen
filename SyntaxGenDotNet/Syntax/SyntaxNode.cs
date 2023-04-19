@@ -11,19 +11,19 @@ public class SyntaxNode
     ///     Gets or sets the children of the syntax node.
     /// </summary>
     /// <value>The children of the syntax node.</value>
-    public virtual IReadOnlyList<SyntaxNode> Children { get; set; } = ArraySegment<SyntaxNode>.Empty;
+    public IReadOnlyList<SyntaxNode> Children { get; set; } = ArraySegment<SyntaxNode>.Empty;
 
     /// <summary>
     ///     Gets or sets the leading whitespace.
     /// </summary>
     /// <value>The leading whitespace.</value>
-    public virtual WhitespaceTrivia LeadingWhitespace { get; set; } = WhitespaceTrivia.None;
+    public WhitespaceTrivia LeadingWhitespace { get; set; } = WhitespaceTrivia.None;
 
     /// <summary>
     ///     Gets or sets the parent syntax node.
     /// </summary>
     /// <value>The parent syntax node.</value>
-    public virtual SyntaxNode? Parent { get; set; }
+    public SyntaxNode? Parent { get; set; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether to strip trailing whitespace from the preceding syntax node.
@@ -32,7 +32,7 @@ public class SyntaxNode
     ///     <see langword="true" /> if trailing whitespace should be stripped from the preceding syntax node; otherwise,
     ///     <see langword="false" />.
     /// </value>
-    public virtual bool StripTrailingWhitespace { get; set; }
+    public bool StripTrailingWhitespace { get; set; }
 
     /// <summary>
     ///     Gets or sets the textual representation of the syntax node.
@@ -64,7 +64,7 @@ public class SyntaxNode
     ///     Gets or sets the trailing whitespace.
     /// </summary>
     /// <value>The trailing whitespace.</value>
-    public virtual WhitespaceTrivia TrailingWhitespace { get; set; } = WhitespaceTrivia.Space;
+    public WhitespaceTrivia TrailingWhitespace { get; set; } = WhitespaceTrivia.Space;
 
     /// <summary>
     ///     Adds a child syntax node to the syntax node.
