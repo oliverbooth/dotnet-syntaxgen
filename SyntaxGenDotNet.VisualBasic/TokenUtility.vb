@@ -1,0 +1,31 @@
+﻿
+Imports SyntaxGenDotNet.Syntax.Tokens
+
+Public Module TokenUtility
+    ''' <summary>
+    '''     Creates a literal token from a value.
+    ''' </summary>
+    ''' <param name="value">The value.</param>
+    ''' <returns>The literal token.</returns>
+    Public Function CreateLiteralToken(ByVal value As Object) As SyntaxToken
+        If value Is Nothing Then
+            Return NothingKeyword
+        ElseIf TypeOf value Is Boolean Then
+            Return If (DirectCast(value, Boolean), TrueKeyword, FalseKeyword)
+        ElseIf TypeOf value Is String Then
+            Return New StringLiteralToken(DirectCast(value, String))
+        ElseIf TypeOf value Is Char Then
+            Return New CharLiteralToken(DirectCast(value, Char))
+        ElseIf TypeOf value Is Integer Then
+            Return New IntegerLiteralToken(DirectCast(value, Integer))
+        ElseIf TypeOf value Is Long Then
+            Return New IntegerLiteralToken(DirectCast(value, Long))
+        ElseIf TypeOf value Is Double Then
+            Return New FloatingPointLiteralToken(DirectCast(value, Double))
+        ElseIf TypeOf value Is Single Then
+            Return New VisualBasicSingleLiteralToken(DirectCast(value, Single))
+        Else
+            Return New LiteralToken(value.ToString())
+        End If
+    End Function
+End Module

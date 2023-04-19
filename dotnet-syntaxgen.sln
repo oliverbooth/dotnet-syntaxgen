@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CSharp", "SyntaxGenDotNet.CSharp\SyntaxGenDotNet.CSharp.csproj", "{BF741F42-243C-4E4F-940C-B7C340DBA874}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SyntaxGenDotNet.VisualBasic", "SyntaxGenDotNet.VisualBasic\SyntaxGenDotNet.VisualBasic.vbproj", "{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,30 @@ Global
 		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x64.Build.0 = Release|Any CPU
 		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x86.ActiveCfg = Release|Any CPU
 		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x86.Build.0 = Release|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Debug|x64.Build.0 = Debug|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Debug|x86.Build.0 = Debug|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Release|x64.ActiveCfg = Release|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Release|x64.Build.0 = Release|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF741F42-243C-4E4F-940C-B7C340DBA874}.Release|x86.Build.0 = Release|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Debug|x64.Build.0 = Debug|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x64.ActiveCfg = Release|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x64.Build.0 = Release|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
