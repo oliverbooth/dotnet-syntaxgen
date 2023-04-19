@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxGenDotNet", "SyntaxGenDotNet\SyntaxGenDotNet.csproj", "{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66085CE2-AEC1-40EA-A723-3E85132D37E4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		branding_Banner.png = branding_Banner.png
+		branding_Social.png = branding_Social.png
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Debug|x64.Build.0 = Debug|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Debug|x86.Build.0 = Debug|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x64.ActiveCfg = Release|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x64.Build.0 = Release|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x86.ActiveCfg = Release|Any CPU
+		{EBAAE0E7-11DC-4B87-ADF5-61B18A1FCACC}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
