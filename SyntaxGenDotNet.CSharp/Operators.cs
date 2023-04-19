@@ -31,5 +31,5 @@ internal static class Operators
     /// <summary>
     ///     The <c>;</c> operator.
     /// </summary>
-    public static readonly OperatorToken Semicolon = new(";") {LeadingWhitespace = WhitespaceTrivia.None};
+    public static readonly OperatorToken Semicolon = new(";");
 }
