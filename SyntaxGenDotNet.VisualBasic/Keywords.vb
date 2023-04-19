@@ -1,7 +1,7 @@
 ﻿Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Tokens
 
-Public Module Keywords
+Friend Module Keywords
     ''' <summary>
     '''     The <c>As</c> keyword.
     ''' </summary>
