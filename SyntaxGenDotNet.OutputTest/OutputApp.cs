@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using SyntaxGenDotNet.CIL;
+﻿using SyntaxGenDotNet.CIL;
 using SyntaxGenDotNet.CppCLI;
 using SyntaxGenDotNet.CSharp;
 using SyntaxGenDotNet.FSharp;
@@ -13,7 +12,6 @@ internal static class OutputApp
 {
     public static void Run()
     {
-        var field = typeof(MyClass).GetField("PublicConstantUnsignedInteger", (BindingFlags)(-1))!;
         var generators = new ISyntaxGenerator[]
         {
             new CSharpSyntaxGenerator(),
@@ -23,6 +21,7 @@ internal static class OutputApp
             new FSharpSyntaxGenerator()
         };
 
+        var type = typeof(MyEnum);
         foreach (ISyntaxGenerator generator in generators)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -31,7 +30,7 @@ internal static class OutputApp
             Console.WriteLine($@"--- {generator.LanguageName} {hyphens}");
             Console.ResetColor();
 
-            var declaration = generator.GenerateFieldDeclaration(field);
+            var declaration = generator.GenerateEnumDeclaration(type);
             WritePlainTextSyntax(declaration);
             Console.WriteLine();
         }
