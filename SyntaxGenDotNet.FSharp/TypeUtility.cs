@@ -20,7 +20,9 @@ internal sealed class TypeUtility
         [typeof(ushort)] = new KeywordToken("uint16"),
         [typeof(uint)] = new KeywordToken("uint"),
         [typeof(ulong)] = new KeywordToken("uint64"),
-        [typeof(void)] = new KeywordToken("unit")
+        [typeof(void)] = new KeywordToken("unit"),
+        [typeof(object)] = new KeywordToken("obj"),
+        [typeof(string)] = new KeywordToken("string"),
     };
 
     /// <summary>
