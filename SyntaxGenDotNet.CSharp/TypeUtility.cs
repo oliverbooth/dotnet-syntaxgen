@@ -366,7 +366,6 @@ internal sealed class TypeUtility
         }
 
         var arguments = new List<Expression>();
-        var bindings = new List<MemberAssignment>();
         var constructor = typeof(StructLayoutAttribute).GetConstructor(new[] {typeof(LayoutKind)})!;
         ConstantExpression structLayout = mask switch
         {
@@ -376,7 +375,7 @@ internal sealed class TypeUtility
         };
 
         arguments.Add(structLayout);
-        var instance = Expression.New(constructor, arguments);
+        NewExpression instance = Expression.New(constructor, arguments);
 
         if (!hasNonAnsiCharset)
         {
@@ -393,9 +392,9 @@ internal sealed class TypeUtility
 
         var charSetExpression = Expression.Constant(charSet);
         var charSetField = typeof(StructLayoutAttribute).GetField(nameof(StructLayoutAttribute.CharSet))!;
-        bindings.Add(Expression.Bind(charSetField, charSetExpression));
+        MemberAssignment bind = Expression.Bind(charSetField, charSetExpression);
 
-        var attributeExpression = Expression.MemberInit(instance, bindings);
+        var attributeExpression = Expression.MemberInit(instance, bind);
         WriteCustomAttribute(node, attributeExpression);
     }
 }
