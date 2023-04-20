@@ -57,6 +57,11 @@ internal sealed class TypeUtility
     /// <param name="type">The type for which to write the attributes.</param>
     public static void WriteCustomAttributes(TypeDeclaration node, Type type)
     {
+        if (type.IsSubclassOf(typeof(Attribute)))
+        {
+            WriteAttributeUsage(node, type);
+        }
+
         WriteSerializableAttribute(node, type);
         WriteStructLayout(node, type);
     }
@@ -256,13 +261,45 @@ internal sealed class TypeUtility
         }
     }
 
+    private static void WriteAttributeUsage(SyntaxNode node, Type type)
+    {
+        if (type.GetCustomAttribute<AttributeUsageAttribute>(false) is not { } attributeUsageAttribute)
+        {
+            return;
+        }
+
+        Type[] constructorArgumentTypes = {typeof(AttributeTargets)};
+        var constructor = typeof(AttributeUsageAttribute).GetConstructor(constructorArgumentTypes)!;
+        var validOnExpression = Expression.Constant(attributeUsageAttribute.ValidOn);
+        var constructorExpression = Expression.New(constructor, validOnExpression);
+        var bindings = new List<MemberBinding>();
+        var allowMultipleProperty = typeof(AttributeUsageAttribute).GetProperty(nameof(AttributeUsageAttribute.AllowMultiple))!;
+        var inheritedProperty = typeof(AttributeUsageAttribute).GetProperty(nameof(AttributeUsageAttribute.Inherited))!;
+
+        if (attributeUsageAttribute.AllowMultiple)
+        {
+            var allowMultipleExpression = Expression.Constant(attributeUsageAttribute.AllowMultiple);
+            bindings.Add(Expression.Bind(allowMultipleProperty, allowMultipleExpression));
+        }
+
+        if (!attributeUsageAttribute.Inherited)
+        {
+            var inheritedExpression = Expression.Constant(attributeUsageAttribute.Inherited);
+            bindings.Add(Expression.Bind(inheritedProperty, inheritedExpression));
+        }
+
+        var attributeExpression = Expression.MemberInit(constructorExpression, bindings);
+        WriteCustomAttribute(node, attributeExpression);
+    }
+
     private static void WriteBindings(SyntaxNode node, MemberInitExpression memberInitExpression, TypeWriteOptions options)
     {
         node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
 
-        for (var index = 0; index < memberInitExpression.Bindings.Count; index++)
+        ReadOnlyCollection<MemberBinding> bindings = memberInitExpression.Bindings;
+        for (var index = 0; index < bindings.Count; index++)
         {
-            var binding = memberInitExpression.Bindings[index];
+            var binding = bindings[index];
             if (binding is not MemberAssignment memberAssignment)
             {
                 continue;
@@ -276,7 +313,12 @@ internal sealed class TypeUtility
                 node.AddChild(Operators.Dot);
             }
 
-            node.AddChild(TokenUtility.CreateLiteralToken(memberAssignment.Expression));
+            node.AddChild(TokenUtility.CreateLiteralToken((ConstantExpression)memberAssignment.Expression));
+
+            if (index < bindings.Count - 1)
+            {
+                node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = " "));
+            }
         }
     }
 
