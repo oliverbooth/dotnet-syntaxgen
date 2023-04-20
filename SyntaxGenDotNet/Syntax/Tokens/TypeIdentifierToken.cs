@@ -11,5 +11,6 @@ public sealed class TypeIdentifierToken : IdentifierToken
     /// <param name="identifier">The identifier.</param>
     public TypeIdentifierToken(string identifier) : base(identifier)
     {
+        TrailingWhitespace = WhitespaceTrivia.Space;
     }
 }

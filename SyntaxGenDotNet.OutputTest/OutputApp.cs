@@ -13,7 +13,7 @@ internal static class OutputApp
 {
     public static void Run()
     {
-        var field = typeof(MyClass).GetField("ProtectedInternalConstantBoolean", (BindingFlags)(-1))!;
+        var field = typeof(MyClass).GetField("ProtectedInternalConstantString", (BindingFlags)(-1))!;
         var generators = new ISyntaxGenerator[]
         {
             new CSharpSyntaxGenerator(),
