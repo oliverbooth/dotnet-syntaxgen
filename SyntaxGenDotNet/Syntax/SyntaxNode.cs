@@ -5,7 +5,7 @@ namespace SyntaxGenDotNet.Syntax;
 /// <summary>
 ///     Represents a syntax node.
 /// </summary>
-public class SyntaxNode
+public class SyntaxNode : ICloneable
 {
     /// <summary>
     ///     Gets or sets the children of the syntax node.
@@ -83,6 +83,14 @@ public class SyntaxNode
         Children = Children.Append(child).ToArray();
     }
 
+    /// <inheritdoc />
+    public virtual object Clone()
+    {
+        var clone = (SyntaxNode)MemberwiseClone();
+        clone.Children = Children.Select(c => (SyntaxNode)c.Clone()).ToArray();
+        return clone;
+    }
+
     /// <summary>
     ///     Returns a string representation of the syntax node.
     /// </summary>
@@ -90,5 +98,23 @@ public class SyntaxNode
     public override string ToString()
     {
         return Text;
+    }
+
+    /// <summary>
+    ///     Creates a clone of the syntax node with the specified modification.
+    /// </summary>
+    /// <param name="modification">The modification to apply to the clone.</param>
+    /// <returns>A clone of the syntax node with the specified modification.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="modification" /> is <see langword="null" />.</exception>
+    public virtual SyntaxNode With(Action<SyntaxNode> modification)
+    {
+        if (modification is null)
+        {
+            throw new ArgumentNullException(nameof(modification));
+        }
+
+        var clone = (SyntaxNode)Clone();
+        modification(clone);
+        return clone;
     }
 }

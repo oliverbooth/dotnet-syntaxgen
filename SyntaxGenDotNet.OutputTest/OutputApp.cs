@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using SyntaxGenDotNet.CIL;
+using SyntaxGenDotNet.CppCLI;
 using SyntaxGenDotNet.CSharp;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
@@ -12,12 +13,21 @@ internal static class OutputApp
     public static void Run()
     {
         var field = typeof(MyClass).GetField("ProtectedInternalConstantFloat", (BindingFlags)(-1))!;
-        ISyntaxGenerator[] generators = {new CSharpSyntaxGenerator(), new VisualBasicSyntaxGenerator(), new CilSyntaxGenerator()};
+        var generators = new ISyntaxGenerator[]
+        {
+            new CSharpSyntaxGenerator(),
+            new VisualBasicSyntaxGenerator(),
+            new CilSyntaxGenerator(),
+            new CppCliSyntaxGenerator()
+        };
 
         foreach (ISyntaxGenerator generator in generators)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($@"----------- {generator.LanguageName} -----------");
+            int remainingSpace = Console.WindowWidth - (generator.LanguageName.Length + 6);
+            int hyphensCount = remainingSpace / 2;
+            var hyphens = new string('-', hyphensCount);
+            Console.WriteLine($@"{hyphens} {generator.LanguageName} {hyphens}{((remainingSpace & 1) == 0 ? "" : "-")}");
             Console.ResetColor();
 
             var declaration = generator.GenerateFieldDeclaration(field);
