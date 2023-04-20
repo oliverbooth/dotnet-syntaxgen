@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace SyntaxGenDotNet;
+namespace SyntaxGenDotNet.Attributes;
 
 /// <summary>
 ///     Represents a writer for an attribute expression.

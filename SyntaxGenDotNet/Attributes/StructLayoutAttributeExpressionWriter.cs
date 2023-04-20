@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace SyntaxGenDotNet;
+namespace SyntaxGenDotNet.Attributes;
 
 /// <summary>
 ///     Represents an expression writer for <see cref="StructLayoutAttribute" />.

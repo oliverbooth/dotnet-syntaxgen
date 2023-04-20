@@ -2,6 +2,7 @@
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
+Imports SyntaxGenDotNet.Attributes
 Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Declaration
 Imports SyntaxGenDotNet.Syntax.Tokens
