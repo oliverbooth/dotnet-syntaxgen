@@ -1,6 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using SyntaxGenDotNet.Syntax;
+using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp;
@@ -44,6 +48,60 @@ internal sealed class TypeUtility
     public static bool TryGetLanguageAliasToken(Type type, [NotNullWhen(true)] out KeywordToken? alias)
     {
         return LanguageAliases.TryGetValue(type, out alias);
+    }
+
+    /// <summary>
+    ///     Writes all known supported custom attribute to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the attributes.</param>
+    /// <param name="type">The type for which to write the attributes.</param>
+    public static void WriteCustomAttributes(TypeDeclaration node, Type type)
+    {
+        WriteSerializableAttribute(node, type);
+        WriteStructLayout(node, type);
+    }
+
+    /// <summary>
+    ///     Writes a custom attribute to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the attribute.</param>
+    /// <param name="attributeExpression">The attribute expression to write.</param>
+    public static void WriteCustomAttribute(SyntaxNode node, MemberInitExpression attributeExpression)
+    {
+        var options = new TypeWriteOptions {TrimAttributeSuffix = true, WriteNamespace = true, WriteAlias = false};
+
+        // explicit creation of the open bracket token to avoid the trailing whitespace
+        // of the previous token being trimmed, as Operators.OpenBracket defaults to trimming.
+        var openBracket = new OperatorToken("[", false);
+
+        node.AddChild(openBracket);
+        WriteTypeName(node, attributeExpression.Type, options);
+
+        ReadOnlyCollection<Expression> arguments = attributeExpression.NewExpression.Arguments;
+        if (arguments.Count > 0)
+        {
+            node.AddChild(Operators.OpenParenthesis);
+
+            for (var index = 0; index < arguments.Count; index++)
+            {
+                if (arguments[index].Type.IsEnum)
+                {
+                    WriteTypeName(node, arguments[index].Type, options with {WriteNamespace = false});
+                    node.AddChild(Operators.Dot);
+                }
+
+                node.AddChild(TokenUtility.CreateLiteralToken(arguments[index]));
+            }
+
+            if (attributeExpression.Bindings.Count > 0)
+            {
+                WriteBindings(node, attributeExpression, options);
+            }
+
+            node.AddChild(Operators.CloseParenthesis);
+        }
+
+        node.AddChild(Operators.CloseBracket.With(o => o.TrailingWhitespace = WhitespaceTrivia.NewLine));
     }
 
     /// <summary>
@@ -198,6 +256,50 @@ internal sealed class TypeUtility
         }
     }
 
+    private static void WriteBindings(SyntaxNode node, MemberInitExpression memberInitExpression, TypeWriteOptions options)
+    {
+        node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
+
+        for (var index = 0; index < memberInitExpression.Bindings.Count; index++)
+        {
+            var binding = memberInitExpression.Bindings[index];
+            if (binding is not MemberAssignment memberAssignment)
+            {
+                continue;
+            }
+
+            node.AddChild(new IdentifierToken(binding.Member.Name));
+            node.AddChild(Operators.Assignment);
+            if (memberAssignment.Expression.Type.IsEnum)
+            {
+                WriteTypeName(node, memberAssignment.Expression.Type, options with {WriteNamespace = false});
+                node.AddChild(Operators.Dot);
+            }
+
+            node.AddChild(TokenUtility.CreateLiteralToken(memberAssignment.Expression));
+        }
+    }
+
+    private static void WriteFullName(SyntaxNode node, string fullName, bool trimAttributeSuffix)
+    {
+        string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
+        for (var index = 0; index < namespaces.Length; index++)
+        {
+            string name = namespaces[index];
+            if (trimAttributeSuffix && name.EndsWith("Attribute", StringComparison.Ordinal))
+            {
+                name = name[..^9];
+            }
+
+            node.AddChild(new TypeIdentifierToken(name));
+
+            if (index < namespaces.Length - 1)
+            {
+                node.AddChild(Operators.Dot);
+            }
+        }
+    }
+
     private static void WriteNamespacedTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix)
     {
         if (type.IsArray)
@@ -222,26 +324,6 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteFullName(SyntaxNode node, string fullName, bool trimAttributeSuffix)
-    {
-        string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
-        for (var index = 0; index < namespaces.Length; index++)
-        {
-            string name = namespaces[index];
-            if (trimAttributeSuffix && name.EndsWith("Attribute", StringComparison.Ordinal))
-            {
-                name = name[..^9];
-            }
-
-            node.AddChild(new TypeIdentifierToken(name));
-
-            if (index < namespaces.Length - 1)
-            {
-                node.AddChild(Operators.Dot);
-            }
-        }
-    }
-
     private static void WriteParameterVariance(SyntaxNode node, Type genericArgument)
     {
         if (!genericArgument.IsGenericParameter)
@@ -262,5 +344,58 @@ internal sealed class TypeUtility
                 node.AddChild(Keywords.OutKeyword);
                 break;
         }
+    }
+
+    private static void WriteSerializableAttribute(SyntaxNode node, Type type)
+    {
+        if ((type.Attributes & TypeAttributes.Serializable) != 0)
+        {
+            WriteCustomAttribute(node, Expression.MemberInit(Expression.New(typeof(SerializableAttribute))));
+        }
+    }
+
+    private static void WriteStructLayout(SyntaxNode node, Type type)
+    {
+        TypeAttributes mask = (type.Attributes & TypeAttributes.LayoutMask);
+        bool hasNonAnsiCharset = (type.Attributes & TypeAttributes.StringFormatMask) != TypeAttributes.AnsiClass;
+        bool writeStructLayout = mask is not (TypeAttributes.AutoLayout or TypeAttributes.SequentialLayout) || hasNonAnsiCharset;
+
+        if (!writeStructLayout)
+        {
+            return;
+        }
+
+        var arguments = new List<Expression>();
+        var bindings = new List<MemberAssignment>();
+        var constructor = typeof(StructLayoutAttribute).GetConstructor(new[] {typeof(LayoutKind)})!;
+        ConstantExpression structLayout = mask switch
+        {
+            TypeAttributes.AutoLayout => Expression.Constant(LayoutKind.Auto),
+            TypeAttributes.SequentialLayout => Expression.Constant(LayoutKind.Sequential),
+            _ => Expression.Constant(LayoutKind.Explicit)
+        };
+
+        arguments.Add(structLayout);
+        var instance = Expression.New(constructor, arguments);
+
+        if (!hasNonAnsiCharset)
+        {
+            WriteCustomAttribute(node, Expression.MemberInit(instance));
+            return;
+        }
+
+        var charSet = (type.Attributes & TypeAttributes.StringFormatMask) switch
+        {
+            TypeAttributes.UnicodeClass => CharSet.Unicode,
+            TypeAttributes.AutoClass => CharSet.Auto,
+            _ => CharSet.Ansi
+        };
+
+        var charSetExpression = Expression.Constant(charSet);
+        var charSetField = typeof(StructLayoutAttribute).GetField(nameof(StructLayoutAttribute.CharSet))!;
+        bindings.Add(Expression.Bind(charSetField, charSetExpression));
+
+        var attributeExpression = Expression.MemberInit(instance, bindings);
+        WriteCustomAttribute(node, attributeExpression);
     }
 }
