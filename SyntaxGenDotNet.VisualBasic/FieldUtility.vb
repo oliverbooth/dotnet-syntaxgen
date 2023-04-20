@@ -9,7 +9,8 @@ Friend Module FieldUtility
     ''' <param name="declaration">The declaration to write to.</param>
     ''' <param name="fieldInfo">The field whose custom attributes to write.</param>
     Public Sub WriteCustomAttributes(declaration as SyntaxNode, fieldInfo As FieldInfo)
-        Dim customAttributes = fieldInfo.GetCustomAttributes().Where(Function(a) a.GetType().IsPublic)
+        Dim customAttributes = fieldInfo.GetCustomAttributes().
+                Where(Function(a) a.GetType().IsPublic And RecognizedAttributes.Contains(a.GetType()))
 
         For Each attribute In customAttributes
             declaration.AddChild(OpenChevron)

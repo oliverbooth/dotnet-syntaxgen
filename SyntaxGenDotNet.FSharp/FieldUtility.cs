@@ -13,7 +13,9 @@ internal static class FieldUtility
     /// <param name="fieldInfo">The field whose custom attributes to write.</param>
     public static void WriteCustomAttributes(SyntaxNode declaration, FieldInfo fieldInfo)
     {
-        IEnumerable<Attribute> customAttributes = fieldInfo.GetCustomAttributes().Where(a => a.GetType().IsPublic);
+        IEnumerable<Attribute> customAttributes = fieldInfo.GetCustomAttributes()
+            .Where(a => a.GetType().IsPublic && TypeUtility.RecognizedAttributes.Contains(a.GetType()));
+
         foreach (Attribute attribute in customAttributes)
         {
             declaration.AddChild(Operators.OpenBracket);

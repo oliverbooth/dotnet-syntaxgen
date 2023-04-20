@@ -3,6 +3,8 @@ Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Tokens
 
 Friend Module TypeUtility
+    Friend ReadOnly RecognizedAttributes As New List(Of Type)() From {GetType(CLSCompliantAttribute)}
+
     Private ReadOnly LanguageAliases As New Dictionary(Of Type, KeywordToken) From {
         {GetType(Byte), New KeywordToken("Byte")},
         {GetType(SByte), New KeywordToken("SByte")},
