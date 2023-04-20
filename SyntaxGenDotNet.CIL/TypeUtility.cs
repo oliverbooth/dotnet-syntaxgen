@@ -78,6 +78,8 @@ internal sealed class TypeUtility
             return;
         }
 
+        node.AddChild(type.IsValueType ? Keywords.ValueTypeKeyword : Keywords.ClassKeyword);
+
         string fullName = type.Name;
         if (type.Namespace is not null)
         {

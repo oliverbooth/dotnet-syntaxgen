@@ -10,6 +10,11 @@ internal static class Keywords
     public static readonly KeywordToken AssemblyKeyword = new("assembly");
 
     /// <summary>
+    ///     The <c>class</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ClassKeyword = new("class");
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static readonly KeywordToken FalseKeyword = new("false");
@@ -68,4 +73,9 @@ internal static class Keywords
     ///     The <c>true</c> keyword.
     /// </summary>
     public static readonly KeywordToken TrueKeyword = new("true");
+
+    /// <summary>
+    ///     The <c>valuetype</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ValueTypeKeyword = new("valuetype");
 }
