@@ -1,6 +1,9 @@
-﻿Imports System.Diagnostics.CodeAnalysis
+﻿Imports System.Collections.ObjectModel
+Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax
+Imports SyntaxGenDotNet.Syntax.Declaration
 Imports SyntaxGenDotNet.Syntax.Tokens
 
 Friend Module TypeUtility
@@ -41,6 +44,74 @@ Friend Module TypeUtility
         languageAlias = Nothing
         Return LanguageAliases.TryGetValue(type, languageAlias)
     End Function
+
+    ''' <summary>
+    '''     Writes a custom attribute to the specified node.
+    ''' </summary>
+    ''' <param name="node">The node to which to write the attribute.</param>
+    ''' <param name="attributeExpression">The attribute expression to write.</param>
+    Public Sub WriteCustomTypeAttribute(node As SyntaxNode, attributeExpression As MemberInitExpression)
+        Dim options As New TypeWriteOptions() With {
+                .WriteAlias = False,
+                .WriteNamespace = True,
+                .TrimAttributeSuffix = True
+                }
+
+        ' explicit creation of the open bracket token to avoid the trailing whitespace
+        ' of the previous token being trimmed, as Operators.OpenChevron defaults to trimming.
+        Dim openChevron As New OperatorToken(Operators.OpenChevron.Text, False)
+
+        node.AddChild(openChevron)
+        WriteTypeName(node, attributeExpression.Type, options)
+
+        Dim arguments As ReadOnlyCollection(Of Expression) = attributeExpression.NewExpression.Arguments
+        If arguments.Count > 0 Then
+            node.AddChild(OpenParenthesis)
+
+            Dim enumOptions As New TypeWriteOptions With {
+                    .WriteAlias = False,
+                    .WriteNamespace = False,
+                    .TrimAttributeSuffix = True
+                    }
+
+            For index = 0 To arguments.Count - 1
+                Dim argument As Expression = arguments(index)
+
+                If argument.Type.IsEnum Then
+                    WriteTypeName(node, argument.Type, enumOptions)
+                    node.AddChild(Dot)
+                End If
+
+                node.AddChild(CreateLiteralToken(argument))
+            Next
+
+            If attributeExpression.Bindings.Count > 0 Then
+                WriteBindings(node, attributeExpression, options)
+            End If
+
+            node.AddChild(CloseParenthesis)
+        End If
+
+        node.AddChild(CloseChevron.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.NewLine))
+    End Sub
+
+    ''' <summary>
+    '''     Writes all known supported custom attribute to the specified node.
+    ''' </summary>
+    ''' <param name="generator">The syntax generator.</param>
+    ''' <param name="node">The node to which to write the attributes.</param>
+    ''' <param name="type">The type for which to write the attributes.</param>
+    Public Sub WriteCustomTypeAttributes(generator As SyntaxGenerator, node As TypeDeclaration, type As Type)
+        For Each writer As AttributeExpressionWriter in generator.AttributeExpressionWriters
+            Dim attributeType As Type = writer.AttributeType
+            Dim attribute As Attribute = type.GetCustomAttribute(attributeType, False)
+            Dim attributeExpression As Expression = writer.CreateAttributeExpression(type, attribute)
+
+            If attributeExpression.GetType() = GetType(MemberInitExpression) Then
+                WriteCustomTypeAttribute(node, DirectCast(attributeExpression, MemberInitExpression))
+            End If
+        Next
+    End Sub
 
     ''' <summary>
     '''     Writes the generic arguments for the specified type to the specified node.
@@ -158,6 +229,40 @@ Friend Module TypeUtility
             Case Else
                 declaration.AddChild(FriendKeyword)
         End Select
+    End Sub
+
+    Private Sub WriteBindings(node As SyntaxNode, memberInitExpression As MemberInitExpression, options As TypeWriteOptions)
+        node.AddChild(Comma.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.Space))
+
+        Dim enumOptions As New TypeWriteOptions With {
+                .WriteAlias = options.WriteAlias,
+                .WriteNamespace = False,
+                .TrimAttributeSuffix = options.TrimAttributeSuffix
+                }
+
+        Dim bindings As ReadOnlyCollection(Of MemberBinding) = memberInitExpression.Bindings
+        For index = 0 To memberInitExpression.Bindings.Count - 1
+            Dim binding As MemberBinding = memberInitExpression.Bindings(index)
+            If binding.GetType() <> GetType(MemberAssignment) Then
+                Continue For
+            End If
+
+            Dim memberAssignment = DirectCast(binding, MemberAssignment)
+            node.AddChild(New IdentifierToken(memberAssignment.Member.Name))
+            node.AddChild(Colon.With(Sub(o) o.LeadingWhitespace = WhitespaceTrivia.Space))
+            node.AddChild(Assignment.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.Space))
+
+            If memberAssignment.Expression.Type.IsEnum Then
+                WriteTypeName(node, memberAssignment.Expression.Type, enumOptions)
+                node.AddChild(Dot)
+            End If
+
+            node.AddChild(CreateLiteralToken(DirectCast(memberAssignment.Expression, ConstantExpression)))
+
+            If index < bindings.Count - 1 Then
+                node.AddChild(Comma.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.Space))
+            End If
+        Next
     End Sub
 
     Private Sub WriteNamespacedTypeName(node As SyntaxNode, type As Type, Optional trimAttributeSuffix As Boolean = False)

@@ -7,7 +7,7 @@ Public Partial Class VisualBasicSyntaxGenerator
     Public Overrides Function GenerateFieldDeclaration(fieldInfo As FieldInfo) As FieldDeclaration
         Dim fieldDeclaration As New FieldDeclaration()
 
-        WriteCustomAttributes(fieldDeclaration, fieldInfo)
+        WriteCustomFieldAttributes(fieldDeclaration, fieldInfo)
         WriteFieldVisibilityKeyword(fieldDeclaration, fieldInfo)
         WriteFieldModifiers(fieldDeclaration, fieldInfo)
 

@@ -8,6 +8,7 @@ Public Partial Class VisualBasicSyntaxGenerator
     Public Overrides Function GenerateTypeDeclaration(type As Type) As TypeDeclaration
         Dim declaration As New TypeDeclaration()
 
+        WriteCustomTypeAttributes(Me, declaration, type)
         WriteTypeVisibilityKeyword(declaration, type)
         WriteTypeModifiers(declaration, type)
         WriteTypeKind(declaration, type)

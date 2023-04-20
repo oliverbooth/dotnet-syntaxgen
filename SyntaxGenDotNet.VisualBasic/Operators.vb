@@ -20,6 +20,11 @@ Friend Module Operators
     Public ReadOnly CloseParenthesis As New OperatorToken(")")
 
     ''' <summary>
+    '''     The <c>:</c> operator.
+    ''' </summary>
+    Public ReadOnly Colon As New OperatorToken(":")
+
+    ''' <summary>
     '''     The <c>,</c> operator.
     ''' </summary>
     Public ReadOnly Comma As New OperatorToken(",")
