@@ -106,15 +106,7 @@ internal sealed class TypeUtility
     {
         if (type.IsArray)
         {
-            node.AddChild(new TypeIdentifierToken("cli"));
-            node.AddChild(Operators.ColonColon);
-            node.AddChild(new TypeIdentifierToken("array"));
-
-            node.AddChild(Operators.OpenChevron);
-            WriteTypeName(node, type.GetElementType()!);
-            node.AddChild(Operators.CloseChevron);
-
-            node.AddChild(Operators.GcTrackedPointer);
+            WriteArrayType(node, type);
             return;
         }
 
@@ -124,6 +116,34 @@ internal sealed class TypeUtility
             fullName = fullName[..fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
+        WriteFullName(node, fullName);
+
+        if (type.IsGenericType)
+        {
+            WriteGenericArguments(node, type);
+        }
+
+        if (!type.IsValueType)
+        {
+            node.AddChild(Operators.GcTrackedPointer);
+        }
+    }
+
+    private static void WriteArrayType(SyntaxNode node, Type type)
+    {
+        node.AddChild(new TypeIdentifierToken("cli"));
+        node.AddChild(Operators.ColonColon);
+        node.AddChild(new TypeIdentifierToken("array"));
+
+        node.AddChild(Operators.OpenChevron);
+        WriteTypeName(node, type.GetElementType()!);
+        node.AddChild(Operators.CloseChevron);
+
+        node.AddChild(Operators.GcTrackedPointer);
+    }
+
+    private static void WriteFullName(SyntaxNode node, string fullName)
+    {
         string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
         for (var index = 0; index < namespaces.Length; index++)
         {
@@ -134,27 +154,22 @@ internal sealed class TypeUtility
                 node.AddChild(Operators.ColonColon);
             }
         }
+    }
 
-        if (type.IsGenericType)
+    private static void WriteGenericArguments(SyntaxNode node, Type type)
+    {
+        node.AddChild(Operators.OpenChevron);
+        Type[] genericArguments = type.GetGenericArguments();
+        for (var index = 0; index < genericArguments.Length; index++)
         {
-            node.AddChild(Operators.OpenChevron);
-            Type[] genericArguments = type.GetGenericArguments();
-            for (var index = 0; index < genericArguments.Length; index++)
+            if (index > 0)
             {
-                if (index > 0)
-                {
-                    node.AddChild(Operators.Comma);
-                }
-
-                WriteTypeName(node, genericArguments[index]);
+                node.AddChild(Operators.Comma);
             }
 
-            node.AddChild(Operators.CloseChevron);
+            WriteTypeName(node, genericArguments[index]);
         }
 
-        if (!type.IsValueType)
-        {
-            node.AddChild(Operators.GcTrackedPointer);
-        }
+        node.AddChild(Operators.CloseChevron);
     }
 }
