@@ -46,7 +46,11 @@ internal sealed class TypeUtility
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
     /// <param name="type">The type for which to write the name.</param>
-    public static void WriteTypeName(SyntaxNode node, Type type)
+    /// <param name="trimAttributeSuffix">
+    ///     <see langword="true" /> to trim the "Attribute" suffix from the type name; otherwise, <see langword="false" />. The
+    ///     default is <see langword="false" />.
+    /// </param>
+    public static void WriteTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix = false)
     {
         if (type.IsGenericParameter)
         {
@@ -60,7 +64,7 @@ internal sealed class TypeUtility
             return;
         }
 
-        WriteNamespacedTypeName(node, type);
+        WriteNamespacedTypeName(node, type, trimAttributeSuffix);
         SyntaxNode last = node.Children[^1];
         if (last is OperatorToken)
         {
@@ -68,7 +72,7 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteNamespacedTypeName(SyntaxNode node, Type type)
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix = false)
     {
         if (type.IsArray)
         {
@@ -84,22 +88,36 @@ internal sealed class TypeUtility
             fullName = fullName[..fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
+        WriteFullName(node, fullName, trimAttributeSuffix);
+
+        if (type.IsGenericType)
+        {
+            WriteGenericArguments(node, type);
+        }
+    }
+
+    private static void WriteFullName(SyntaxNode node, string fullName, bool trimAttributeSuffix)
+    {
         string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
         for (var index = 0; index < namespaces.Length; index++)
         {
-            node.AddChild(new TypeIdentifierToken(namespaces[index]));
+            string name = namespaces[index];
+            if (trimAttributeSuffix && name.EndsWith("Attribute", StringComparison.Ordinal))
+            {
+                name = name[..^9];
+            }
+
+            node.AddChild(new TypeIdentifierToken(name));
 
             if (index < namespaces.Length - 1)
             {
                 node.AddChild(Operators.Dot);
             }
         }
+    }
 
-        if (!type.IsGenericType)
-        {
-            return;
-        }
-
+    private static void WriteGenericArguments(SyntaxNode node, Type type)
+    {
         node.AddChild(Operators.OpenChevron);
         Type[] genericArguments = type.GetGenericArguments();
         for (var index = 0; index < genericArguments.Length; index++)

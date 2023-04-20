@@ -13,7 +13,7 @@ Friend Module FieldUtility
 
         For Each attribute In customAttributes
             declaration.AddChild(OpenChevron)
-            WriteTypeName(declaration, attribute.GetType())
+            WriteTypeName(declaration, attribute.GetType(), True)
             declaration.AddChild(OpenParenthesis)
 
             Dim constructor As ConstructorInfo = attribute.GetType().GetConstructors()(0)

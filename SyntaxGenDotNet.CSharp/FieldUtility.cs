@@ -17,7 +17,7 @@ internal static class FieldUtility
         foreach (Attribute attribute in customAttributes)
         {
             declaration.AddChild(Operators.OpenBracket);
-            TypeUtility.WriteTypeName(declaration, attribute.GetType());
+            TypeUtility.WriteTypeName(declaration, attribute.GetType(), true);
             declaration.AddChild(Operators.OpenParenthesis);
 
             ConstructorInfo constructor = attribute.GetType().GetConstructors()[0];

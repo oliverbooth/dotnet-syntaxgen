@@ -44,7 +44,11 @@ Friend Module TypeUtility
     ''' </summary>
     ''' <param name="node">The node to which to write the type name.</param>
     ''' <param name="type">The type for which to write the name.</param>
-    Public Sub WriteTypeName(node As SyntaxNode, type As Type)
+    ''' <param name="trimAttributeSuffix">
+    '''     <see langword="true" /> to trim the "Attribute" suffix from the type name; otherwise,
+    '''     <see langword="false" />. The default is <see langword="false" />.
+    ''' </param>
+    Public Sub WriteTypeName(node As SyntaxNode, type As Type, Optional trimAttributeSuffix As Boolean = False)
         If type.IsGenericParameter Then
             node.AddChild(New IdentifierToken(type.Name))
             Return
@@ -56,10 +60,10 @@ Friend Module TypeUtility
             Return
         End If
 
-        WriteNamespacedTypeName(node, type)
+        WriteNamespacedTypeName(node, type, trimAttributeSuffix)
     End Sub
 
-    Private Sub WriteNamespacedTypeName(node As SyntaxNode, type As Type)
+    Private Sub WriteNamespacedTypeName(node As SyntaxNode, type As Type, Optional trimAttributeSuffix As Boolean = False)
         If type.IsArray Then
             WriteTypeName(node, type.GetElementType())
 
@@ -68,7 +72,7 @@ Friend Module TypeUtility
                 node.AddChild(OpenParenthesis)
                 node.AddChild(CloseParenthesis)
             Next
-            
+
             Return
         End If
 
@@ -82,28 +86,40 @@ Friend Module TypeUtility
             fullName = fullName.Substring(0, index)
         End If
 
+        WriteFullName(node, fullName, trimAttributeSuffix)
+
+        If type.IsGenericType Then
+            WriteGenericArguments(node, type)
+        End If
+    End Sub
+
+    Private Sub WriteFullName(node As SyntaxNode, fullName As String, trimAttributeSuffix As Boolean)
         Dim namespaces As String() = fullName.Split(ILOperators.NamespaceSeparator.Text)
         For index = 0 To namespaces.Length - 1
-            node.AddChild(New TypeIdentifierToken(namespaces(index)))
+            Dim name As String = namespaces(index)
+            If trimAttributeSuffix And name.EndsWith("Attribute", StringComparison.Ordinal) Then
+                name = name.Substring(0, name.Length - 9)
+            End If
+            node.AddChild(New TypeIdentifierToken(name))
 
             If index < namespaces.Length - 1 Then
                 node.AddChild(Dot)
             End If
         Next
+    End Sub
 
-        If type.IsGenericType Then
-            node.AddChild(OpenParenthesis)
-            node.AddChild(OfKeyword)
-            Dim genericArguments As Type() = type.GetGenericArguments()
-            For index = 0 To genericArguments.Length - 1
-                If index > 0 Then
-                    node.AddChild(Comma)
-                End If
+    Private Sub WriteGenericArguments(node As SyntaxNode, type As Type)
+        node.AddChild(OpenParenthesis)
+        node.AddChild(OfKeyword)
+        Dim genericArguments As Type() = type.GetGenericArguments()
+        For index = 0 To genericArguments.Length - 1
+            If index > 0 Then
+                node.AddChild(Comma)
+            End If
 
-                WriteTypeName(node, genericArguments(index))
-            Next
+            WriteTypeName(node, genericArguments(index))
+        Next
 
-            node.AddChild(CloseParenthesis)
-        End If
+        node.AddChild(CloseParenthesis)
     End Sub
 End Module
