@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
@@ -53,17 +52,28 @@ internal sealed class TypeUtility
     /// <summary>
     ///     Writes all known supported custom attribute to the specified node.
     /// </summary>
+    /// <param name="generator">The syntax generator.</param>
     /// <param name="node">The node to which to write the attributes.</param>
     /// <param name="type">The type for which to write the attributes.</param>
-    public static void WriteCustomAttributes(TypeDeclaration node, Type type)
+    public static void WriteCustomAttributes(SyntaxGenerator generator, TypeDeclaration node, Type type)
     {
-        if (type.IsSubclassOf(typeof(Attribute)))
+        foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
         {
-            WriteAttributeUsage(node, type);
-        }
+            var writerType = writer.GetType();
+            if (!writerType.IsSubclassOf(typeof(AttributeExpressionWriter)))
+            {
+                continue;
+            }
 
-        WriteSerializableAttribute(node, type);
-        WriteStructLayout(node, type);
+            Type attributeType = writer.AttributeType;
+            Attribute? attribute = type.GetCustomAttribute(attributeType, false);
+            Expression attributeExpression = writer.CreateAttributeExpression(type, attribute);
+
+            if (attributeExpression is MemberInitExpression memberInitExpression)
+            {
+                WriteCustomAttribute(node, memberInitExpression);
+            }
+        }
     }
 
     /// <summary>
@@ -261,37 +271,6 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteAttributeUsage(SyntaxNode node, Type type)
-    {
-        if (type.GetCustomAttribute<AttributeUsageAttribute>(false) is not { } attributeUsageAttribute)
-        {
-            return;
-        }
-
-        Type[] constructorArgumentTypes = {typeof(AttributeTargets)};
-        var constructor = typeof(AttributeUsageAttribute).GetConstructor(constructorArgumentTypes)!;
-        var validOnExpression = Expression.Constant(attributeUsageAttribute.ValidOn);
-        var constructorExpression = Expression.New(constructor, validOnExpression);
-        var bindings = new List<MemberBinding>();
-        var allowMultipleProperty = typeof(AttributeUsageAttribute).GetProperty(nameof(AttributeUsageAttribute.AllowMultiple))!;
-        var inheritedProperty = typeof(AttributeUsageAttribute).GetProperty(nameof(AttributeUsageAttribute.Inherited))!;
-
-        if (attributeUsageAttribute.AllowMultiple)
-        {
-            var allowMultipleExpression = Expression.Constant(attributeUsageAttribute.AllowMultiple);
-            bindings.Add(Expression.Bind(allowMultipleProperty, allowMultipleExpression));
-        }
-
-        if (!attributeUsageAttribute.Inherited)
-        {
-            var inheritedExpression = Expression.Constant(attributeUsageAttribute.Inherited);
-            bindings.Add(Expression.Bind(inheritedProperty, inheritedExpression));
-        }
-
-        var attributeExpression = Expression.MemberInit(constructorExpression, bindings);
-        WriteCustomAttribute(node, attributeExpression);
-    }
-
     private static void WriteBindings(SyntaxNode node, MemberInitExpression memberInitExpression, TypeWriteOptions options)
     {
         node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
@@ -386,57 +365,5 @@ internal sealed class TypeUtility
                 node.AddChild(Keywords.OutKeyword);
                 break;
         }
-    }
-
-    private static void WriteSerializableAttribute(SyntaxNode node, Type type)
-    {
-        if ((type.Attributes & TypeAttributes.Serializable) != 0)
-        {
-            WriteCustomAttribute(node, Expression.MemberInit(Expression.New(typeof(SerializableAttribute))));
-        }
-    }
-
-    private static void WriteStructLayout(SyntaxNode node, Type type)
-    {
-        TypeAttributes mask = (type.Attributes & TypeAttributes.LayoutMask);
-        bool hasNonAnsiCharset = (type.Attributes & TypeAttributes.StringFormatMask) != TypeAttributes.AnsiClass;
-        bool writeStructLayout = mask is not (TypeAttributes.AutoLayout or TypeAttributes.SequentialLayout) || hasNonAnsiCharset;
-
-        if (!writeStructLayout)
-        {
-            return;
-        }
-
-        var arguments = new List<Expression>();
-        var constructor = typeof(StructLayoutAttribute).GetConstructor(new[] {typeof(LayoutKind)})!;
-        ConstantExpression structLayout = mask switch
-        {
-            TypeAttributes.AutoLayout => Expression.Constant(LayoutKind.Auto),
-            TypeAttributes.SequentialLayout => Expression.Constant(LayoutKind.Sequential),
-            _ => Expression.Constant(LayoutKind.Explicit)
-        };
-
-        arguments.Add(structLayout);
-        NewExpression instance = Expression.New(constructor, arguments);
-
-        if (!hasNonAnsiCharset)
-        {
-            WriteCustomAttribute(node, Expression.MemberInit(instance));
-            return;
-        }
-
-        var charSet = (type.Attributes & TypeAttributes.StringFormatMask) switch
-        {
-            TypeAttributes.UnicodeClass => CharSet.Unicode,
-            TypeAttributes.AutoClass => CharSet.Auto,
-            _ => CharSet.Ansi
-        };
-
-        var charSetExpression = Expression.Constant(charSet);
-        var charSetField = typeof(StructLayoutAttribute).GetField(nameof(StructLayoutAttribute.CharSet))!;
-        MemberAssignment bind = Expression.Bind(charSetField, charSetExpression);
-
-        var attributeExpression = Expression.MemberInit(instance, bind);
-        WriteCustomAttribute(node, attributeExpression);
     }
 }

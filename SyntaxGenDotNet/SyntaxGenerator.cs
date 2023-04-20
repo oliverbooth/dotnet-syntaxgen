@@ -9,6 +9,22 @@ namespace SyntaxGenDotNet;
 public abstract class SyntaxGenerator
 {
     /// <summary>
+    ///     Initializes a new instance of the <see cref="SyntaxGenerator" /> class.
+    /// </summary>
+    protected SyntaxGenerator()
+    {
+        AttributeExpressionWriters.Add(new AttributeUsageAttributeExpressionWriter());
+        AttributeExpressionWriters.Add(new SerializableAttributeExpressionWriter());
+        AttributeExpressionWriters.Add(new StructLayoutAttributeExpressionWriter());
+    }
+
+    /// <summary>
+    ///     Gets a list of the attribute expression writers supported by this syntax generator.
+    /// </summary>
+    /// <value>A list of the attribute expression writers supported by this syntax generator.</value>
+    public List<AttributeExpressionWriter> AttributeExpressionWriters { get; } = new();
+
+    /// <summary>
     ///     Gets the name of the language for which this syntax generator generates syntax.
     /// </summary>
     /// <value>The name of the language.</value>

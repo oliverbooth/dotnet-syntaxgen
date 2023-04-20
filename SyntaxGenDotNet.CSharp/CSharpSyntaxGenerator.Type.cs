@@ -20,7 +20,7 @@ public partial class CSharpSyntaxGenerator
         }
 
         var declaration = new TypeDeclaration();
-        TypeUtility.WriteCustomAttributes(declaration, type);
+        TypeUtility.WriteCustomAttributes(this, declaration, type);
         TypeUtility.WriteVisibilityKeyword(declaration, type);
         TypeUtility.WriteModifiers(declaration, type);
         WriteTypeKind(declaration, type);
