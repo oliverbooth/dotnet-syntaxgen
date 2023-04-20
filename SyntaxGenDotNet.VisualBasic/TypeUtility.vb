@@ -56,28 +56,54 @@ Friend Module TypeUtility
             Return
         End If
 
-        If Not type.IsGenericType Then
-            node.AddChild(New TypeIdentifierToken(type.Name))
+        WriteNamespacedTypeName(node, type)
+    End Sub
+
+    Private Sub WriteNamespacedTypeName(node As SyntaxNode, type As Type)
+        If type.IsArray Then
+            WriteTypeName(node, type.GetElementType())
+
+            Dim arrayRank As Integer = type.GetArrayRank()
+            For index = 0 To arrayRank - 1
+                node.AddChild(OpenParenthesis)
+                node.AddChild(CloseParenthesis)
+            Next
+            
             Return
         End If
 
-        Dim genericType = type.GetGenericTypeDefinition()
-        If Not TryGetLanguageAliasToken(genericType, languageAlias) Then
-            node.AddChild(New TypeIdentifierToken(type.Name))
-            Return
+        Dim fullName As String = type.FullName
+        If fullName Is Nothing Then
+            fullName = type.Name
         End If
 
-        node.AddChild(OpenParenthesis)
-        node.AddChild(OfKeyword)
-        Dim genericArguments As Type() = type.GetGenericArguments()
-        For index = 0 To genericArguments.Length - 1
-            If index > 0 Then
-                node.AddChild(Comma)
+        If type.IsGenericType Then
+            Dim index As Integer = fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)
+            fullName = fullName.Substring(0, index)
+        End If
+
+        Dim namespaces As String() = fullName.Split(ILOperators.NamespaceSeparator.Text)
+        For index = 0 To namespaces.Length - 1
+            node.AddChild(New TypeIdentifierToken(namespaces(index)))
+
+            If index < namespaces.Length - 1 Then
+                node.AddChild(Dot)
             End If
-
-            WriteTypeName(node, genericArguments(index))
         Next
 
-        node.AddChild(CloseParenthesis)
+        If type.IsGenericType Then
+            node.AddChild(OpenParenthesis)
+            node.AddChild(OfKeyword)
+            Dim genericArguments As Type() = type.GetGenericArguments()
+            For index = 0 To genericArguments.Length - 1
+                If index > 0 Then
+                    node.AddChild(Comma)
+                End If
+
+                WriteTypeName(node, genericArguments(index))
+            Next
+
+            node.AddChild(CloseParenthesis)
+        End If
     End Sub
 End Module

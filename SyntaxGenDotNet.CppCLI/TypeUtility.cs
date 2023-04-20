@@ -58,32 +58,62 @@ internal sealed class TypeUtility
             return;
         }
 
-        if (!type.IsGenericType)
+        WriteNamespacedTypeName(node, type);
+    }
+
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type)
+    {
+        if (type.IsArray)
         {
-            node.AddChild(new TypeIdentifierToken(type.Name));
+            node.AddChild(new TypeIdentifierToken("cli"));
+            node.AddChild(Operators.ColonColon);
+            node.AddChild(new TypeIdentifierToken("array"));
+
+            node.AddChild(Operators.OpenChevron);
+            WriteTypeName(node, type.GetElementType()!);
+            node.AddChild(Operators.CloseChevron);
+
+            node.AddChild(Operators.GcTrackedPointer);
             return;
         }
 
-        var genericType = type.GetGenericTypeDefinition();
-        if (!TryGetLanguageAliasToken(genericType, out alias))
+        string fullName = type.FullName ?? type.Name;
+        if (type.IsGenericType)
         {
-            node.AddChild(new TypeIdentifierToken(type.Name));
-            return;
+            fullName = fullName[..fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
-        node.AddChild(alias);
-        node.AddChild(Operators.OpenChevron);
-        Type[] genericArguments = type.GetGenericArguments();
-        for (var index = 0; index < genericArguments.Length; index++)
+        string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
+        for (var index = 0; index < namespaces.Length; index++)
         {
-            if (index > 0)
+            node.AddChild(new TypeIdentifierToken(namespaces[index]));
+
+            if (index < namespaces.Length - 1)
             {
-                node.AddChild(Operators.Comma);
+                node.AddChild(Operators.ColonColon);
+            }
+        }
+
+        if (type.IsGenericType)
+        {
+            node.AddChild(Operators.OpenChevron);
+            Type[] genericArguments = type.GetGenericArguments();
+            for (var index = 0; index < genericArguments.Length; index++)
+            {
+                if (index > 0)
+                {
+                    node.AddChild(Operators.Comma);
+                }
+
+                WriteTypeName(node, genericArguments[index]);
             }
 
-            WriteTypeName(node, genericArguments[index]);
+            node.AddChild(Operators.CloseChevron);
         }
 
-        node.AddChild(Operators.CloseChevron);
+        if (!type.IsValueType)
+        {
+            node.AddChild(Operators.GcTrackedPointer);
+        }
     }
 }

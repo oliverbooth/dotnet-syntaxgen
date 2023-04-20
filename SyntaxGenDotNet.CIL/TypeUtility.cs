@@ -60,19 +60,58 @@ internal sealed class TypeUtility
             return;
         }
 
+        WriteNamespacedTypeName(node, type);
+        SyntaxNode last = node.Children[^1];
+        if (last is OperatorToken)
+        {
+            last.TrailingWhitespace = WhitespaceTrivia.Space;
+        }
+    }
+
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type)
+    {
+        if (type.IsArray)
+        {
+            WriteTypeName(node, type.GetElementType()!);
+            node.AddChild(Operators.OpenBracket);
+            node.AddChild(Operators.CloseBracket);
+            return;
+        }
+
+        string fullName = type.Name;
+        if (type.Namespace is not null)
+        {
+            fullName = type.Namespace + ILOperators.NamespaceSeparator + fullName;
+        }
+
+        string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
+        for (var index = 0; index < namespaces.Length; index++)
+        {
+            node.AddChild(new TypeIdentifierToken(namespaces[index]));
+
+            if (index < namespaces.Length - 1)
+            {
+                node.AddChild(ILOperators.NamespaceSeparator);
+            }
+        }
+
         if (!type.IsGenericType)
         {
-            node.AddChild(new TypeIdentifierToken(type.Name));
             return;
         }
 
-        var genericType = type.GetGenericTypeDefinition();
-        if (TryGetLanguageAliasToken(genericType, out alias))
+        node.AddChild(Operators.OpenChevron);
+        Type[] genericArguments = type.GetGenericArguments();
+        for (var index = 0; index < genericArguments.Length; index++)
         {
-            node.AddChild(alias);
-            return;
+            if (index > 0)
+            {
+                node.AddChild(Operators.Comma);
+            }
+
+            WriteTypeName(node, genericArguments[index]);
         }
 
-        node.AddChild(new TypeIdentifierToken(type.Name));
+        node.AddChild(Operators.CloseChevron);
     }
 }

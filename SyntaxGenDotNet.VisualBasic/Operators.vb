@@ -20,6 +20,11 @@ Friend Module Operators
     Public ReadOnly Comma As New OperatorToken(",")
 
     ''' <summary>
+    '''     The <c>.</c> operator.
+    ''' </summary>
+    Public ReadOnly Dot As New OperatorToken(".")
+
+    ''' <summary>
     '''     The <c>(</c> operator.
     ''' </summary>
     Public ReadOnly OpenParenthesis As New OperatorToken("(")

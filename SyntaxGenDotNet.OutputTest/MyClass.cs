@@ -34,8 +34,22 @@ internal class MyClass
     protected static readonly int ProtectedStaticReadOnlyField = 42;
     private static readonly int PrivateStaticReadOnlyField = 42;
     internal static readonly int InternalStaticReadOnlyField = 42;
-    protected static internal readonly int ProtectedInternalStaticReadOnlyField = 42;
-    private static protected readonly int PrivateProtectedStaticReadOnlyField = 42;
+    protected internal static readonly int ProtectedInternalStaticReadOnlyField = 42;
+    private protected static readonly int PrivateProtectedStaticReadOnlyField = 42;
+
+    public static readonly List<int> PublicStaticReadOnlyListField = new() {1, 2, 3};
+    protected static readonly List<int> ProtectedStaticReadOnlyListField = new() {1, 2, 3};
+    private static readonly List<int> PrivateStaticReadOnlyListField = new() {1, 2, 3};
+    internal static readonly List<int> InternalStaticReadOnlyListField = new() {1, 2, 3};
+    protected internal static readonly List<int> ProtectedInternalStaticReadOnlyListField = new() {1, 2, 3};
+    private protected static readonly List<int> PrivateProtectedStaticReadOnlyListField = new() {1, 2, 3};
+
+    public static readonly int[] PublicStaticReadOnlyArrayField = new[] {1, 2, 3};
+    protected static readonly int[] ProtectedStaticReadOnlyArrayField = new[] {1, 2, 3};
+    private static readonly int[] PrivateStaticReadOnlyArrayField = new[] {1, 2, 3};
+    internal static readonly int[] InternalStaticReadOnlyArrayField = new[] {1, 2, 3};
+    protected internal static readonly int[] ProtectedInternalStaticReadOnlyArrayField = new[] {1, 2, 3};
+    private protected static readonly int[] PrivateProtectedStaticReadOnlyArrayField = new[] {1, 2, 3};
 
     public const int PublicConstantInteger = 42;
     protected const int ProtectedConstantInteger = 42;

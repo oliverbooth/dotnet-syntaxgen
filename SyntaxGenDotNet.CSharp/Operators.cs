@@ -14,6 +14,11 @@ internal static class Operators
     };
 
     /// <summary>
+    ///     The <c>]</c> operator.
+    /// </summary>
+    public static readonly OperatorToken CloseBracket = new("]");
+
+    /// <summary>
     ///     The <c>&gt;</c> operator.
     /// </summary>
     public static readonly OperatorToken CloseChevron = new(">");
@@ -22,6 +27,16 @@ internal static class Operators
     ///     The <c>,</c> operator.
     /// </summary>
     public static readonly OperatorToken Comma = new(",");
+
+    /// <summary>
+    ///     The <c>.</c> operator.
+    /// </summary>
+    public static readonly OperatorToken Dot = new(".");
+
+    /// <summary>
+    ///     The <c>[</c> operator.
+    /// </summary>
+    public static readonly OperatorToken OpenBracket = new("[");
 
     /// <summary>
     ///     The <c>&lt;</c> operator.

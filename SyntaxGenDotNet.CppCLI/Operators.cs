@@ -34,6 +34,14 @@ internal static class Operators
     public static readonly OperatorToken Comma = new(",");
 
     /// <summary>
+    ///     The <c>^</c> operator.
+    /// </summary>
+    public static readonly OperatorToken GcTrackedPointer = new("^")
+    {
+        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
+    };
+
+    /// <summary>
     ///     The <c>&lt;</c> operator.
     /// </summary>
     public static readonly OperatorToken OpenChevron = new("<");
