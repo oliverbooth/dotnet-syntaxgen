@@ -1,4 +1,5 @@
 ﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Tokens
 
@@ -63,6 +64,37 @@ Friend Module TypeUtility
         End If
 
         WriteNamespacedTypeName(node, type, trimAttributeSuffix)
+    End Sub
+
+    ''' <summary>
+    '''     Writes the visibility keyword for a type declaration.
+    ''' </summary>
+    ''' <param name="declaration">The declaration to write to.</param>
+    ''' <param name="type">The type whose visibility to write.</param>
+    Public Sub WriteVisibilityKeyword(declaration As SyntaxNode, type As Type)
+        Const mask = TypeAttributes.VisibilityMask
+
+        Select Case type.Attributes And mask
+            Case TypeAttributes.Public Or TypeAttributes.NestedPublic
+                declaration.AddChild(PublicKeyword)
+
+            Case TypeAttributes.NestedPrivate
+                declaration.AddChild(PrivateKeyword)
+
+            Case TypeAttributes.NestedFamANDAssem
+                declaration.AddChild(PrivateKeyword)
+                declaration.AddChild(ProtectedKeyword)
+
+            Case TypeAttributes.NestedFamORAssem
+                declaration.AddChild(ProtectedKeyword)
+                declaration.AddChild(FriendKeyword)
+
+            Case TypeAttributes.NestedFamily
+                declaration.AddChild(ProtectedKeyword)
+
+            Case Else
+                declaration.AddChild(FriendKeyword)
+        End Select
     End Sub
 
     Private Sub WriteNamespacedTypeName(node As SyntaxNode, type As Type, Optional trimAttributeSuffix As Boolean = False)

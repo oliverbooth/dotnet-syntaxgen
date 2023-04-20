@@ -60,6 +60,11 @@ internal static class Keywords
     public static readonly KeywordToken TrueKeyword = new("true");
 
     /// <summary>
+    ///     The <c>type</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken TypeKeyword = new("type");
+
+    /// <summary>
     ///     The <c>val</c> keyword.
     /// </summary>
     public static readonly KeywordToken ValKeyword = new("val");

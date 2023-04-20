@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -70,6 +71,46 @@ internal sealed class TypeUtility
         if (last is OperatorToken)
         {
             last.TrailingWhitespace = WhitespaceTrivia.Space;
+        }
+    }
+
+    /// <summary>
+    ///     Writes the visibility keyword for a type declaration.
+    /// </summary>
+    /// <param name="declaration">The declaration to write to.</param>
+    /// <param name="type">The type whose visibility to write.</param>
+    public static void WriteVisibilityKeyword(SyntaxNode declaration, Type type)
+    {
+        const TypeAttributes mask = TypeAttributes.VisibilityMask;
+
+        switch (type.Attributes & mask)
+        {
+            case TypeAttributes.Public:
+            case TypeAttributes.NestedPublic:
+                // do nothing. public is the default.
+                break;
+
+            case TypeAttributes.NestedPrivate:
+                declaration.AddChild(Keywords.PrivateKeyword);
+                break;
+
+            case TypeAttributes.NestedFamANDAssem:
+                declaration.AddChild(Keywords.PrivateKeyword);
+                declaration.AddChild(Keywords.ProtectedKeyword);
+                break;
+
+            case TypeAttributes.NestedFamORAssem:
+                declaration.AddChild(Keywords.ProtectedKeyword);
+                declaration.AddChild(Keywords.InternalKeyword);
+                break;
+
+            case TypeAttributes.NestedFamily:
+                declaration.AddChild(Keywords.ProtectedKeyword);
+                break;
+
+            default:
+                declaration.AddChild(Keywords.InternalKeyword);
+                break;
         }
     }
 

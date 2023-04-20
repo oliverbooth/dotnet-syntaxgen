@@ -15,6 +15,13 @@ public interface ISyntaxGenerator
     string LanguageName { get; }
 
     /// <summary>
+    ///     Generates the syntax for the specified enum.
+    /// </summary>
+    /// <param name="enumType">The enum for which to generate syntax.</param>
+    /// <returns>The syntax for the specified enum.</returns>
+    EnumDeclaration GenerateEnumDeclaration(Type enumType);
+
+    /// <summary>
     ///     Generates the syntax for the specified field.
     /// </summary>
     /// <param name="fieldInfo">The field for which to generate syntax.</param>

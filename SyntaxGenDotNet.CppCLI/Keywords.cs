@@ -5,6 +5,16 @@ namespace SyntaxGenDotNet.CppCLI;
 internal static class Keywords
 {
     /// <summary>
+    ///     The <c>class</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ClassKeyword = new("class");
+
+    /// <summary>
+    ///     The <c>enum</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken EnumKeyword = new("enum");
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static readonly KeywordToken FalseKeyword = new("false");

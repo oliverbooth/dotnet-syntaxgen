@@ -10,6 +10,11 @@ internal static class Keywords
     public static readonly KeywordToken ConstKeyword = new("const");
 
     /// <summary>
+    ///     The <c>enum</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken EnumKeyword = new("enum");
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static readonly KeywordToken FalseKeyword = new("false");

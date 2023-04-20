@@ -29,6 +29,11 @@ internal static class Operators
     public static readonly OperatorToken CloseParenthesis = new(")");
 
     /// <summary>
+    ///     The <c>:</c> operator.
+    /// </summary>
+    public static readonly OperatorToken Colon = new(":");
+
+    /// <summary>
     ///     The <c>,</c> operator.
     /// </summary>
     public static readonly OperatorToken Comma = new(",");

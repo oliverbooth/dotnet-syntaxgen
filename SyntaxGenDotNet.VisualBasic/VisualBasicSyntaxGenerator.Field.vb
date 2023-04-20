@@ -9,7 +9,7 @@ Public Partial Class VisualBasicSyntaxGenerator
         Dim fieldDeclaration As New FieldDeclaration()
 
         WriteCustomAttributes(fieldDeclaration, fieldInfo)
-        WriteVisibilityKeyword(fieldDeclaration, fieldInfo)
+        FieldUtility.WriteVisibilityKeyword(fieldDeclaration, fieldInfo)
         WriteModifiers(fieldDeclaration, fieldInfo)
 
         fieldDeclaration.AddChild(new IdentifierToken(fieldInfo.Name))

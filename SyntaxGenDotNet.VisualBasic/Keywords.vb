@@ -15,6 +15,11 @@ Friend Module Keywords
     Public ReadOnly ConstKeyword As New KeywordToken("Const")
 
     ''' <summary>
+    '''     The <c>Enum</c> keyword.
+    ''' </summary>
+    Public ReadOnly EnumKeyword As New KeywordToken("Enum")
+
+    ''' <summary>
     '''     The <c>False</c> keyword.
     ''' </summary>
     Public ReadOnly FalseKeyword As New KeywordToken("False")
