@@ -11,6 +11,7 @@
         <ProjectReference Include="..\SyntaxGenDotNet.CIL\SyntaxGenDotNet.CIL.csproj"/>
         <ProjectReference Include="..\SyntaxGenDotNet.CppCLI\SyntaxGenDotNet.CppCLI.csproj"/>
         <ProjectReference Include="..\SyntaxGenDotNet.CSharp\SyntaxGenDotNet.CSharp.csproj"/>
+        <ProjectReference Include="..\SyntaxGenDotNet.FSharp\SyntaxGenDotNet.FSharp.csproj"/>
         <ProjectReference Include="..\SyntaxGenDotNet.VisualBasic\SyntaxGenDotNet.VisualBasic.vbproj"/>
         <ProjectReference Include="..\SyntaxGenDotNet\SyntaxGenDotNet.csproj"/>
     </ItemGroup>

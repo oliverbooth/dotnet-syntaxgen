@@ -2,6 +2,7 @@
 using SyntaxGenDotNet.CIL;
 using SyntaxGenDotNet.CppCLI;
 using SyntaxGenDotNet.CSharp;
+using SyntaxGenDotNet.FSharp;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 using SyntaxGenDotNet.VisualBasic;
@@ -12,13 +13,14 @@ internal static class OutputApp
 {
     public static void Run()
     {
-        var field = typeof(MyClass).GetField("PrivateProtectedConstantChar", (BindingFlags)(-1))!;
+        var field = typeof(MyClass).GetField("ProtectedInternalConstantBoolean", (BindingFlags)(-1))!;
         var generators = new ISyntaxGenerator[]
         {
             new CSharpSyntaxGenerator(),
             new VisualBasicSyntaxGenerator(),
             new CilSyntaxGenerator(),
-            new CppCliSyntaxGenerator()
+            new CppCliSyntaxGenerator(),
+            new FSharpSyntaxGenerator()
         };
 
         foreach (ISyntaxGenerator generator in generators)

@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using SyntaxGenDotNet.FSharp;
 using SyntaxGenDotNet.Syntax;
 
-namespace SyntaxGenDotNet.CSharp;
+namespace SyntaxGenDotNet.FSharp;
 
 internal static class FieldUtility
 {
