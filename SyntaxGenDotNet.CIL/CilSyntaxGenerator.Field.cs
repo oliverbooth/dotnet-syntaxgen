@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices;
+using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -11,6 +13,13 @@ public sealed partial class CilSyntaxGenerator
     {
         var fieldDeclaration = new FieldDeclaration();
         fieldDeclaration.AddChild(Keywords.FieldDeclaration);
+
+        if (fieldInfo.GetCustomAttribute<FieldOffsetAttribute>() is { } fieldOffsetAttribute)
+        {
+            fieldDeclaration.AddChild(Operators.OpenBracket.With(o => o.LeadingWhitespace = WhitespaceTrivia.Space));
+            fieldDeclaration.AddChild(TokenUtility.CreateLiteralToken(fieldOffsetAttribute.Value));
+            fieldDeclaration.AddChild(Operators.CloseBracket.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
+        }
 
         FieldUtility.WriteVisibilityKeyword(fieldDeclaration, fieldInfo);
         FieldUtility.WriteModifiers(fieldDeclaration, fieldInfo);
