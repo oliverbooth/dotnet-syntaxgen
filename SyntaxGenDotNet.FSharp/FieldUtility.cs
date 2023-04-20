@@ -20,7 +20,7 @@ internal static class FieldUtility
         {
             declaration.AddChild(Operators.OpenBracket);
             declaration.AddChild(Operators.OpenChevron);
-            TypeUtility.WriteTypeName(declaration, attribute.GetType(), true);
+            TypeUtility.WriteTypeName(declaration, attribute.GetType(), new TypeWriteOptions {TrimAttributeSuffix = true});
             declaration.AddChild(Operators.OpenParenthesis);
 
             Type attributeType = attribute.GetType();

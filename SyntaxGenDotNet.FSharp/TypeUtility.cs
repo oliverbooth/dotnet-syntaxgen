@@ -48,15 +48,22 @@ internal sealed class TypeUtility
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
     /// <param name="type">The type for which to write the name.</param>
-    /// <param name="trimAttributeSuffix">
-    ///     <see langword="true" /> to trim the "Attribute" suffix from the type name; otherwise, <see langword="false" />. The
-    ///     default is <see langword="false" />.
-    /// </param>
-    public static void WriteTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix = false)
+    public static void WriteTypeName(SyntaxNode node, Type type)
+    {
+        WriteTypeName(node, type, new TypeWriteOptions());
+    }
+
+    /// <summary>
+    ///     Writes the type name to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the type name.</param>
+    /// <param name="type">The type for which to write the name.</param>
+    /// <param name="options">The options for writing the type name.</param>
+    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
     {
         if (type.IsGenericParameter)
         {
-            node.AddChild(new IdentifierToken(type.Name));
+            node.AddChild(new TypeIdentifierToken($"'{type.Name}"));
             return;
         }
 
@@ -66,7 +73,7 @@ internal sealed class TypeUtility
             return;
         }
 
-        WriteNamespacedTypeName(node, type, trimAttributeSuffix);
+        WriteNamespacedTypeName(node, type, options);
         SyntaxNode last = node.Children[^1];
         if (last is OperatorToken)
         {
@@ -114,7 +121,7 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix = false)
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
     {
         if (type.IsArray)
         {
@@ -124,13 +131,13 @@ internal sealed class TypeUtility
             return;
         }
 
-        string fullName = type.FullName ?? type.Name;
+        string fullName = options.WriteNamespace ? type.FullName ?? type.Name : type.Name;
         if (type.IsGenericType)
         {
             fullName = fullName[..fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
-        WriteFullName(node, fullName, trimAttributeSuffix);
+        WriteFullName(node, fullName, options.TrimAttributeSuffix);
 
         if (type.IsGenericType)
         {

@@ -1,13 +1,29 @@
-﻿using SyntaxGenDotNet.Syntax.Tokens;
+﻿using SyntaxGenDotNet.Syntax;
+using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.FSharp;
 
 internal static class Keywords
 {
     /// <summary>
+    ///     The <c>class</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ClassKeyword = new("class");
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static readonly KeywordToken FalseKeyword = new("false");
+
+    /// <summary>
+    ///     The <c>inherit</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken InheritKeyword = new("inherit") {LeadingWhitespace = WhitespaceTrivia.Indent};
+
+    /// <summary>
+    ///     The <c>interface</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken InterfaceKeyword = new("interface");
 
     /// <summary>
     ///     The <c>internal</c> keyword.
@@ -53,6 +69,11 @@ internal static class Keywords
     ///     The <c>staticval</c> keyword.
     /// </summary>
     public static readonly KeywordToken StaticValKeyword = new("staticval");
+
+    /// <summary>
+    ///     The <c>struct</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken StructKeyword = new("struct");
 
     /// <summary>
     ///     The <c>true</c> keyword.
