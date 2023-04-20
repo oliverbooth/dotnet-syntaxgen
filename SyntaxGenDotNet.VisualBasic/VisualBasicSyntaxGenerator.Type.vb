@@ -6,6 +6,14 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc />
     Public Overrides Function GenerateTypeDeclaration(type As Type) As TypeDeclaration
+        If type.IsEnum Then
+            Return GenerateEnumDeclaration(type)
+        End If
+
+        If type.IsSubclassOf(GetType(MulticastDelegate)) Or type.IsSubclassOf(GetType([Delegate])) Then
+            Return GenerateDelegateDeclaration(type)
+        End If
+
         Dim declaration As New TypeDeclaration()
 
         WriteCustomTypeAttributes(Me, declaration, type)
