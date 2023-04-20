@@ -29,7 +29,7 @@ Public Partial Class VisualBasicSyntaxGenerator
     End Sub
 
     Private Shared Sub WriteInterfaces(declaration As SyntaxNode, type As Type)
-        Dim interfaces As Type() = type.GetInterfaces()
+        Dim interfaces As Type() = type.GetDirectInterfaces()
         If interfaces.Length = 0 Then
             Return
         End If

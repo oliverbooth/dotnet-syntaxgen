@@ -8,6 +8,25 @@ namespace SyntaxGenDotNet.Extensions;
 public static class TypeExtensions
 {
     /// <summary>
+    ///     Gets the direct interfaces implemented by the specified type.
+    /// </summary>
+    /// <param name="type">The type for which to get the direct interfaces.</param>
+    /// <returns>An array of the direct interfaces implemented by the specified type.</returns>
+    public static Type[] GetDirectInterfaces(this Type type)
+    {
+        Type[] interfaces = type.GetInterfaces();
+        if (type.BaseType is null || type.BaseType == typeof(object) || type.BaseType == typeof(ValueType))
+        {
+            return interfaces;
+        }
+
+        var directInterfaces = new HashSet<Type>(interfaces);
+        Type[] baseInterfaces = GetDirectInterfaces(type.BaseType).ToArray();
+        directInterfaces.ExceptWith(baseInterfaces);
+        return directInterfaces.ToArray();
+    }
+
+    /// <summary>
     ///     Returns a value indicating whether the type has a base type that is not <see cref="object" /> or
     ///     <see cref="ValueType" />.
     /// </summary>

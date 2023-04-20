@@ -26,13 +26,24 @@ public partial class CSharpSyntaxGenerator
         WriteTypeKind(declaration, type);
         TypeUtility.WriteTypeName(declaration, type, new TypeWriteOptions {WriteAlias = false, WriteNamespace = false});
 
-        if (type.HasBaseType() || type.GetInterfaces().Length > 0)
+        Type[] baseTypes = type.HasBaseType() ? new[] {type.BaseType!} : Array.Empty<Type>();
+        baseTypes = baseTypes.Concat(type.GetDirectInterfaces()).ToArray();
+        
+        if (baseTypes.Length > 0)
         {
             declaration.AddChild(Operators.Colon.With(o => o.LeadingWhitespace = o.TrailingWhitespace = " "));
         }
 
-        WriteBaseType(declaration, type);
-        WriteInterfaces(declaration, type);
+        for (var index = 0; index < baseTypes.Length; index++)
+        {
+            Type baseType = baseTypes[index];
+            TypeUtility.WriteTypeName(declaration, baseType, new TypeWriteOptions());
+
+            if (index < baseTypes.Length - 1)
+            {
+                declaration.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = " "));
+            }
+        }
 
         return declaration;
     }
