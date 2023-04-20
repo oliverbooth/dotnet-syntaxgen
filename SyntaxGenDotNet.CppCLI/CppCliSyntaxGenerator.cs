@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using SyntaxGenDotNet.Syntax.Declaration;
-
-namespace SyntaxGenDotNet.CppCLI;
+﻿namespace SyntaxGenDotNet.CppCLI;
 
 /// <summary>
 ///     Represents a syntax generator for the C++/CLI language.
