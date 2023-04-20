@@ -59,6 +59,11 @@ internal static class Operators
     public static readonly OperatorToken OpenParenthesis = new("(");
 
     /// <summary>
+    ///     The <c>?</c> operator.
+    /// </summary>
+    public static readonly OperatorToken QuestionMark = new("?") {TrailingWhitespace = WhitespaceTrivia.Space};
+
+    /// <summary>
     ///     The <c>;</c> operator.
     /// </summary>
     public static readonly OperatorToken Semicolon = new(";");

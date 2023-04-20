@@ -57,6 +57,13 @@ internal sealed class TypeUtility
     /// </param>
     public static void WriteTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix = false)
     {
+        if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+        {
+            WriteTypeName(node, type.GenericTypeArguments[0], trimAttributeSuffix);
+            node.AddChild(Operators.QuestionMark);
+            return;
+        }
+
         if (type.IsGenericParameter)
         {
             node.AddChild(new IdentifierToken(type.Name));
