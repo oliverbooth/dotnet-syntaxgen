@@ -5,6 +5,11 @@ namespace SyntaxGenDotNet.CppCLI;
 internal static class Keywords
 {
     /// <summary>
+    ///     The <c>abstract</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken AbstractKeyword = new("abstract");
+
+    /// <summary>
     ///     The <c>class</c> keyword.
     /// </summary>
     public static readonly KeywordToken ClassKeyword = new("class");
@@ -50,6 +55,16 @@ internal static class Keywords
     public static readonly KeywordToken PublicKeyword = new("public");
 
     /// <summary>
+    ///     The <c>readonly</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken RefKeyword = new("ref");
+
+    /// <summary>
+    ///     The <c>sealed</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken SealedKeyword = new("sealed");
+
+    /// <summary>
     ///     The <c>static</c> keyword.
     /// </summary>
     public static readonly KeywordToken StaticKeyword = new("static");
@@ -58,4 +73,9 @@ internal static class Keywords
     ///     The <c>true</c> keyword.
     /// </summary>
     public static readonly KeywordToken TrueKeyword = new("true");
+
+    /// <summary>
+    ///     The <c>value</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ValueKeyword = new("value");
 }

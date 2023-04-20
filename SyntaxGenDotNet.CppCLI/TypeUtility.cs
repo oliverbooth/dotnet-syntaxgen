@@ -41,25 +41,59 @@ internal sealed class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the modifiers for the specified type to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the modifiers.</param>
+    /// <param name="type">The type for which to write the modifiers.</param>
+    public static void WriteModifiers(SyntaxNode node, Type type)
+    {
+        if (type.IsInterface || type.IsValueType)
+        {
+            return;
+        }
+
+        if (type.IsAbstract)
+        {
+            node.AddChild(Keywords.AbstractKeyword);
+        }
+
+        if (type.IsSealed)
+        {
+            node.AddChild(Keywords.SealedKeyword);
+        }
+    }
+
+    /// <summary>
     ///     Writes the type name to the specified node.
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
     /// <param name="type">The type for which to write the name.</param>
     public static void WriteTypeName(SyntaxNode node, Type type)
     {
+        WriteTypeName(node, type, new TypeWriteOptions());
+    }
+
+    /// <summary>
+    ///     Writes the type name to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the type name.</param>
+    /// <param name="type">The type for which to write the name.</param>
+    /// <param name="options">The options to use when writing the type name.</param>
+    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
+    {
         if (type.IsGenericParameter)
         {
-            node.AddChild(new IdentifierToken(type.Name));
+            node.AddChild(new TypeIdentifierToken(type.Name));
             return;
         }
 
-        if (TryGetLanguageAliasToken(type, out KeywordToken? alias))
+        if (options.WriteAlias && TryGetLanguageAliasToken(type, out KeywordToken? alias))
         {
             node.AddChild(alias);
             return;
         }
 
-        WriteNamespacedTypeName(node, type);
+        WriteNamespacedTypeName(node, type, options);
     }
 
     /// <summary>
@@ -102,7 +136,7 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteNamespacedTypeName(SyntaxNode node, Type type)
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
     {
         if (type.IsArray)
         {
@@ -110,20 +144,29 @@ internal sealed class TypeUtility
             return;
         }
 
-        string fullName = type.FullName ?? type.Name;
+        string typeName = type.Name;
         if (type.IsGenericType)
         {
-            fullName = fullName[..fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
+            typeName = typeName[..typeName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
-        WriteFullName(node, fullName);
+        string fullName = type.Namespace is null ? typeName : $"{type.Namespace}.{typeName}";
+
+        if (options.WriteNamespace)
+        {
+            WriteFullName(node, fullName);
+        }
+        else
+        {
+            node.AddChild(new TypeIdentifierToken(typeName));
+        }
 
         if (type.IsGenericType)
         {
             WriteGenericArguments(node, type);
         }
 
-        if (!type.IsValueType)
+        if (!type.IsValueType && options.WriteGcTrackedPointer)
         {
             node.AddChild(Operators.GcTrackedPointer);
         }
