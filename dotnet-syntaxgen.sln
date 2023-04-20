@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CSharp", "S
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SyntaxGenDotNet.VisualBasic", "SyntaxGenDotNet.VisualBasic\SyntaxGenDotNet.VisualBasic.vbproj", "{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CIL", "SyntaxGenDotNet.CIL\SyntaxGenDotNet.CIL.csproj", "{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,18 @@ Global
 		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x64.Build.0 = Release|Any CPU
 		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}.Release|x86.Build.0 = Release|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Debug|x64.Build.0 = Debug|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Debug|x86.Build.0 = Debug|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Release|x64.ActiveCfg = Release|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Release|x64.Build.0 = Release|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Release|x86.ActiveCfg = Release|Any CPU
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
