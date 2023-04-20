@@ -29,9 +29,9 @@ public sealed partial class CilSyntaxGenerator
         var declaration = new TypeDeclaration();
         declaration.AddChild(Keywords.DotClassKeyword);
 
-        var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false, WriteKindPrefix = false};
+        var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false};
         TypeUtility.WriteTypeAttributes(declaration, type);
-        TypeUtility.WriteTypeName(declaration, type, options);
+        TypeUtility.WriteTypeName(declaration, type, options with {WriteKindPrefix = false});
 
         if (type.BaseType is not null)
         {

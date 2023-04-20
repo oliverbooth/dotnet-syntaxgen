@@ -90,6 +90,11 @@ internal sealed class TypeUtility
 
         if (!options.WriteNamespace)
         {
+            if (options.WriteKindPrefix && type is {IsValueType: false, IsGenericType: true})
+            {
+                node.AddChild(Keywords.ClassKeyword);
+            }
+
             node.AddChild(new TypeIdentifierToken(type.Name));
             return;
         }
@@ -217,7 +222,14 @@ internal sealed class TypeUtility
 
         if (writeKindPrefix)
         {
-            node.AddChild(type.IsValueType ? Keywords.ValueTypeKeyword : Keywords.ClassKeyword);
+            if (type.IsValueType)
+            {
+                node.AddChild(Keywords.ValueTypeKeyword);
+            }
+            else if (type.IsGenericType)
+            {
+                node.AddChild(Keywords.ClassKeyword);
+            }
         }
 
         string fullName = type.Name;
