@@ -7,7 +7,7 @@ Public Module TokenUtility
     ''' </summary>
     ''' <param name="value">The value.</param>
     ''' <returns>The literal token.</returns>
-    Public Function CreateLiteralToken(ByVal value As Object) As SyntaxToken
+    Public Function CreateLiteralToken(value As Object) As SyntaxToken
         If value Is Nothing Then
             Return NothingKeyword
         ElseIf TypeOf value Is Boolean Then
@@ -15,7 +15,7 @@ Public Module TokenUtility
         ElseIf TypeOf value Is String Then
             Return New StringLiteralToken(DirectCast(value, String))
         ElseIf TypeOf value Is Char Then
-            Return New CharLiteralToken(DirectCast(value, Char))
+            Return New VisualBasicCharLiteralToken(DirectCast(value, Char))
         ElseIf TypeOf value Is Byte Then
             Return New IntegerLiteralToken(DirectCast(value, Byte))
         ElseIf TypeOf value Is SByte Then
