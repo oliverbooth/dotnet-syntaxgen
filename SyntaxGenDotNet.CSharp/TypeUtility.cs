@@ -82,7 +82,7 @@ internal sealed class TypeUtility
     /// <param name="type">The type for which to write the modifiers.</param>
     public static void WriteModifiers(SyntaxNode node, Type type)
     {
-        if (type.IsInterface)
+        if (type.IsInterface || type.IsValueType)
         {
             return;
         }
