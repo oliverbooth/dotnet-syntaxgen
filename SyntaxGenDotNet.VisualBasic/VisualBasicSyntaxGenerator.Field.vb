@@ -4,8 +4,7 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc/>
-    Public Function GenerateFieldDeclaration(fieldInfo As FieldInfo) As FieldDeclaration _
-        Implements ISyntaxGenerator.GenerateFieldDeclaration
+    Public Overrides Function GenerateFieldDeclaration(fieldInfo As FieldInfo) As FieldDeclaration
         Dim fieldDeclaration As New FieldDeclaration()
 
         WriteCustomAttributes(fieldDeclaration, fieldInfo)

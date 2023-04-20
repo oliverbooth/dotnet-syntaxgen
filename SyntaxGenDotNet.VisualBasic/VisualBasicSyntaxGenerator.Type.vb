@@ -5,8 +5,7 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc />
-    Public Function GenerateTypeDeclaration(type As Type) As TypeDeclaration _
-        Implements ISyntaxGenerator.GenerateTypeDeclaration
+    Public Overrides Function GenerateTypeDeclaration(type As Type) As TypeDeclaration
         Dim declaration As New TypeDeclaration()
 
         WriteTypeVisibilityKeyword(declaration, type)

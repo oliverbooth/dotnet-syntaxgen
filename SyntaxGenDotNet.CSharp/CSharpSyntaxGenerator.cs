@@ -3,8 +3,13 @@
 /// <summary>
 ///     Represents a syntax generator for the C# language.
 /// </summary>
-public partial class CSharpSyntaxGenerator : ISyntaxGenerator
+public partial class CSharpSyntaxGenerator : SyntaxGenerator
 {
-    /// <inheritdoc />
-    public string LanguageName { get; } = "C#";
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CSharpSyntaxGenerator" /> class.
+    /// </summary>
+    public CSharpSyntaxGenerator()
+    {
+        LanguageName = "C#";
+    }
 }

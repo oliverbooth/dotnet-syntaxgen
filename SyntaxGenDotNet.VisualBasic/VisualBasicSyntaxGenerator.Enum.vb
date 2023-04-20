@@ -4,8 +4,7 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc/>
-    Public Function GenerateEnumDeclaration(enumType As Type) As TypeDeclaration _
-        Implements ISyntaxGenerator.GenerateEnumDeclaration
+    Public Overrides Function GenerateEnumDeclaration(enumType As Type) As TypeDeclaration
         Trace.Assert(enumType.IsEnum, "The specified type is not an enum.")
 
         Dim enumDeclaration As New TypeDeclaration()

@@ -7,7 +7,7 @@ namespace SyntaxGenDotNet.CSharp;
 public partial class CSharpSyntaxGenerator
 {
     /// <inheritdoc />
-    public FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
+    public override FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
     {
         var fieldDeclaration = new FieldDeclaration();
         FieldUtility.WriteCustomAttributes(fieldDeclaration, fieldInfo);

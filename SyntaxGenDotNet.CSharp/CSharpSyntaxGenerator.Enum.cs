@@ -8,7 +8,7 @@ namespace SyntaxGenDotNet.CSharp;
 public partial class CSharpSyntaxGenerator
 {
     /// <inheritdoc />
-    public TypeDeclaration GenerateEnumDeclaration(Type enumType)
+    public override TypeDeclaration GenerateEnumDeclaration(Type enumType)
     {
         Trace.Assert(enumType.IsEnum, "The specified type is not an enum.");
 

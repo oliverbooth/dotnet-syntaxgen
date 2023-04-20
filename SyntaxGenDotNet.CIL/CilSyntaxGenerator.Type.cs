@@ -7,7 +7,7 @@ namespace SyntaxGenDotNet.CIL;
 public sealed partial class CilSyntaxGenerator
 {
     /// <inheritdoc />
-    public TypeDeclaration GenerateDelegateDeclaration(Type delegateType)
+    public override TypeDeclaration GenerateDelegateDeclaration(Type delegateType)
     {
         Trace.Assert(delegateType.IsSubclassOf(typeof(MulticastDelegate)) || delegateType.IsSubclassOf(typeof(Delegate)),
             "The specified type is not a delegate.");
@@ -16,7 +16,7 @@ public sealed partial class CilSyntaxGenerator
     }
 
     /// <inheritdoc />
-    public TypeDeclaration GenerateEnumDeclaration(Type enumType)
+    public override TypeDeclaration GenerateEnumDeclaration(Type enumType)
     {
         Trace.Assert(enumType.IsEnum, "The specified type is not an enum.");
 
@@ -24,7 +24,7 @@ public sealed partial class CilSyntaxGenerator
     }
 
     /// <inheritdoc />
-    public TypeDeclaration GenerateTypeDeclaration(Type type)
+    public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
         var declaration = new TypeDeclaration();
         declaration.AddChild(Keywords.DotClassKeyword);

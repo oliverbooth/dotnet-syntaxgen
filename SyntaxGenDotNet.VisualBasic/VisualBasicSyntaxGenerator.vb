@@ -2,12 +2,12 @@
 '''     Represents a syntax generator for the Visual Basic language.
 ''' </summary>
 Public Partial Class VisualBasicSyntaxGenerator
-    Implements ISyntaxGenerator
+    Inherits SyntaxGenerator
 
-    ''' <inheritdoc/>
-    Public ReadOnly Property LanguageName As String Implements ISyntaxGenerator.LanguageName
-        Get
-            Return "VB"
-        End Get
-    End Property
+    ''' <summary>
+    '''     Initializes a new instance of the <see cref="VisualBasicSyntaxGenerator" /> class.
+    ''' </summary>
+    Public Sub New()
+        LanguageName = "VB"
+    End Sub
 End Class

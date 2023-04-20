@@ -12,14 +12,14 @@ internal static class OutputApp
 {
     public static void Run()
     {
-        var generators = new ISyntaxGenerator[]
+        var generators = new SyntaxGenerator[]
         {
             new CSharpSyntaxGenerator(), new VisualBasicSyntaxGenerator(), new CilSyntaxGenerator(),
             new CppCliSyntaxGenerator(), new FSharpSyntaxGenerator()
         };
 
         var type = typeof(MyClass);
-        foreach (ISyntaxGenerator generator in generators)
+        foreach (SyntaxGenerator generator in generators)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             int remainingSpace = Console.WindowWidth - (generator.LanguageName.Length + 6);

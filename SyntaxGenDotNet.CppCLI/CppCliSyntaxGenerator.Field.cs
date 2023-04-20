@@ -8,7 +8,7 @@ namespace SyntaxGenDotNet.CppCLI;
 public sealed partial class CppCliSyntaxGenerator
 {
     /// <inheritdoc />
-    public FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
+    public override FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
     {
         var fieldDeclaration = new FieldDeclaration();
         FieldUtility.WriteVisibilityKeyword(fieldDeclaration, fieldInfo);

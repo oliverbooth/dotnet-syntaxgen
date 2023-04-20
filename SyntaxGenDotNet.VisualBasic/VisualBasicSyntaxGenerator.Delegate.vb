@@ -5,8 +5,7 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc/>
-    Public Function GenerateDelegateDeclaration(delegateType As Type) As TypeDeclaration _
-        Implements ISyntaxGenerator.GenerateDelegateDeclaration
+    Public Overrides Function GenerateDelegateDeclaration(delegateType As Type) As TypeDeclaration
         Trace.Assert(delegateType.IsSubclassOf(GetType(MulticastDelegate)) Or delegateType.IsSubclassOf(GetType([Delegate])),
                      "The specified type is not a delegate.")
 

@@ -1,13 +1,15 @@
-﻿using System.Diagnostics;
-using SyntaxGenDotNet.Syntax.Declaration;
-
-namespace SyntaxGenDotNet.CIL;
+﻿namespace SyntaxGenDotNet.CIL;
 
 /// <summary>
 ///     Represents a syntax generator for CIL (Common Intermediate Language).
 /// </summary>
-public sealed partial class CilSyntaxGenerator : ISyntaxGenerator
+public sealed partial class CilSyntaxGenerator : SyntaxGenerator
 {
-    /// <inheritdoc />
-    public string LanguageName { get; } = "IL";
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CilSyntaxGenerator" /> class.
+    /// </summary>
+    public CilSyntaxGenerator()
+    {
+        LanguageName = "CIL";
+    }
 }

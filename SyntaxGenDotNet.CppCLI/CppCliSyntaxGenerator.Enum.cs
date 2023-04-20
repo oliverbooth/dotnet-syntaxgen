@@ -7,7 +7,7 @@ namespace SyntaxGenDotNet.CppCLI;
 public partial class CppCliSyntaxGenerator
 {
     /// <inheritdoc />
-    public TypeDeclaration GenerateEnumDeclaration(Type enumType)
+    public override TypeDeclaration GenerateEnumDeclaration(Type enumType)
     {
         Trace.Assert(enumType.IsEnum, "The specified type is not an enum.");
 

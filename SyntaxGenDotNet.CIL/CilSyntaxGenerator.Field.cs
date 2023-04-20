@@ -7,7 +7,7 @@ namespace SyntaxGenDotNet.CIL;
 public sealed partial class CilSyntaxGenerator
 {
     /// <inheritdoc />
-    public FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
+    public override FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
     {
         var fieldDeclaration = new FieldDeclaration();
         fieldDeclaration.AddChild(Keywords.FieldDeclaration);

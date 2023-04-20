@@ -1,12 +1,15 @@
-﻿using SyntaxGenDotNet.Syntax.Declaration;
-
-namespace SyntaxGenDotNet.CppCLI;
+﻿namespace SyntaxGenDotNet.CppCLI;
 
 /// <summary>
 ///     Represents a syntax generator for the C++/CLI language.
 /// </summary>
-public sealed partial class CppCliSyntaxGenerator : ISyntaxGenerator
+public sealed partial class CppCliSyntaxGenerator : SyntaxGenerator
 {
-    /// <inheritdoc />
-    public string LanguageName { get; } = "C++/CLI";
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CppCliSyntaxGenerator" /> class.
+    /// </summary>
+    public CppCliSyntaxGenerator()
+    {
+        LanguageName = "C++/CLI";
+    }
 }

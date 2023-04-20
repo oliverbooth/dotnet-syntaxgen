@@ -7,7 +7,7 @@ namespace SyntaxGenDotNet.CSharp;
 public partial class CSharpSyntaxGenerator
 {
     /// <inheritdoc />
-    public TypeDeclaration GenerateTypeDeclaration(Type type)
+    public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
         if (type.IsEnum)
         {

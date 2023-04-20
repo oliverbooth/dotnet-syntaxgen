@@ -5,7 +5,7 @@ namespace SyntaxGenDotNet.CppCLI;
 public sealed partial class CppCliSyntaxGenerator
 {
     /// <inheritdoc />
-    public TypeDeclaration GenerateTypeDeclaration(Type type)
+    public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
         return new TypeDeclaration();
     }
