@@ -15,13 +15,14 @@ public sealed class AttributeUsageAttributeExpressionWriter : AttributeExpressio
             return Expression.Empty();
         }
 
+        var allowMultipleProperty = AttributeType.GetProperty(nameof(AttributeUsageAttribute.AllowMultiple))!;
+        var inheritedProperty = AttributeType.GetProperty(nameof(AttributeUsageAttribute.Inherited))!;
+
         Type[] constructorArgumentTypes = {typeof(AttributeTargets)};
-        var constructor = typeof(AttributeUsageAttribute).GetConstructor(constructorArgumentTypes)!;
+        var constructor = AttributeType.GetConstructor(constructorArgumentTypes)!;
         var validOnExpression = Expression.Constant(attribute.ValidOn);
         var constructorExpression = Expression.New(constructor, validOnExpression);
         var bindings = new List<MemberBinding>();
-        var allowMultipleProperty = typeof(AttributeUsageAttribute).GetProperty(nameof(AttributeUsageAttribute.AllowMultiple))!;
-        var inheritedProperty = typeof(AttributeUsageAttribute).GetProperty(nameof(AttributeUsageAttribute.Inherited))!;
 
         if (attribute.AllowMultiple)
         {

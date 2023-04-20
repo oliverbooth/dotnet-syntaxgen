@@ -13,7 +13,7 @@ public sealed class SerializableAttributeExpressionWriter : AttributeExpressionW
     {
         if ((declaringType.Attributes & TypeAttributes.Serializable) != 0)
         {
-            return Expression.MemberInit(Expression.New(typeof(SerializableAttribute)));
+            return Expression.MemberInit(Expression.New(AttributeType));
         }
 
         return Expression.Empty();

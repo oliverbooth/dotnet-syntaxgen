@@ -22,7 +22,7 @@ public sealed class StructLayoutAttributeExpressionWriter : AttributeExpressionW
         }
 
         var arguments = new List<Expression>();
-        var constructor = typeof(StructLayoutAttribute).GetConstructor(new[] {typeof(LayoutKind)})!;
+        var constructor = AttributeType.GetConstructor(new[] {typeof(LayoutKind)})!;
         ConstantExpression structLayout = mask switch
         {
             TypeAttributes.AutoLayout => Expression.Constant(LayoutKind.Auto),
@@ -46,7 +46,7 @@ public sealed class StructLayoutAttributeExpressionWriter : AttributeExpressionW
         };
 
         var charSetExpression = Expression.Constant(charSet);
-        var charSetField = typeof(StructLayoutAttribute).GetField(nameof(StructLayoutAttribute.CharSet))!;
+        var charSetField = AttributeType.GetField(nameof(StructLayoutAttribute.CharSet))!;
         MemberAssignment bind = Expression.Bind(charSetField, charSetExpression);
         return Expression.MemberInit(newExpression, bind);
     }
