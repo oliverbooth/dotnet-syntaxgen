@@ -75,7 +75,7 @@ Friend Module TypeUtility
         Const mask = TypeAttributes.VisibilityMask
 
         Select Case type.Attributes And mask
-            Case TypeAttributes.Public Or TypeAttributes.NestedPublic
+            Case TypeAttributes.Public, TypeAttributes.NestedPublic
                 declaration.AddChild(PublicKeyword)
 
             Case TypeAttributes.NestedPrivate
