@@ -27,9 +27,8 @@ internal static class OutputApp
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             int remainingSpace = Console.WindowWidth - (generator.LanguageName.Length + 6);
-            int hyphensCount = remainingSpace / 2;
-            var hyphens = new string('-', hyphensCount);
-            Console.WriteLine($@"{hyphens} {generator.LanguageName} {hyphens}{((remainingSpace & 1) == 0 ? "" : "-")}");
+            var hyphens = new string('-', remainingSpace);
+            Console.WriteLine($@"--- {generator.LanguageName} {hyphens}");
             Console.ResetColor();
 
             var declaration = generator.GenerateFieldDeclaration(field);
