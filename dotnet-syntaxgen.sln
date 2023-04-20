@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CIL", "Synt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CppCLI", "SyntaxGenDotNet.CppCLI\SyntaxGenDotNet.CppCLI.csproj", "{ACDC340A-D5D9-4AC9-B31D-682EB31C9765}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.FSharp", "SyntaxGenDotNet.FSharp\SyntaxGenDotNet.FSharp.csproj", "{BB259937-B1E7-4E63-9938-A3C93873F9B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,18 @@ Global
 		{ACDC340A-D5D9-4AC9-B31D-682EB31C9765}.Release|x64.Build.0 = Release|Any CPU
 		{ACDC340A-D5D9-4AC9-B31D-682EB31C9765}.Release|x86.ActiveCfg = Release|Any CPU
 		{ACDC340A-D5D9-4AC9-B31D-682EB31C9765}.Release|x86.Build.0 = Release|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Debug|x64.Build.0 = Debug|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Release|x64.ActiveCfg = Release|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Release|x64.Build.0 = Release|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
