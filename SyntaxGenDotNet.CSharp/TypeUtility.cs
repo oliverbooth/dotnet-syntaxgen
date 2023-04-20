@@ -50,33 +50,6 @@ internal sealed class TypeUtility
     }
 
     /// <summary>
-    ///     Writes all known supported custom attribute to the specified node.
-    /// </summary>
-    /// <param name="generator">The syntax generator.</param>
-    /// <param name="node">The node to which to write the attributes.</param>
-    /// <param name="type">The type for which to write the attributes.</param>
-    public static void WriteCustomAttributes(SyntaxGenerator generator, TypeDeclaration node, Type type)
-    {
-        foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
-        {
-            var writerType = writer.GetType();
-            if (!writerType.IsSubclassOf(typeof(AttributeExpressionWriter)))
-            {
-                continue;
-            }
-
-            Type attributeType = writer.AttributeType;
-            Attribute? attribute = type.GetCustomAttribute(attributeType, false);
-            Expression attributeExpression = writer.CreateAttributeExpression(type, attribute);
-
-            if (attributeExpression is MemberInitExpression memberInitExpression)
-            {
-                WriteCustomAttribute(node, memberInitExpression);
-            }
-        }
-    }
-
-    /// <summary>
     ///     Writes a custom attribute to the specified node.
     /// </summary>
     /// <param name="node">The node to which to write the attribute.</param>
@@ -87,7 +60,7 @@ internal sealed class TypeUtility
 
         // explicit creation of the open bracket token to avoid the trailing whitespace
         // of the previous token being trimmed, as Operators.OpenBracket defaults to trimming.
-        var openBracket = new OperatorToken("[", false);
+        var openBracket = new OperatorToken(Operators.OpenBracket.Text, false);
 
         node.AddChild(openBracket);
         WriteTypeName(node, attributeExpression.Type, options);
@@ -99,13 +72,15 @@ internal sealed class TypeUtility
 
             for (var index = 0; index < arguments.Count; index++)
             {
-                if (arguments[index].Type.IsEnum)
+                Expression argument = arguments[index];
+
+                if (argument.Type.IsEnum)
                 {
-                    WriteTypeName(node, arguments[index].Type, options with {WriteNamespace = false});
+                    WriteTypeName(node, argument.Type, options with {WriteNamespace = false});
                     node.AddChild(Operators.Dot);
                 }
 
-                node.AddChild(TokenUtility.CreateLiteralToken(arguments[index]));
+                node.AddChild(TokenUtility.CreateLiteralToken(argument));
             }
 
             if (attributeExpression.Bindings.Count > 0)
@@ -117,6 +92,27 @@ internal sealed class TypeUtility
         }
 
         node.AddChild(Operators.CloseBracket.With(o => o.TrailingWhitespace = WhitespaceTrivia.NewLine));
+    }
+
+    /// <summary>
+    ///     Writes all known supported custom attribute to the specified node.
+    /// </summary>
+    /// <param name="generator">The syntax generator.</param>
+    /// <param name="node">The node to which to write the attributes.</param>
+    /// <param name="type">The type for which to write the attributes.</param>
+    public static void WriteCustomAttributes(SyntaxGenerator generator, TypeDeclaration node, Type type)
+    {
+        foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
+        {
+            Type attributeType = writer.AttributeType;
+            Attribute? attribute = type.GetCustomAttribute(attributeType, false);
+            Expression attributeExpression = writer.CreateAttributeExpression(type, attribute);
+
+            if (attributeExpression is MemberInitExpression memberInitExpression)
+            {
+                WriteCustomAttribute(node, memberInitExpression);
+            }
+        }
     }
 
     /// <summary>
