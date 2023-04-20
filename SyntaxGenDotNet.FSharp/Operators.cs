@@ -24,6 +24,11 @@ internal static class Operators
     public static readonly OperatorToken CloseChevron = new(">");
 
     /// <summary>
+    ///     The <c>)</c> operator.
+    /// </summary>
+    public static readonly OperatorToken CloseParenthesis = new(")");
+
+    /// <summary>
     ///     The <c>:</c> operator.
     /// </summary>
     public static readonly OperatorToken Colon = new(":", false)
@@ -50,4 +55,9 @@ internal static class Operators
     ///     The <c>&lt;</c> operator.
     /// </summary>
     public static readonly OperatorToken OpenChevron = new("<");
+
+    /// <summary>
+    ///     The <c>(</c> operator.
+    /// </summary>
+    public static readonly OperatorToken OpenParenthesis = new("(");
 }

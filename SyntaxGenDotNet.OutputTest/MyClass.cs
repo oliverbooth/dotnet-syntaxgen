@@ -58,6 +58,9 @@ internal class MyClass
     protected internal const int ProtectedInternalConstantInteger = 42;
     private protected const int PrivateProtectedConstantInteger = 42;
 
+    [CLSCompliant(false)]
+    public const uint PublicConstantUnsignedInteger = 42;
+
     public const string PublicConstantString = "42";
     protected const string ProtectedConstantString = "42";
     private const string PrivateConstantString = "42";

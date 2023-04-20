@@ -8,13 +8,14 @@ Public Partial Class VisualBasicSyntaxGenerator
         Implements ISyntaxGenerator.GenerateFieldDeclaration
         Dim fieldDeclaration As New FieldDeclaration()
 
+        WriteCustomAttributes(fieldDeclaration, fieldInfo)
         WriteVisibilityKeyword(fieldDeclaration, fieldInfo)
         WriteModifiers(fieldDeclaration, fieldInfo)
-        
+
         fieldDeclaration.AddChild(new IdentifierToken(fieldInfo.Name))
         fieldDeclaration.AddChild(AsKeyword)
         WriteTypeName(fieldDeclaration, fieldInfo.FieldType)
-        
+
         If fieldInfo.IsLiteral Then
             fieldDeclaration.AddChild(Assignment)
             Dim value = fieldInfo.GetRawConstantValue()

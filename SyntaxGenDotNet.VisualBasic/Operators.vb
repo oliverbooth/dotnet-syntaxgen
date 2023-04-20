@@ -10,6 +10,11 @@ Friend Module Operators
         }
 
     ''' <summary>
+    '''     The <c>&gt;</c> operator.
+    ''' </summary>
+    Public ReadOnly CloseChevron As New OperatorToken(">")
+
+    ''' <summary>
     '''     The <c>)</c> operator.
     ''' </summary>
     Public ReadOnly CloseParenthesis As New OperatorToken(")")
@@ -23,6 +28,11 @@ Friend Module Operators
     '''     The <c>.</c> operator.
     ''' </summary>
     Public ReadOnly Dot As New OperatorToken(".")
+
+    ''' <summary>
+    '''     The <c>&lt;</c> operator.
+    ''' </summary>
+    Public ReadOnly OpenChevron As New OperatorToken("<")
 
     ''' <summary>
     '''     The <c>(</c> operator.

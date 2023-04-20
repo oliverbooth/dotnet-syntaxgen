@@ -13,7 +13,7 @@ internal static class OutputApp
 {
     public static void Run()
     {
-        var field = typeof(MyClass).GetField("ProtectedInternalStaticReadOnlyListField", (BindingFlags)(-1))!;
+        var field = typeof(MyClass).GetField("PublicConstantUnsignedInteger", (BindingFlags)(-1))!;
         var generators = new ISyntaxGenerator[]
         {
             new CSharpSyntaxGenerator(),
