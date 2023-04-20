@@ -17,8 +17,15 @@ internal sealed class TokenUtility
             bool boolValue => boolValue ? Keywords.TrueKeyword : Keywords.FalseKeyword,
             string stringValue => new StringLiteralToken(stringValue),
             char charValue => new CilCharLiteralToken(charValue),
+            sbyte sbyteValue => new IntegerLiteralToken(sbyteValue),
+            byte byteValue => new IntegerLiteralToken(byteValue),
+            short shortValue => new IntegerLiteralToken(shortValue),
+            ushort ushortValue => new IntegerLiteralToken(ushortValue),
             int intValue => new IntegerLiteralToken(intValue),
+            uint uintValue => new IntegerLiteralToken(uintValue),
             long longValue => new IntegerLiteralToken(longValue),
+            ulong ulongValue => new IntegerLiteralToken(ulongValue),
+            float floatValue => new FloatingPointLiteralToken(floatValue),
             double doubleValue => new FloatingPointLiteralToken(doubleValue),
             _ => new LiteralToken(value.ToString()!)
         };

@@ -27,6 +27,14 @@ public abstract class NumericLiteralToken : LiteralToken
     ///     Initializes a new instance of the <see cref="NumericLiteralToken" /> class.
     /// </summary>
     /// <param name="literalValue">The literal value.</param>
+    protected NumericLiteralToken(ulong literalValue) : this(literalValue.ToString(CultureInfo.InvariantCulture))
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="NumericLiteralToken" /> class.
+    /// </summary>
+    /// <param name="literalValue">The literal value.</param>
     protected NumericLiteralToken(float literalValue) : this(literalValue.ToString(CultureInfo.InvariantCulture))
     {
     }

@@ -11,7 +11,7 @@ internal static class OutputApp
 {
     public static void Run()
     {
-        var field = typeof(MyClass).GetField("InternalConstantChar", (BindingFlags)(-1))!;
+        var field = typeof(MyClass).GetField("ProtectedInternalConstantFloat", (BindingFlags)(-1))!;
         ISyntaxGenerator[] generators = {new CSharpSyntaxGenerator(), new VisualBasicSyntaxGenerator(), new CilSyntaxGenerator()};
 
         foreach (ISyntaxGenerator generator in generators)
