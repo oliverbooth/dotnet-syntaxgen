@@ -106,8 +106,18 @@ internal sealed class TypeUtility
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
     /// <param name="type">The type for which to write the name.</param>
+    public static void WriteTypeName(SyntaxNode node, Type type)
+    {
+        WriteTypeName(node, type, new TypeWriteOptions {WriteAlias = true, WriteNamespace = true});
+    }
+
+    /// <summary>
+    ///     Writes the type name to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the type name.</param>
+    /// <param name="type">The type for which to write the name.</param>
     /// <param name="options">The options for writing the type name.</param>
-    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options = default)
+    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
     {
         if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
         {
