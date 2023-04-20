@@ -125,6 +125,11 @@ Friend Module Keywords
     Public ReadOnly SharedKeyword As New KeywordToken("Shared")
 
     ''' <summary>
+    '''     The <c>Structure</c> keyword.
+    ''' </summary>
+    Public ReadOnly StructureKeyword As New KeywordToken("Structure")
+
+    ''' <summary>
     '''     The <c>Sub</c> keyword.
     ''' </summary>
     Public ReadOnly SubKeyword As New KeywordToken("Sub")

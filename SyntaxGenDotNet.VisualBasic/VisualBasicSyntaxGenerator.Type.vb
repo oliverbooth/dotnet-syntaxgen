@@ -54,6 +54,8 @@ Public Partial Class VisualBasicSyntaxGenerator
             declaration.AddChild(InterfaceKeyword)
         ElseIf type.IsEnum Then
             declaration.AddChild(EnumKeyword)
+        ElseIf type.IsValueType Then
+            declaration.AddChild(StructureKeyword)
         Else
             declaration.AddChild(ClassKeyword)
         End If

@@ -74,7 +74,7 @@ Friend Module TypeUtility
     ''' <param name="node">The node to which to write the modifiers.</param>
     ''' <param name="type">The type for which to write the modifiers.</param>
     Public Sub WriteTypeModifiers(node As SyntaxNode, type As Type)
-        If type.IsInterface Then
+        If type.IsInterface Or type.IsValueType Then
             Return
         End If
 
