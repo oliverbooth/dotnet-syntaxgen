@@ -20,12 +20,6 @@ public class SyntaxNode
     public WhitespaceTrivia LeadingWhitespace { get; set; } = WhitespaceTrivia.None;
 
     /// <summary>
-    ///     Gets or sets the parent syntax node.
-    /// </summary>
-    /// <value>The parent syntax node.</value>
-    public SyntaxNode? Parent { get; set; }
-
-    /// <summary>
     ///     Gets or sets a value indicating whether to strip trailing whitespace from the preceding syntax node.
     /// </summary>
     /// <value>
@@ -81,57 +75,12 @@ public class SyntaxNode
             throw new ArgumentNullException(nameof(child));
         }
 
-        if (child.Parent is not null)
-        {
-            throw new InvalidOperationException("The child already has a parent.");
-        }
-
         if (child == this)
         {
             throw new InvalidOperationException("The child is the syntax node.");
         }
 
-        if (child.IsDescendantOf(this))
-        {
-            throw new InvalidOperationException("The child is a descendant of the syntax node.");
-        }
-
-        if (Children.Contains(child))
-        {
-            return;
-        }
-
-        child.Parent = this;
         Children = Children.Append(child).ToArray();
-    }
-
-    /// <summary>
-    ///     Returns a value indicating whether the syntax node is a descendant of the specified syntax node.
-    /// </summary>
-    /// <param name="syntaxNode">The syntax node.</param>
-    /// <returns>
-    ///     <see langword="true" /> if the syntax node is a descendant of the specified syntax node; otherwise,
-    ///     <see langword="false" />.
-    /// </returns>
-    /// <exception cref="ArgumentNullException"><paramref name="syntaxNode" /> is <see langword="null" />.</exception>
-    public bool IsDescendantOf(SyntaxNode syntaxNode)
-    {
-        if (syntaxNode is null)
-        {
-            throw new ArgumentNullException(nameof(syntaxNode));
-        }
-
-        if (Parent is null)
-        {
-            return false;
-        }
-
-        if (Parent == syntaxNode)
-        {
-            return true;
-        }
-
-        return Parent.IsDescendantOf(syntaxNode);
     }
 
     /// <summary>
