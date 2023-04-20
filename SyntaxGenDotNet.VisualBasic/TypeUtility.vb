@@ -43,27 +43,90 @@ Friend Module TypeUtility
     End Function
 
     ''' <summary>
+    '''     Writes the generic arguments for the specified type to the specified node.
+    ''' </summary>
+    ''' <param name="node">The node to which to write the generic arguments.</param>
+    ''' <param name="type">The type for which to write the generic arguments.</param>
+    Public Sub WriteGenericArguments(node As SyntaxNode, type As Type)
+        If Not type.IsGenericType Then
+            Return
+        End If
+
+        node.AddChild(OpenParenthesis)
+        node.AddChild(OfKeyword)
+        Dim genericArguments As Type() = type.GetGenericArguments()
+        For index = 0 To genericArguments.Length - 1
+            Dim genericArgument As Type = genericArguments(index)
+            WriteParameterVariance(node, genericArgument)
+            WriteTypeName(node, genericArgument)
+
+            If index < genericArguments.Length - 1 Then
+                node.AddChild(Comma.With(Sub(o) o.TrailingWhitespace = " "))
+            End If
+        Next
+
+        node.AddChild(CloseParenthesis)
+    End Sub
+
+    ''' <summary>
+    '''     Writes the modifiers for the specified type to the specified node.
+    ''' </summary>
+    ''' <param name="node">The node to which to write the modifiers.</param>
+    ''' <param name="type">The type for which to write the modifiers.</param>
+    Public Sub WriteTypeModifiers(node As SyntaxNode, type As Type)
+        If type.IsInterface Then
+            Return
+        End If
+
+        If type.IsAbstract And Not type.IsSealed Then
+            node.AddChild(MustInheritKeyword)
+        ElseIf type.IsSealed And Not type.IsAbstract Then
+            node.AddChild(NotInheritableKeyword)
+        End If
+    End Sub
+
+    ''' <summary>
     '''     Writes the type name to the specified node.
     ''' </summary>
     ''' <param name="node">The node to which to write the type name.</param>
     ''' <param name="type">The type for which to write the name.</param>
-    ''' <param name="trimAttributeSuffix">
-    '''     <see langword="true" /> to trim the "Attribute" suffix from the type name; otherwise,
-    '''     <see langword="false" />. The default is <see langword="false" />.
-    ''' </param>
-    Public Sub WriteTypeName(node As SyntaxNode, type As Type, Optional trimAttributeSuffix As Boolean = False)
+    Public Sub WriteTypeName(node As SyntaxNode, type As Type)
+        WriteTypeName(node, type, TypeWriteOptions.DefaultOptions)
+    End Sub
+
+    ''' <summary>
+    '''     Writes the type name to the specified node.
+    ''' </summary>
+    ''' <param name="node">The node to which to write the type name.</param>
+    ''' <param name="type">The type for which to write the name.</param>
+    ''' <param name="options">The options for writing the type name.</param>
+    Public Sub WriteTypeName(node As SyntaxNode, type As Type, options As TypeWriteOptions)
+        Dim typeName As String = type.FullName
+        If typeName Is Nothing Or Not options.WriteNamespace Then
+            typeName = type.Name
+        End If
+
         If type.IsGenericParameter Then
-            node.AddChild(New IdentifierToken(type.Name))
+            node.AddChild(New TypeIdentifierToken(typeName))
             Return
         End If
 
         Dim languageAlias As KeywordToken = Nothing
-        If TryGetLanguageAliasToken(type, languageAlias) Then
+        If options.WriteAlias And TryGetLanguageAliasToken(type, languageAlias) Then
             node.AddChild(languageAlias)
             Return
         End If
 
-        WriteNamespacedTypeName(node, type, trimAttributeSuffix)
+        If Not options.WriteNamespace Then
+            If type.IsGenericType Then
+                typeName = type.Name.Substring(0, typeName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
+            End If
+
+            node.AddChild(New TypeIdentifierToken(typeName))
+            Return
+        End If
+
+        WriteNamespacedTypeName(node, type, options.TrimAttributeSuffix)
     End Sub
 
     ''' <summary>
@@ -71,7 +134,7 @@ Friend Module TypeUtility
     ''' </summary>
     ''' <param name="declaration">The declaration to write to.</param>
     ''' <param name="type">The type whose visibility to write.</param>
-    Public Sub WriteVisibilityKeyword(declaration As SyntaxNode, type As Type)
+    Public Sub WriteTypeVisibilityKeyword(declaration As SyntaxNode, type As Type)
         Const mask = TypeAttributes.VisibilityMask
 
         Select Case type.Attributes And mask
@@ -142,18 +205,20 @@ Friend Module TypeUtility
         Next
     End Sub
 
-    Private Sub WriteGenericArguments(node As SyntaxNode, type As Type)
-        node.AddChild(OpenParenthesis)
-        node.AddChild(OfKeyword)
-        Dim genericArguments As Type() = type.GetGenericArguments()
-        For index = 0 To genericArguments.Length - 1
-            If index > 0 Then
-                node.AddChild(Comma)
-            End If
+    Private Sub WriteParameterVariance(node As SyntaxNode, type As Type)
+        If Not type.IsGenericParameter Then
+            Return
+        End If
 
-            WriteTypeName(node, genericArguments(index))
-        Next
+        Const mask = GenericParameterAttributes.VarianceMask
+        Dim attributes = type.GenericParameterAttributes
 
-        node.AddChild(CloseParenthesis)
+        Select Case attributes And mask
+            Case GenericParameterAttributes.Contravariant
+                node.AddChild(InKeyword)
+
+            Case GenericParameterAttributes.Covariant
+                node.AddChild(OutKeyword)
+        End Select
     End Sub
 End Module

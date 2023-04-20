@@ -170,6 +170,6 @@ internal sealed class TypeUtility
             WriteTypeName(node, genericArguments[index]);
         }
 
-        node.AddChild(Operators.CloseChevron);
+        node.AddChild(Operators.CloseChevron.With(o => o.TrailingWhitespace = " "));
     }
 }

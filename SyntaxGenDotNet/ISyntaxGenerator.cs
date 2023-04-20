@@ -19,7 +19,14 @@ public interface ISyntaxGenerator
     /// </summary>
     /// <param name="enumType">The enum for which to generate syntax.</param>
     /// <returns>The syntax for the specified enum.</returns>
-    EnumDeclaration GenerateEnumDeclaration(Type enumType);
+    TypeDeclaration GenerateEnumDeclaration(Type enumType);
+
+    /// <summary>
+    ///     Generates the syntax for the specified delegate.
+    /// </summary>
+    /// <param name="delegateType">The delegate for which to generate syntax.</param>
+    /// <returns>The syntax for the specified delegate.</returns>
+    TypeDeclaration GenerateDelegateDeclaration(Type delegateType);
 
     /// <summary>
     ///     Generates the syntax for the specified field.
@@ -27,4 +34,11 @@ public interface ISyntaxGenerator
     /// <param name="fieldInfo">The field for which to generate syntax.</param>
     /// <returns>The syntax for the specified field.</returns>
     FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo);
+
+    /// <summary>
+    ///     Generates the syntax for the specified type.
+    /// </summary>
+    /// <param name="type">The type for which to generate syntax.</param>
+    /// <returns>The syntax for the specified type.</returns>
+    TypeDeclaration GenerateTypeDeclaration(Type type);
 }

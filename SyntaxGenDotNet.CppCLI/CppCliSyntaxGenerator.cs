@@ -1,4 +1,6 @@
-﻿namespace SyntaxGenDotNet.CppCLI;
+﻿using SyntaxGenDotNet.Syntax.Declaration;
+
+namespace SyntaxGenDotNet.CppCLI;
 
 /// <summary>
 ///     Represents a syntax generator for the C++/CLI language.

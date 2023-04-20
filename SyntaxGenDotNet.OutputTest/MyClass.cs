@@ -1,5 +1,8 @@
 ﻿// ReSharper disable All
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+
 #pragma warning disable CS0414
 #pragma warning disable CS0649
 #pragma warning disable CS0169
@@ -7,7 +10,7 @@
 
 namespace SyntaxGenDotNet.OutputTest;
 
-internal class MyClass
+internal abstract class MyClass : Attribute, IComparable<MyClass>, IComparable, ICloneable
 {
     public int PublicInstanceField;
     protected int ProtectedInstanceField;
@@ -15,6 +18,13 @@ internal class MyClass
     internal int InternalInstanceField;
     protected internal int ProtectedInternalInstanceField;
     private protected int PrivateProtectedInstanceField;
+
+    public int? PublicInstanceNullableField;
+    protected int? ProtectedInstanceNullableField;
+    private int? PrivateInstanceNullableField;
+    internal int? InternalInstanceNullableField;
+    protected internal int? ProtectedInternalInstanceNullableField;
+    private protected int? PrivateProtectedInstanceNullableField;
 
     public readonly int PublicInstanceReadOnlyField = 42;
     protected readonly int ProtectedInstanceReadOnlyField = 42;
@@ -308,4 +318,19 @@ internal class MyClass
     protected internal event EventHandler ProtectedInternalInstanceEvent = null!;
 
     private protected event EventHandler PrivateProtectedInstanceEvent = null!;
+
+    public object Clone()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int CompareTo(object? obj)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int CompareTo(MyClass? other)
+    {
+        throw new NotImplementedException();
+    }
 }

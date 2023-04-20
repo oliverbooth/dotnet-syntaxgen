@@ -4,13 +4,13 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc/>
-    Public Function GenerateEnumDeclaration(enumType As Type) As EnumDeclaration _
+    Public Function GenerateEnumDeclaration(enumType As Type) As TypeDeclaration _
         Implements ISyntaxGenerator.GenerateEnumDeclaration
         Trace.Assert(enumType.IsEnum, "The specified type is not an enum.")
 
-        Dim enumDeclaration As New EnumDeclaration()
+        Dim enumDeclaration As New TypeDeclaration()
 
-        TypeUtility.WriteVisibilityKeyword(enumDeclaration, enumType)
+        WriteTypeVisibilityKeyword(enumDeclaration, enumType)
         enumDeclaration.AddChild(EnumKeyword)
         enumDeclaration.AddChild(new TypeIdentifierToken(enumType.Name))
 

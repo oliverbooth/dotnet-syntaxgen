@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -42,25 +43,49 @@ internal sealed class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the attributes for the specified type to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the attributes.</param>
+    /// <param name="type">The type for which to write the attributes.</param>
+    public static void WriteTypeAttributes(SyntaxNode node, Type type)
+    {
+        WriteClassSemanticsAttributes(node, type);
+        WriteVisibilityAttribute(node, type);
+        WriteSpecialSemanticsAttributes(node, type);
+        WriteLayoutAttributes(node, type);
+        WriteCharSetAttributes(node, type);
+        WriteImplementationAttributes(node, type);
+        WriteAdditionalAttributes(node, type);
+    }
+
+    /// <summary>
     ///     Writes the type name to the specified node.
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
     /// <param name="type">The type for which to write the name.</param>
-    public static void WriteTypeName(SyntaxNode node, Type type)
+    /// <param name="options">The options for writing the type name.</param>
+    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options = default)
     {
         if (type.IsGenericParameter)
         {
-            node.AddChild(new IdentifierToken(type.Name));
+            node.AddChild(new TypeIdentifierToken(type.Name));
             return;
         }
 
-        if (TryGetLanguageAliasToken(type, out KeywordToken? alias))
+        if (options.WriteAlias && TryGetLanguageAliasToken(type, out KeywordToken? alias))
         {
             node.AddChild(alias);
             return;
         }
 
-        WriteNamespacedTypeName(node, type);
+        if (!options.WriteNamespace)
+        {
+            node.AddChild(new TypeIdentifierToken(type.Name));
+            return;
+        }
+
+        WriteNamespacedTypeName(node, type, options.WriteKindPrefix);
+
         SyntaxNode last = node.Children[^1];
         if (last is OperatorToken)
         {
@@ -68,7 +93,109 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteNamespacedTypeName(SyntaxNode node, Type type)
+
+    private static void WriteAdditionalAttributes(SyntaxNode node, Type type)
+    {
+        if ((type.Attributes & TypeAttributes.BeforeFieldInit) != 0)
+        {
+            node.AddChild(Keywords.BeforeFieldInitKeyword);
+        }
+
+        if ((type.Attributes & TypeAttributes.RTSpecialName) != 0)
+        {
+            node.AddChild(Keywords.RTSpecialNameKeyword);
+        }
+
+        if ((type.Attributes & TypeAttributes.HasSecurity) != 0)
+        {
+            node.AddChild(Keywords.HasSecurityKeyword);
+        }
+    }
+
+    private static void WriteCharSetAttributes(SyntaxNode node, Type type)
+    {
+        const TypeAttributes mask = TypeAttributes.StringFormatMask;
+        TypeAttributes attributes = type.Attributes & mask;
+
+        switch (attributes)
+        {
+            case TypeAttributes.AutoClass:
+                node.AddChild(Keywords.AutoCharKeyword);
+                break;
+
+            case TypeAttributes.AnsiClass:
+                node.AddChild(Keywords.AnsiKeyword);
+                break;
+
+            case TypeAttributes.UnicodeClass:
+                node.AddChild(Keywords.UnicodeKeyword);
+                break;
+        }
+    }
+
+    private static void WriteClassSemanticsAttributes(SyntaxNode node, Type type)
+    {
+        if ((type.Attributes & TypeAttributes.Interface) != 0)
+        {
+            node.AddChild(Keywords.InterfaceKeyword);
+        }
+    }
+
+    private static void WriteGenericArguments(SyntaxNode node, Type type)
+    {
+        node.AddChild(Operators.OpenChevron);
+        Type[] genericArguments = type.GetGenericArguments();
+        for (var index = 0; index < genericArguments.Length; index++)
+        {
+            Type genericArgument = genericArguments[index];
+            WriteParameterVariance(node, genericArgument);
+            WriteTypeName(node, genericArgument);
+
+            if (index < genericArguments.Length - 1)
+            {
+                node.AddChild(Operators.Comma);
+            }
+        }
+
+        node.AddChild(Operators.CloseChevron);
+    }
+
+
+    private static void WriteImplementationAttributes(SyntaxNode node, Type type)
+    {
+        if ((type.Attributes & TypeAttributes.Import) != 0)
+        {
+            node.AddChild(Keywords.ImportKeyword);
+        }
+
+        if ((type.Attributes & TypeAttributes.Serializable) != 0)
+        {
+            node.AddChild(Keywords.SerializableKeyword);
+        }
+
+        if ((type.Attributes & TypeAttributes.WindowsRuntime) != 0)
+        {
+            node.AddChild(Keywords.WindowsRuntimeKeyword);
+        }
+    }
+
+    private static void WriteLayoutAttributes(SyntaxNode node, Type type)
+    {
+        if (type.IsExplicitLayout)
+        {
+            node.AddChild(Keywords.ExplicitKeyword);
+        }
+        else if (type.IsAutoLayout)
+        {
+            node.AddChild(Keywords.AutoKeyword);
+        }
+        else
+        {
+            node.AddChild(Keywords.SequentialKeyword);
+        }
+    }
+
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, bool writeKindPrefix)
     {
         if (type.IsArray)
         {
@@ -78,7 +205,10 @@ internal sealed class TypeUtility
             return;
         }
 
-        node.AddChild(type.IsValueType ? Keywords.ValueTypeKeyword : Keywords.ClassKeyword);
+        if (writeKindPrefix)
+        {
+            node.AddChild(type.IsValueType ? Keywords.ValueTypeKeyword : Keywords.ClassKeyword);
+        }
 
         string fullName = type.Name;
         if (type.Namespace is not null)
@@ -97,23 +227,101 @@ internal sealed class TypeUtility
             }
         }
 
-        if (!type.IsGenericType)
+        if (type.IsGenericType)
+        {
+            WriteGenericArguments(node, type);
+        }
+    }
+
+    private static void WriteParameterVariance(SyntaxNode node, Type genericArgument)
+    {
+        if (!genericArgument.IsGenericParameter)
         {
             return;
         }
 
-        node.AddChild(Operators.OpenChevron);
-        Type[] genericArguments = type.GetGenericArguments();
-        for (var index = 0; index < genericArguments.Length; index++)
-        {
-            if (index > 0)
-            {
-                node.AddChild(Operators.Comma);
-            }
+        const GenericParameterAttributes mask = GenericParameterAttributes.VarianceMask;
+        var attributes = genericArgument.GenericParameterAttributes;
 
-            WriteTypeName(node, genericArguments[index]);
+        switch (attributes & mask)
+        {
+            case GenericParameterAttributes.Contravariant:
+                node.AddChild(Operators.Contravariant);
+                break;
+
+            case GenericParameterAttributes.Covariant:
+                node.AddChild(Operators.Covariant);
+                break;
+        }
+    }
+
+    private static void WriteSpecialSemanticsAttributes(SyntaxNode node, Type type)
+    {
+        if (type.IsAbstract)
+        {
+            node.AddChild(Keywords.AbstractKeyword);
         }
 
-        node.AddChild(Operators.CloseChevron);
+        if (type.IsSealed)
+        {
+            node.AddChild(Keywords.SealedKeyword);
+        }
+
+        if (type.IsSpecialName)
+        {
+            node.AddChild(Keywords.SpecialNameKeyword);
+        }
+
+        if ((type.Attributes & TypeAttributes.RTSpecialName) != 0)
+        {
+            node.AddChild(Keywords.RTSpecialNameKeyword);
+        }
+    }
+
+    private static void WriteVisibilityAttribute(SyntaxNode node, Type type)
+    {
+        const TypeAttributes mask = TypeAttributes.VisibilityMask;
+        TypeAttributes attributes = type.Attributes & mask;
+
+        switch (attributes)
+        {
+            case TypeAttributes.Public:
+                node.AddChild(Keywords.PublicKeyword);
+                break;
+
+            case TypeAttributes.NestedPublic:
+                node.AddChild(Keywords.NestedKeyword);
+                node.AddChild(Keywords.PublicKeyword);
+                break;
+
+            case TypeAttributes.NestedPrivate:
+                node.AddChild(Keywords.NestedKeyword);
+                node.AddChild(Keywords.PrivateKeyword);
+                break;
+
+            case TypeAttributes.NestedFamily:
+                node.AddChild(Keywords.NestedKeyword);
+                node.AddChild(Keywords.FamilyKeyword);
+                break;
+
+            case TypeAttributes.NestedAssembly:
+                node.AddChild(Keywords.NestedKeyword);
+                node.AddChild(Keywords.AssemblyKeyword);
+                break;
+
+            case TypeAttributes.NestedFamANDAssem:
+                node.AddChild(Keywords.NestedKeyword);
+                node.AddChild(Keywords.FamAndAssemKeyword);
+                break;
+
+            case TypeAttributes.NestedFamORAssem:
+                node.AddChild(Keywords.NestedKeyword);
+                node.AddChild(Keywords.FamOrAssemKeyword);
+                break;
+
+            case TypeAttributes.NotPublic:
+                node.AddChild(Keywords.PrivateKeyword);
+                break;
+        }
     }
 }

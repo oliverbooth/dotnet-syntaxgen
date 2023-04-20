@@ -14,7 +14,7 @@ Friend Module FieldUtility
 
         For Each attribute In customAttributes
             declaration.AddChild(OpenChevron)
-            WriteTypeName(declaration, attribute.GetType(), True)
+            WriteTypeName(declaration, attribute.GetType(), New TypeWriteOptions() With{ .TrimAttributeSuffix = True })
             declaration.AddChild(OpenParenthesis)
 
             Dim constructor As ConstructorInfo = attribute.GetType().GetConstructors()(0)
@@ -41,7 +41,7 @@ Friend Module FieldUtility
     ''' </summary>
     ''' <param name="declaration">The declaration to write to.</param>
     ''' <param name="fieldInfo">The field whose modifiers to write.</param>
-    Public Sub WriteModifiers(declaration As SyntaxNode, fieldInfo As FieldInfo)
+    Public Sub WriteFieldModifiers(declaration As SyntaxNode, fieldInfo As FieldInfo)
         If fieldInfo.IsLiteral Then
             declaration.AddChild(ConstKeyword)
             Return
@@ -61,7 +61,7 @@ Friend Module FieldUtility
     ''' </summary>
     ''' <param name="declaration">The declaration to write to.</param>
     ''' <param name="fieldInfo">The field whose visibility to write.</param>
-    Public Sub WriteVisibilityKeyword(declaration As SyntaxNode, fieldInfo As FieldInfo)
+    Public Sub WriteFieldVisibilityKeyword(declaration As SyntaxNode, fieldInfo As FieldInfo)
         Const mask = FieldAttributes.FieldAccessMask
 
         Select Case fieldInfo.Attributes And mask

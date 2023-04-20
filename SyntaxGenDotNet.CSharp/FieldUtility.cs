@@ -19,7 +19,7 @@ internal static class FieldUtility
         foreach (Attribute attribute in customAttributes)
         {
             declaration.AddChild(Operators.OpenBracket);
-            TypeUtility.WriteTypeName(declaration, attribute.GetType(), true);
+            TypeUtility.WriteTypeName(declaration, attribute.GetType(), new TypeWriteOptions {TrimAttributeSuffix = true});
             declaration.AddChild(Operators.OpenParenthesis);
 
             ConstructorInfo constructor = attribute.GetType().GetConstructors()[0];

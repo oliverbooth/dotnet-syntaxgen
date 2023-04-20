@@ -47,36 +47,100 @@ internal sealed class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the generic arguments for the specified type to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the generic arguments.</param>
+    /// <param name="type">The type for which to write the generic arguments.</param>
+    public static void WriteGenericArguments(SyntaxNode node, Type type)
+    {
+        if (!type.IsGenericType)
+        {
+            return;
+        }
+
+        node.AddChild(Operators.OpenChevron);
+        Type[] genericArguments = type.GetGenericArguments();
+        for (var index = 0; index < genericArguments.Length; index++)
+        {
+            Type genericArgument = genericArguments[index];
+            WriteParameterVariance(node, genericArgument);
+            WriteTypeName(node, genericArgument);
+
+            if (index < genericArguments.Length - 1)
+            {
+                node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = " "));
+            }
+        }
+
+        node.AddChild(Operators.CloseChevron);
+    }
+
+    /// <summary>
+    ///     Writes the modifiers for the specified type to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the modifiers.</param>
+    /// <param name="type">The type for which to write the modifiers.</param>
+    public static void WriteModifiers(SyntaxNode node, Type type)
+    {
+        if (type.IsInterface)
+        {
+            return;
+        }
+
+        if (type is {IsAbstract: true, IsSealed: true})
+        {
+            node.AddChild(Keywords.StaticKeyword);
+        }
+        else if (type.IsAbstract)
+        {
+            node.AddChild(Keywords.AbstractKeyword);
+        }
+        else if (type.IsSealed)
+        {
+            node.AddChild(Keywords.SealedKeyword);
+        }
+    }
+
+    /// <summary>
     ///     Writes the type name to the specified node.
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
     /// <param name="type">The type for which to write the name.</param>
-    /// <param name="trimAttributeSuffix">
-    ///     <see langword="true" /> to trim the "Attribute" suffix from the type name; otherwise, <see langword="false" />. The
-    ///     default is <see langword="false" />.
-    /// </param>
-    public static void WriteTypeName(SyntaxNode node, Type type, bool trimAttributeSuffix = false)
+    /// <param name="options">The options for writing the type name.</param>
+    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options = default)
     {
         if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
         {
-            WriteTypeName(node, type.GenericTypeArguments[0], trimAttributeSuffix);
+            WriteTypeName(node, type.GenericTypeArguments[0], options);
             node.AddChild(Operators.QuestionMark);
             return;
         }
 
+        string typeName = type.Name;
         if (type.IsGenericParameter)
         {
-            node.AddChild(new IdentifierToken(type.Name));
+            node.AddChild(new TypeIdentifierToken(typeName));
             return;
         }
 
-        if (TryGetLanguageAliasToken(type, out KeywordToken? alias))
+        if (options.WriteAlias && TryGetLanguageAliasToken(type, out KeywordToken? alias))
         {
             node.AddChild(alias);
             return;
         }
 
-        WriteNamespacedTypeName(node, type, trimAttributeSuffix);
+        if (!options.WriteNamespace)
+        {
+            if (type.IsGenericType)
+            {
+                typeName = typeName[..typeName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
+            }
+
+            node.AddChild(new TypeIdentifierToken(typeName));
+            return;
+        }
+
+        WriteNamespacedTypeName(node, type, options.TrimAttributeSuffix);
         SyntaxNode last = node.Children[^1];
         if (last is OperatorToken)
         {
@@ -168,20 +232,25 @@ internal sealed class TypeUtility
         }
     }
 
-    private static void WriteGenericArguments(SyntaxNode node, Type type)
+    private static void WriteParameterVariance(SyntaxNode node, Type genericArgument)
     {
-        node.AddChild(Operators.OpenChevron);
-        Type[] genericArguments = type.GetGenericArguments();
-        for (var index = 0; index < genericArguments.Length; index++)
+        if (!genericArgument.IsGenericParameter)
         {
-            if (index > 0)
-            {
-                node.AddChild(Operators.Comma);
-            }
-
-            WriteTypeName(node, genericArguments[index]);
+            return;
         }
 
-        node.AddChild(Operators.CloseChevron);
+        const GenericParameterAttributes mask = GenericParameterAttributes.VarianceMask;
+        var attributes = genericArgument.GenericParameterAttributes;
+
+        switch (attributes & mask)
+        {
+            case GenericParameterAttributes.Contravariant:
+                node.AddChild(Keywords.InKeyword);
+                break;
+
+            case GenericParameterAttributes.Covariant:
+                node.AddChild(Keywords.OutKeyword);
+                break;
+        }
     }
 }
