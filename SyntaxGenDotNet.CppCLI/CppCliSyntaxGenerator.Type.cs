@@ -14,6 +14,11 @@ public sealed partial class CppCliSyntaxGenerator
             return GenerateEnumDeclaration(type);
         }
 
+        if (type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate)))
+        {
+            return GenerateDelegateDeclaration(type);
+        }
+
         var declaration = new TypeDeclaration();
         TypeUtility.WriteVisibilityKeyword(declaration, type);
 
