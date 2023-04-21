@@ -73,6 +73,28 @@ internal sealed class TypeUtility
             throw new ArgumentNullException(nameof(type));
         }
 
+        if (type.IsByRef)
+        {
+            target.AddChild(Keywords.RefKeyword);
+            WriteAlias(target, type.GetElementType()!, options);
+            return;
+        }
+
+        if (type.IsPointer)
+        {
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.Asterisk);
+            return;
+        }
+
+        if (type.IsArray)
+        {
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.OpenBracket);
+            target.AddChild(Operators.CloseBracket);
+            return;
+        }
+
         if (TryGetLanguageAliasToken(type, out KeywordToken? alias))
         {
             target.AddChild(alias);
@@ -80,17 +102,7 @@ internal sealed class TypeUtility
         }
 
         options ??= new TypeWriteOptions();
-
-        if (options.Value.WriteNamespace)
-        {
-            WriteNamespace(target, type);
-
-            if (type.Namespace is not null)
-            {
-                target.AddChild(Operators.Dot);
-            }
-        }
-
+        WriteNamespace(target, type, options);
         WriteName(target, type, options);
 
         if (options.Value.WriteGenericArguments)
@@ -238,12 +250,13 @@ internal sealed class TypeUtility
     /// </summary>
     /// <param name="target">The node to which to write the namespace.</param>
     /// <param name="type">The type whose namespace to write.</param>
+    /// <param name="options">The options for writing the namespace.</param>
     /// <exception cref="ArgumentNullException">
     ///     <para><paramref name="target" /> is <see langword="null" />.</para>
     ///     -or-
     ///     <para><paramref name="type" /> is <see langword="null" />.</para>
     /// </exception>
-    public static void WriteNamespace(SyntaxNode target, Type type)
+    public static void WriteNamespace(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
         if (target is null)
         {
@@ -255,7 +268,19 @@ internal sealed class TypeUtility
             throw new ArgumentNullException(nameof(type));
         }
 
+        options ??= new TypeWriteOptions();
+
+        if (!options.Value.WriteNamespace)
+        {
+            return;
+        }
+
         WriteNamespace(target, type.Namespace);
+
+        if (type.Namespace is not null)
+        {
+            target.AddChild(Operators.Dot);
+        }
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
@@ -17,6 +17,7 @@ public partial class CSharpSyntaxGenerator
             return;
         }
 
+        target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(parameter.Name));
 
         if (!parameter.IsOptional)

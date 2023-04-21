@@ -13,6 +13,15 @@ internal struct TypeWriteOptions
     }
 
     /// <summary>
+    ///     Gets or sets a value indicating whether to append the namespace delimiter to the type name.
+    /// </summary>
+    /// <value>
+    ///     <see langword="true" /> if the namespace delimiter should be appended to the type name; otherwise,
+    ///     <see langword="false" />.
+    /// </value>
+    public bool AppendNamespaceDelimiter { get; set; } = true;
+
+    /// <summary>
     ///     Gets or sets a value indicating whether to trim the "Attribute" suffix from the type name.
     /// </summary>
     /// <value>

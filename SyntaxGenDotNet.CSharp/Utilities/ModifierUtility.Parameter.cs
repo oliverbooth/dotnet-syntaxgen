@@ -36,9 +36,5 @@ internal sealed partial class ModifierUtility
         {
             target.AddChild(Keywords.OutKeyword);
         }
-        else if (parameter.ParameterType.IsByRef)
-        {
-            target.AddChild(Keywords.RefKeyword);
-        }
     }
 }

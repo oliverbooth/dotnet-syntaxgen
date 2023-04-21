@@ -1,4 +1,4 @@
-using SyntaxGenDotNet.Syntax;
+﻿using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp;
@@ -12,6 +12,11 @@ internal static class Operators
     {
         LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
     };
+
+    /// <summary>
+    ///     The <c>=</c> operator.
+    /// </summary>
+    public static readonly OperatorToken Asterisk = new("*") {TrailingWhitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>]</c> operator.
