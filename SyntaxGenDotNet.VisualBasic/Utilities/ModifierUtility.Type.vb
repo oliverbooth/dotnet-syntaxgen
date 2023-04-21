@@ -1,4 +1,4 @@
-﻿Imports System.Reflection
+Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax
 
 Namespace Utilities

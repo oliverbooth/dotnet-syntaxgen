@@ -1,11 +1,10 @@
-﻿
+
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Tokens
 
 Namespace Utilities
-
     Friend Module TypeUtility
         Private ReadOnly LanguageAliases As New Dictionary(Of Type, KeywordToken) From {
             {GetType(Byte), New KeywordToken("Byte")},

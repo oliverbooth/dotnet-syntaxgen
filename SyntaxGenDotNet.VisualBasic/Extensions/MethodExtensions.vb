@@ -1,4 +1,4 @@
-﻿Imports System.Reflection
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 
 Namespace Extensions
