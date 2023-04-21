@@ -28,25 +28,21 @@ internal static class AttributeUtility
         ReadOnlyCollection<Expression> arguments = attributeExpression.NewExpression.Arguments;
         bool hasArguments = arguments.Count > 0;
         bool hasBindings = attributeExpression.Bindings.Count > 0;
-        bool writeParentheses = hasArguments || hasBindings;
 
-        if (writeParentheses)
+        if (hasArguments || hasBindings)
         {
             target.AddChild(Operators.OpenParenthesis);
-        }
 
-        if (hasArguments)
-        {
-            WriteArguments(target, arguments);
-        }
+            if (hasArguments)
+            {
+                WriteArguments(target, arguments);
+            }
 
-        if (hasBindings)
-        {
-            WriteBindings(hasArguments, target, attributeExpression, options);
-        }
+            if (hasBindings)
+            {
+                WriteBindings(hasArguments, target, attributeExpression, options);
+            }
 
-        if (writeParentheses)
-        {
             target.AddChild(Operators.CloseParenthesis);
         }
 

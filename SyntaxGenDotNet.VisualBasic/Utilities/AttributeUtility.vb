@@ -29,21 +29,18 @@ Namespace Utilities
             Dim arguments As ReadOnlyCollection(Of Expression) = attributeExpression.NewExpression.Arguments
             Dim hasArguments As Boolean = arguments.Count > 0
             Dim hasBindings As Boolean = attributeExpression.Bindings.Count > 0
-            Dim writeParentheses As Boolean = hasArguments Or hasBindings
 
-            If writeParentheses Then
+            If hasArguments Or hasBindings Then
                 target.AddChild(OpenParenthesis)
-            End If
 
-            If hasArguments Then
-                WriteArguments(target, arguments)
-            End If
+                If hasArguments Then
+                    WriteArguments(target, arguments)
+                End If
 
-            If hasBindings Then
-                WriteBindings(hasArguments, target, attributeExpression, options)
-            End If
+                If hasBindings Then
+                    WriteBindings(hasArguments, target, attributeExpression, options)
+                End If
 
-            If writeParentheses Then
                 target.AddChild(CloseParenthesis)
             End If
 
