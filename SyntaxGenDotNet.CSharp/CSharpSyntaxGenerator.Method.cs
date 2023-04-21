@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -68,8 +68,7 @@ public partial class CSharpSyntaxGenerator
 
         for (var index = 0; index < parameters.Count; index++)
         {
-            ParameterInfo parameter = parameters[index];
-            WriteParameter(target, parameter);
+            WriteParameter(target, parameters[index]);
 
             if (index < parameters.Count - 1)
             {
