@@ -5,6 +5,7 @@ Friend Structure TypeWriteOptions
     Public Shared ReadOnly DefaultOptions As New TypeWriteOptions() With {
         .TrimAttributeSuffix = False,
         .WriteAlias = True,
+        .WriteGenericArguments = True,
         .WriteNamespace = True
         }
 
@@ -22,6 +23,12 @@ Friend Structure TypeWriteOptions
     ''' </summary>
     ''' <value><see langword="true" /> to write the alias for the type; otherwise, <see langword="false" />.</value>
     Public Property WriteAlias As Boolean
+
+    ''' <summary>
+    '''     Gets or sets a value indicating whether to write the generic arguments for the type.
+    ''' </summary>
+    ''' <value><see langword="true" /> to write the generic arguments for the type; otherwise, <see langword="false" />.</value>
+    Public Property WriteGenericArguments As Boolean
 
     ''' <summary>
     '''     Gets or sets a value indicating whether to write the full namespace for the type.

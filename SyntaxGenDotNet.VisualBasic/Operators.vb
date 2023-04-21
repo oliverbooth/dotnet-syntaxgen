@@ -22,12 +22,16 @@ Friend Module Operators
     ''' <summary>
     '''     The <c>:</c> operator.
     ''' </summary>
-    Public ReadOnly Colon As New OperatorToken(":")
+    Public ReadOnly Colon As New OperatorToken(":") With {
+        .LeadingWhitespace = WhitespaceTrivia.Space
+        }
 
     ''' <summary>
     '''     The <c>,</c> operator.
     ''' </summary>
-    Public ReadOnly Comma As New OperatorToken(",")
+    Public ReadOnly Comma As New OperatorToken(",") With {
+        .TrailingWhitespace = WhitespaceTrivia.Space
+        }
 
     ''' <summary>
     '''     The <c>.</c> operator.

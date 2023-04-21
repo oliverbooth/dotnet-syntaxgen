@@ -1,4 +1,5 @@
 ﻿
+Imports System.Linq.Expressions
 Imports SyntaxGenDotNet.Syntax.Tokens
 
 Public Module TokenUtility
@@ -8,7 +9,9 @@ Public Module TokenUtility
     ''' <param name="value">The value.</param>
     ''' <returns>The literal token.</returns>
     Public Function CreateLiteralToken(value As Object) As SyntaxToken
-        If value Is Nothing Then
+        If TypeOf value Is ConstantExpression Then
+            Return CreateLiteralToken(DirectCast(value, ConstantExpression).Value)
+        ElseIf value Is Nothing Then
             Return NothingKeyword
         ElseIf TypeOf value Is Boolean Then
             Return If (DirectCast(value, Boolean), TrueKeyword, FalseKeyword)

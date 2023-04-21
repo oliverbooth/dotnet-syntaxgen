@@ -1,13 +1,14 @@
 ﻿Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax.Declaration
 Imports SyntaxGenDotNet.Syntax.Tokens
+Imports SyntaxGenDotNet.VisualBasic.Utilities
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc/>
     Public Overrides Function GenerateFieldDeclaration(fieldInfo As FieldInfo) As FieldDeclaration
         Dim fieldDeclaration As New FieldDeclaration()
 
-        WriteCustomFieldAttributes(fieldDeclaration, fieldInfo)
+        WriteCustomAttributes(Me, fieldDeclaration, fieldInfo)
         WriteFieldVisibilityKeyword(fieldDeclaration, fieldInfo)
         WriteFieldModifiers(fieldDeclaration, fieldInfo)
 

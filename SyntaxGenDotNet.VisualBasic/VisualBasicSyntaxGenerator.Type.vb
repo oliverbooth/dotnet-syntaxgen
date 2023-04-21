@@ -1,31 +1,91 @@
-﻿Imports SyntaxGenDotNet.Extensions
+﻿Imports System.Reflection
+Imports SyntaxGenDotNet.Extensions
 Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Declaration
 Imports SyntaxGenDotNet.Syntax.Tokens
+Imports SyntaxGenDotNet.VisualBasic.Utilities
 
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc />
     Public Overrides Function GenerateTypeDeclaration(type As Type) As TypeDeclaration
-        If type.IsEnum Then
-            Return GenerateEnumDeclaration(type)
-        End If
-
-        If type.IsSubclassOf(GetType(MulticastDelegate)) Or type.IsSubclassOf(GetType([Delegate])) Then
-            Return GenerateDelegateDeclaration(type)
-        End If
-
         Dim declaration As New TypeDeclaration()
+        WriteCustomAttributes(Me, declaration, type)
 
-        WriteCustomTypeAttributes(Me, declaration, type)
-        WriteTypeVisibilityKeyword(declaration, type)
-        WriteTypeModifiers(declaration, type)
-        WriteTypeKind(declaration, type)
-        declaration.AddChild(new TypeIdentifierToken(type.Name))
-        WriteBaseType(declaration, type)
-        WriteInterfaces(declaration, type)
+        If type.IsEnum Then
+            WriteEnumDeclaration(declaration, type)
+        ElseIf type.IsSubclassOf(GetType(MulticastDelegate)) Or type.IsSubclassOf(GetType([Delegate])) Then
+            WriteDelegateDeclaration(declaration, type)
+        Else
+            WriteClassDeclaration(declaration, type)
+        End If
 
         Return declaration
     End Function
+
+    Private Shared Sub WriteClassDeclaration(target As SyntaxNode, type As Type)
+        WriteAllModifiers(target, type)
+        WriteTypeModifiers(target, type)
+        WriteTypeKind(target, type)
+        WriteName(target, type)
+        WriteBaseType(target, type)
+        WriteInterfaces(target, type)
+    End Sub
+
+    Private Shared Sub WriteDelegateDeclaration(target As SyntaxNode, delegateType As Type)
+        Dim invokeMethod As MethodInfo = delegateType.GetMethod("Invoke")
+        WriteVisibilityModifier(target, delegateType)
+        target.AddChild(DelegateKeyword)
+
+        If invokeMethod.ReturnType = GetType(Void) Then
+            target.AddChild(SubKeyword)
+        Else
+            target.AddChild(FunctionKeyword)
+        End If
+
+        Dim name As String = delegateType.Name
+        If delegateType.IsGenericType Then
+            name = name.Substring(0, name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
+        End If
+
+        target.AddChild(New TypeIdentifierToken(name))
+        WriteGenericArguments(target, delegateType)
+        target.AddChild(OpenParenthesis)
+
+        Dim parameters As ParameterInfo() = invokeMethod.GetParameters()
+        For index = 0 To parameters.Length - 1
+            Dim parameter As ParameterInfo = parameters(index)
+
+            If parameter.Name IsNot Nothing Then
+                target.AddChild(New IdentifierToken(parameter.Name))
+            End If
+
+            target.AddChild(AsKeyword)
+            WriteTypeName(target, parameter.ParameterType)
+
+            If index < parameters.Length - 1 Then
+                target.AddChild(Comma.With(Sub(o) o.TrailingWhitespace = " "))
+            End If
+        Next
+
+        target.AddChild(CloseParenthesis)
+
+        If invokeMethod.ReturnType <> GetType(Void) Then
+            target.AddChild(AsKeyword)
+            WriteTypeName(target, invokeMethod.ReturnType)
+        End If
+    End Sub
+
+    Private Shared Sub WriteEnumDeclaration(target As SyntaxNode, enumType As Type)
+        WriteVisibilityModifier(target, enumType)
+        target.AddChild(EnumKeyword)
+        target.AddChild(new TypeIdentifierToken(enumType.Name))
+
+        Dim enumUnderlyingType As Type = enumType.GetEnumUnderlyingType()
+        If enumUnderlyingType <> GetType(Integer) Then
+            target.AddChild(AsKeyword.With(Sub(k) k.LeadingWhitespace = WhitespaceTrivia.None))
+            WriteTypeName(target, enumUnderlyingType)
+        End If
+    End Sub
 
     Private Shared Sub WriteBaseType(declaration As SyntaxNode, type As Type)
         If Not type.HasBaseType() Then

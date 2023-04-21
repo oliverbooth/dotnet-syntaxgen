@@ -10,6 +10,16 @@ Friend Module Keywords
         }
 
     ''' <summary>
+    '''     The <c>ByRef</c> keyword.
+    ''' </summary>
+    Public ReadOnly ByRefKeyword As New KeywordToken("ByRef")
+
+    ''' <summary>
+    '''     The <c>ByVal</c> keyword.
+    ''' </summary>
+    Public ReadOnly ByValKeyword As New KeywordToken("ByVal")
+
+    ''' <summary>
     '''     The <c>Class</c> keyword.
     ''' </summary>
     Public ReadOnly ClassKeyword As New KeywordToken("Class")
