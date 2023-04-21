@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using SyntaxGenDotNet.Attributes;
@@ -82,6 +82,8 @@ internal static class AttributeUtility
     {
         SyntaxNode comma = Operators.Comma.With(o => o.TrailingWhitespace = " ");
         ReadOnlyCollection<MemberBinding> bindings = memberInitExpression.Bindings;
+        options.WriteNamespace = false;
+
         for (var index = 0; index < bindings.Count; index++)
         {
             target.AddChild(comma);
@@ -96,7 +98,7 @@ internal static class AttributeUtility
             target.AddChild(Operators.Assignment);
             if (assignment.Expression.Type.IsEnum)
             {
-                TypeUtility.WriteAlias(target, assignment.Expression.Type, options with {WriteNamespace = false});
+                TypeUtility.WriteAlias(target, assignment.Expression.Type, options);
                 target.AddChild(Operators.Dot);
             }
 
