@@ -49,6 +49,7 @@ public sealed partial class CppCliSyntaxGenerator
         }
 
         declaration.AddChild(Operators.CloseParenthesis);
+        declaration.AddChild(Operators.Semicolon);
         return declaration;
     }
 
