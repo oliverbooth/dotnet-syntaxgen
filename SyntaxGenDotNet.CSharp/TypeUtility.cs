@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
@@ -123,6 +123,7 @@ internal sealed class TypeUtility
         for (var index = 0; index < genericArguments.Count; index++)
         {
             Type genericArgument = genericArguments[index];
+            WriteParameterVariance(target, genericArgument);
             WriteAlias(target, genericArgument);
 
             if (index < genericArguments.Count - 1)
