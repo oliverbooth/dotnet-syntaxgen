@@ -7,7 +7,6 @@ namespace SyntaxGenDotNet.FSharp.Utilities;
 
 internal sealed class TypeUtility
 {
-    internal static readonly List<Type> RecognizedAttributes = new() {typeof(CLSCompliantAttribute)};
     private static readonly Dictionary<Type, KeywordToken> LanguageAliases = new()
     {
         [typeof(bool)] = new KeywordToken("bool"),
