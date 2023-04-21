@@ -94,8 +94,8 @@ internal sealed class TypeUtility
     /// <summary>
     ///     Writes the generic arguments for the specified type to the specified node.
     /// </summary>
-    /// <param name="target">The node to which to write the generic arguments.</param>
-    /// <param name="type">The type for which to write the generic arguments.</param>
+    /// <param name="target">The target node to which to write the generic arguments.</param>
+    /// <param name="type">The type whose generic arguments to write.</param>
     public static void WriteGenericArguments(SyntaxNode target, Type type)
     {
         if (!type.IsGenericType)
