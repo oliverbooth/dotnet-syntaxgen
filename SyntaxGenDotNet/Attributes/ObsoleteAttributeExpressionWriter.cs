@@ -19,9 +19,10 @@ public sealed class ObsoleteAttributeExpressionWriter : AttributeExpressionWrite
         }
 
         var arguments = new List<Expression>();
-        ObsoleteAttribute attribute = attributes.First();
         var bindings = new List<MemberAssignment>();
         var types = new List<Type>();
+
+        ObsoleteAttribute attribute = attributes.First();
         BindConstructorArguments(attribute, types, arguments);
         BindProperties(attribute, bindings);
 
