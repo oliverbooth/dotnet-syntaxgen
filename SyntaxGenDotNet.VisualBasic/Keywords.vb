@@ -105,9 +105,24 @@ Friend Module Keywords
     Public ReadOnly OfKeyword As New KeywordToken("Of")
 
     ''' <summary>
+    '''     The <c>Optional</c> keyword.
+    ''' </summary>
+    Public ReadOnly OptionalKeyword As New KeywordToken("Optional")
+
+    ''' <summary>
     '''     The <c>Out</c> keyword.
     ''' </summary>
     Public ReadOnly OutKeyword As New KeywordToken("Out")
+
+    ''' <summary>
+    '''     The <c>Overridable</c> keyword.
+    ''' </summary>
+    Public ReadOnly OverridableKeyword As New KeywordToken("Overridable")
+
+    ''' <summary>
+    '''     The <c>Overrides</c> keyword.
+    ''' </summary>
+    Public ReadOnly OverridesKeyword As New KeywordToken("Overrides")
 
     ''' <summary>
     '''     The <c>Private</c> keyword.
