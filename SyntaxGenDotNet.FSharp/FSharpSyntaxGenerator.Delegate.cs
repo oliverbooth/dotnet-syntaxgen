@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -18,7 +19,7 @@ public partial class FSharpSyntaxGenerator
         TypeUtility.WriteVisibilityKeyword(declaration, delegateType);
         TypeUtility.WriteTypeName(declaration, delegateType, new TypeWriteOptions {WriteNamespace = false, WriteAlias = false});
 
-        declaration.AddChild(Operators.Assignment);
+        declaration.AddChild(Operators.Assignment.With(o => o.LeadingWhitespace = WhitespaceTrivia.None));
         declaration.AddChild(Keywords.DelegateKeyword);
         declaration.AddChild(Keywords.OfKeyword);
 
