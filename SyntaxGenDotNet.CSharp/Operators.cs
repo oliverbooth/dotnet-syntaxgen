@@ -1,4 +1,4 @@
-﻿using SyntaxGenDotNet.Syntax;
+using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp;
@@ -31,12 +31,12 @@ internal static class Operators
     /// <summary>
     ///     The <c>:</c> operator.
     /// </summary>
-    public static readonly OperatorToken Colon = new(":");
+    public static readonly OperatorToken Colon = new(":") {Whitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>,</c> operator.
     /// </summary>
-    public static readonly OperatorToken Comma = new(",");
+    public static readonly OperatorToken Comma = new(",") {TrailingWhitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>.</c> operator.
