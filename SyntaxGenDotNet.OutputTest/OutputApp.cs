@@ -18,7 +18,7 @@ internal static class OutputApp
             new CppCliSyntaxGenerator(), new FSharpSyntaxGenerator()
         };
 
-        var type = typeof(MyClass);
+        var member = typeof(Console).GetMethods().First(m => m.Name == nameof(Console.Beep));
         foreach (SyntaxGenerator generator in generators)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -27,7 +27,7 @@ internal static class OutputApp
             Console.WriteLine($@"--- {generator.LanguageName} {hyphens}");
             Console.ResetColor();
 
-            var declaration = generator.GenerateTypeDeclaration(type);
+            var declaration = generator.GenerateDeclaration(member);
             WritePlainTextSyntax(declaration);
             Console.WriteLine();
         }
