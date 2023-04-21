@@ -6,6 +6,11 @@ namespace SyntaxGenDotNet.FSharp;
 internal static class Keywords
 {
     /// <summary>
+    ///     The <c>abstract</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken AbstractKeyword = new("abstract");
+
+    /// <summary>
     ///     The <c>class</c> keyword.
     /// </summary>
     public static readonly KeywordToken ClassKeyword = new("class");
@@ -54,6 +59,11 @@ internal static class Keywords
     ///     The <c>of</c> keyword.
     /// </summary>
     public static readonly KeywordToken OfKeyword = new("of");
+
+    /// <summary>
+    ///     The <c>override</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken OverrideKeyword = new("override");
 
     /// <summary>
     ///     The <c>private</c> keyword.
