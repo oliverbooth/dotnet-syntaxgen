@@ -1,4 +1,4 @@
-﻿using SyntaxGenDotNet.Syntax.Tokens;
+using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp;
 
@@ -78,6 +78,11 @@ internal static class Keywords
     ///     The <c>readonly</c> keyword.
     /// </summary>
     public static readonly KeywordToken ReadOnlyKeyword = new("readonly");
+
+    /// <summary>
+    ///     The <c>ref</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken RefKeyword = new("ref");
 
     /// <summary>
     ///     The <c>sealed</c> keyword.
