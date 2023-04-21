@@ -270,11 +270,12 @@ internal sealed class TypeUtility
 
     private static void WriteBindings(SyntaxNode node, MemberInitExpression memberInitExpression, TypeWriteOptions options)
     {
-        node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
-
+        SyntaxNode comma = Operators.Comma.With(o => o.TrailingWhitespace = " ");
         ReadOnlyCollection<MemberBinding> bindings = memberInitExpression.Bindings;
         for (var index = 0; index < bindings.Count; index++)
         {
+            node.AddChild(comma);
+
             var binding = bindings[index];
             if (binding is not MemberAssignment memberAssignment)
             {
@@ -290,11 +291,6 @@ internal sealed class TypeUtility
             }
 
             node.AddChild(TokenUtility.CreateLiteralToken((ConstantExpression)memberAssignment.Expression));
-
-            if (index < bindings.Count - 1)
-            {
-                node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = " "));
-            }
         }
     }
 
