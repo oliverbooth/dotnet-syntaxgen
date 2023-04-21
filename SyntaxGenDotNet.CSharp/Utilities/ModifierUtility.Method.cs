@@ -12,23 +12,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the modifiers will be written.</param>
     /// <param name="method">The <see cref="MethodBase" /> whose modifiers to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="method" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteAllModifiers(SyntaxNode target, MethodInfo method)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (method is null)
-        {
-            throw new ArgumentNullException(nameof(method));
-        }
-
         WriteVisibilityModifier(target, method);
         WriteInheritanceModifiers(target, method);
         WriteValueTypeModifiers(target, method);
@@ -40,23 +25,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the inheritance modifiers will be written.</param>
     /// <param name="method">The <see cref="MethodBase" /> whose modifiers to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="method" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteInheritanceModifiers(SyntaxNode target, MethodInfo method)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (method is null)
-        {
-            throw new ArgumentNullException(nameof(method));
-        }
-
         MethodAttributes attributes = method.Attributes;
         bool isAbstract = (attributes & MethodAttributes.Abstract) != 0;
         bool isFinal = (attributes & MethodAttributes.Final) != 0;
@@ -85,23 +55,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the visibility modifier will be written.</param>
     /// <param name="method">The <see cref="MethodBase" /> whose visibility to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="method" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteVisibilityModifier(SyntaxNode target, MethodBase method)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (method is null)
-        {
-            throw new ArgumentNullException(nameof(method));
-        }
-
         WriteVisibilityModifier(target, method.Attributes);
     }
 
