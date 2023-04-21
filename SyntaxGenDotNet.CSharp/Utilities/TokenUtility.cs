@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using SyntaxGenDotNet.Syntax.Tokens;
 
-namespace SyntaxGenDotNet.CSharp;
+namespace SyntaxGenDotNet.CSharp.Utilities;
 
 internal sealed class TokenUtility
 {

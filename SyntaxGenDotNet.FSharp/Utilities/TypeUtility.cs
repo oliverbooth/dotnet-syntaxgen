@@ -3,7 +3,7 @@ using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
-namespace SyntaxGenDotNet.FSharp;
+namespace SyntaxGenDotNet.FSharp.Utilities;
 
 internal sealed class TypeUtility
 {

@@ -1,6 +1,6 @@
 ﻿using SyntaxGenDotNet.Syntax.Tokens;
 
-namespace SyntaxGenDotNet.CppCLI;
+namespace SyntaxGenDotNet.CIL.Utilities;
 
 internal sealed class TokenUtility
 {
@@ -16,7 +16,7 @@ internal sealed class TokenUtility
             null => Keywords.NullKeyword,
             bool boolValue => boolValue ? Keywords.TrueKeyword : Keywords.FalseKeyword,
             string stringValue => new StringLiteralToken(stringValue),
-            char charValue => new CharLiteralToken(charValue),
+            char charValue => new CilCharLiteralToken(charValue),
             sbyte sbyteValue => new IntegerLiteralToken(sbyteValue),
             byte byteValue => new IntegerLiteralToken(byteValue),
             short shortValue => new IntegerLiteralToken(shortValue),
