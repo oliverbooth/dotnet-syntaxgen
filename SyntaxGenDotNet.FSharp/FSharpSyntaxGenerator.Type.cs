@@ -1,4 +1,5 @@
-﻿using SyntaxGenDotNet.Extensions;
+﻿using System.Reflection;
+using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.FSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -10,42 +11,94 @@ public partial class FSharpSyntaxGenerator
     /// <inheritdoc />
     public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
+        var declaration = new TypeDeclaration();
+        AttributeUtility.WriteCustomAttributes(this, declaration, type);
+        ModifierUtility.WriteAllModifiers(declaration, type);
+        TypeUtility.WriteName(declaration, type, new TypeWriteOptions {WriteAlias = false, WriteNamespace = false});
+        declaration.AddChild(Operators.Assignment);
+
         if (type.IsEnum)
         {
-            return GenerateEnumDeclaration(type);
+            return declaration;
         }
 
-        if (type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate)))
+        WriteKind(declaration, type);
+
+        if (type.IsDelegate())
         {
-            return GenerateDelegateDeclaration(type);
+            WriteDelegateDeclaration(declaration, type);
+            return declaration;
         }
 
-        var declaration = new TypeDeclaration();
+        WriteBaseType(declaration, type);
+        WriteInterfaces(declaration, type);
+        return declaration;
+    }
 
-        declaration.AddChild(Keywords.TypeKeyword);
-        TypeUtility.WriteVisibilityKeyword(declaration, type);
-        TypeUtility.WriteTypeName(declaration, type, new TypeWriteOptions {WriteNamespace = false, WriteAlias = false});
-        declaration.AddChild(Operators.Assignment.With(o => o.LeadingWhitespace = WhitespaceTrivia.None));
-        declaration.AddChild(type.IsValueType ? Keywords.StructKeyword : Keywords.ClassKeyword);
-
-        if (type.HasBaseType())
+    private static void WriteBaseType(SyntaxNode target, Type type)
+    {
+        if (!type.HasBaseType())
         {
-            declaration.AddChild(Keywords.InheritKeyword);
-            TypeUtility.WriteTypeName(declaration, type.BaseType!);
+            return;
         }
 
-        Type[] interfaces = type.GetDirectInterfaces();
+        target.AddChild(Keywords.InheritKeyword);
+        TypeUtility.WriteTypeName(target, type.BaseType!);
+    }
 
-        if (interfaces.Length > 0)
+    private static void WriteDelegateDeclaration(SyntaxNode target, Type type)
+    {
+        MethodInfo invokeMethod = type.GetMethod("Invoke")!;
+        ParameterInfo[] parameters = invokeMethod.GetParameters();
+        for (var index = 0; index < parameters.Length; index++)
         {
-            SyntaxNode interfaceKeyword = Keywords.InterfaceKeyword.With(k => k.LeadingWhitespace = WhitespaceTrivia.Indent);
-            foreach (Type interfaceType in interfaces)
+            ParameterInfo parameter = parameters[index];
+            TypeUtility.WriteTypeName(target, parameter.ParameterType);
+
+            if (index < parameters.Length - 1)
             {
-                declaration.AddChild(interfaceKeyword);
-                TypeUtility.WriteTypeName(declaration, interfaceType);
+                target.AddChild(Operators.Asterisk);
             }
         }
 
-        return declaration;
+        target.AddChild(Operators.Arrow);
+        TypeUtility.WriteTypeName(target, invokeMethod.ReturnType);
+    }
+
+    private static void WriteInterfaces(TypeDeclaration target, Type type)
+    {
+        Type[] interfaces = type.GetDirectInterfaces();
+        if (interfaces.Length == 0)
+        {
+            return;
+        }
+
+        SyntaxNode interfaceKeyword = Keywords.InterfaceKeyword.With(k => k.LeadingWhitespace = WhitespaceTrivia.Indent);
+        foreach (Type interfaceType in interfaces)
+        {
+            target.AddChild(interfaceKeyword);
+            TypeUtility.WriteTypeName(target, interfaceType);
+        }
+    }
+
+    private static void WriteKind(SyntaxNode target, Type type)
+    {
+        if (type.IsInterface)
+        {
+            target.AddChild(Keywords.InterfaceKeyword);
+        }
+        else if (type.IsValueType)
+        {
+            target.AddChild(Keywords.StructKeyword);
+        }
+        else if (type.IsDelegate())
+        {
+            target.AddChild(Keywords.DelegateKeyword);
+            target.AddChild(Keywords.OfKeyword);
+        }
+        else
+        {
+            target.AddChild(Keywords.ClassKeyword);
+        }
     }
 }

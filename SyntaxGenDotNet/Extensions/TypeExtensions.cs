@@ -47,6 +47,22 @@ public static class TypeExtensions
     }
 
     /// <summary>
+    ///     Returns a value indicating whether the type is a delegate.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <returns><see langword="true" /> if the type is a delegate; otherwise, <see langword="false" />.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="type" /> is <see langword="null" />.</exception>
+    public static bool IsDelegate(this Type type)
+    {
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
+
+        return type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate));
+    }
+
+    /// <summary>
     ///     Returns a value indicating whether the type is a generic parameter that has constraints.
     /// </summary>
     /// <param name="type">The type to check.</param>
