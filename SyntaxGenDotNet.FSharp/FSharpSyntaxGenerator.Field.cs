@@ -10,15 +10,14 @@ public partial class FSharpSyntaxGenerator
     /// <inheritdoc />
     public override FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
     {
-        var fieldDeclaration = new FieldDeclaration();
-        FieldUtility.WriteCustomAttributes(fieldDeclaration, fieldInfo);
-        FieldUtility.WriteModifiers(fieldDeclaration, fieldInfo);
-        FieldUtility.WriteVisibilityKeyword(fieldDeclaration, fieldInfo);
+        var declaration = new FieldDeclaration();
 
-        fieldDeclaration.AddChild(new IdentifierToken(fieldInfo.Name));
-        fieldDeclaration.AddChild(Operators.Colon);
-        TypeUtility.WriteTypeName(fieldDeclaration, fieldInfo.FieldType);
+        AttributeUtility.WriteCustomAttributes(this, declaration, fieldInfo);
+        ModifierUtility.WriteAllModifiers(declaration, fieldInfo);
+        declaration.AddChild(new IdentifierToken(fieldInfo.Name));
+        declaration.AddChild(Operators.Colon);
+        TypeUtility.WriteTypeName(declaration, fieldInfo.FieldType);
 
-        return fieldDeclaration;
+        return declaration;
     }
 }
