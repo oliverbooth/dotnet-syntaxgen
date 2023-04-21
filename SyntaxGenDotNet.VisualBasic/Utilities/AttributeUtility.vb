@@ -27,28 +27,40 @@ Namespace Utilities
             WriteAlias(target, attributeExpression.Type, options)
 
             Dim arguments As ReadOnlyCollection(Of Expression) = attributeExpression.NewExpression.Arguments
-            If arguments.Count > 0 Then
+            Dim hasArguments As Boolean = arguments.Count > 0
+            Dim hasBindings As Boolean = attributeExpression.Bindings.Count > 0
+            Dim writeParentheses As Boolean = hasArguments Or hasBindings
+
+            If writeParentheses Then
                 target.AddChild(OpenParenthesis)
+            End If
 
-                For index = 0 To arguments.Count - 1
-                    Dim argument As Expression = arguments(index)
+            If hasArguments Then
+                WriteArguments(target, arguments)
+            End If
 
-                    If argument.Type.IsEnum Then
-                        WriteName(target, argument.Type)
-                        target.AddChild(Dot)
-                    End If
+            If hasBindings Then
+                WriteBindings(hasArguments, target, attributeExpression, options)
+            End If
 
-                    target.AddChild(CreateLiteralToken(argument))
-                Next
-
-                If attributeExpression.Bindings.Count > 0 Then
-                    WriteBindings(target, attributeExpression, options)
-                End If
-
+            If writeParentheses Then
                 target.AddChild(CloseParenthesis)
             End If
 
             target.AddChild(CloseChevron.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.NewLine))
+        End Sub
+
+        Private Sub WriteArguments(target As SyntaxNode, arguments As ReadOnlyCollection(Of Expression))
+            For index = 0 To arguments.Count - 1
+                Dim argument As Expression = arguments(index)
+
+                If argument.Type.IsEnum Then
+                    WriteName(target, argument.Type)
+                    target.AddChild(Dot)
+                End If
+
+                target.AddChild(CreateLiteralToken(argument))
+            Next
         End Sub
 
         ''' <summary>
@@ -74,9 +86,12 @@ Namespace Utilities
             Next
         End Sub
 
-        Private Sub WriteBindings(target As SyntaxNode, memberInitExpression As MemberInitExpression, options as TypeWriteOptions)
+        Private Sub WriteBindings(writeComma As Boolean,
+                                  target As SyntaxNode,
+                                  expression As MemberInitExpression,
+                                  options as TypeWriteOptions)
             Dim comma As SyntaxNode = Operators.Comma.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.Space)
-            Dim bindings As ReadOnlyCollection(Of MemberBinding) = memberInitExpression.Bindings
+            Dim bindings As ReadOnlyCollection(Of MemberBinding) = expression.Bindings
             options.WriteNamespace = False
 
             For index = 0 To bindings.Count - 1
@@ -86,7 +101,11 @@ Namespace Utilities
                 End If
 
                 Dim assignment = DirectCast(binding, MemberAssignment)
-                target.AddChild(comma)
+
+                If index > 0 Or writeComma Then
+                    target.AddChild(comma)
+                End If
+
                 target.AddChild(New IdentifierToken(binding.Member.Name))
                 target.AddChild(Colon)
                 target.AddChild(Operators.Assignment)

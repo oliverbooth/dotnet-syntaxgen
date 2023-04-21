@@ -26,28 +26,27 @@ internal static class AttributeUtility
         TypeUtility.WriteAlias(target, attributeExpression.Type, options);
 
         ReadOnlyCollection<Expression> arguments = attributeExpression.NewExpression.Arguments;
-        if (arguments.Count > 0)
+        bool hasArguments = arguments.Count > 0;
+        bool hasBindings = attributeExpression.Bindings.Count > 0;
+        bool writeParentheses = hasArguments || hasBindings;
+
+        if (writeParentheses)
         {
             target.AddChild(Operators.OpenParenthesis);
+        }
 
-            for (var index = 0; index < arguments.Count; index++)
-            {
-                Expression argument = arguments[index];
+        if (hasArguments)
+        {
+            WriteArguments(target, arguments);
+        }
 
-                if (argument.Type.IsEnum)
-                {
-                    TypeUtility.WriteName(target, argument.Type);
-                    target.AddChild(Operators.Dot);
-                }
+        if (hasBindings)
+        {
+            WriteBindings(hasArguments, target, attributeExpression, options);
+        }
 
-                target.AddChild(TokenUtility.CreateLiteralToken(argument));
-            }
-
-            if (attributeExpression.Bindings.Count > 0)
-            {
-                WriteBindings(target, attributeExpression, options);
-            }
-
+        if (writeParentheses)
+        {
             target.AddChild(Operators.CloseParenthesis);
         }
 
@@ -78,10 +77,29 @@ internal static class AttributeUtility
         }
     }
 
-    private static void WriteBindings(SyntaxNode target, MemberInitExpression memberInitExpression, TypeWriteOptions options)
+    private static void WriteArguments(SyntaxNode target, IReadOnlyList<Expression> arguments)
+    {
+        for (var index = 0; index < arguments.Count; index++)
+        {
+            Expression argument = arguments[index];
+
+            if (argument.Type.IsEnum)
+            {
+                TypeUtility.WriteName(target, argument.Type);
+                target.AddChild(Operators.Dot);
+            }
+
+            target.AddChild(TokenUtility.CreateLiteralToken(argument));
+        }
+    }
+
+    private static void WriteBindings(bool writeComma,
+        SyntaxNode target,
+        MemberInitExpression expression,
+        TypeWriteOptions options)
     {
         SyntaxNode comma = Operators.Comma.With(o => o.TrailingWhitespace = " ");
-        ReadOnlyCollection<MemberBinding> bindings = memberInitExpression.Bindings;
+        ReadOnlyCollection<MemberBinding> bindings = expression.Bindings;
         options.WriteNamespace = false;
 
         for (var index = 0; index < bindings.Count; index++)
@@ -92,7 +110,11 @@ internal static class AttributeUtility
                 continue;
             }
 
-            target.AddChild(comma);
+            if (index > 0 || writeComma)
+            {
+                target.AddChild(comma);
+            }
+
             target.AddChild(new IdentifierToken(binding.Member.Name));
             target.AddChild(Operators.Assignment);
             if (assignment.Expression.Type.IsEnum)
