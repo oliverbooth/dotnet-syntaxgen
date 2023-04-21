@@ -86,14 +86,13 @@ internal static class AttributeUtility
 
         for (var index = 0; index < bindings.Count; index++)
         {
-            target.AddChild(comma);
-
             MemberBinding binding = bindings[index];
             if (binding is not MemberAssignment assignment)
             {
                 continue;
             }
 
+            target.AddChild(comma);
             target.AddChild(new IdentifierToken(binding.Member.Name));
             target.AddChild(Operators.Assignment);
             if (assignment.Expression.Type.IsEnum)
