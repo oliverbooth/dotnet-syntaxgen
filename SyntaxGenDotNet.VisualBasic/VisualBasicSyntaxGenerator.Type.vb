@@ -3,6 +3,7 @@ Imports SyntaxGenDotNet.Extensions
 Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Declaration
 Imports SyntaxGenDotNet.Syntax.Tokens
+Imports SyntaxGenDotNet.VisualBasic.Extensions
 Imports SyntaxGenDotNet.VisualBasic.Utilities
 
 Public Partial Class VisualBasicSyntaxGenerator
@@ -36,11 +37,7 @@ Public Partial Class VisualBasicSyntaxGenerator
         WriteVisibilityModifier(target, delegateType)
         target.AddChild(DelegateKeyword)
 
-        If invokeMethod.ReturnType = GetType(Void) Then
-            target.AddChild(SubKeyword)
-        Else
-            target.AddChild(FunctionKeyword)
-        End If
+        target.AddChild(If(invokeMethod.IsSub(), SubKeyword, FunctionKeyword))
 
         Dim name As String = delegateType.Name
         If delegateType.IsGenericType Then
@@ -69,7 +66,7 @@ Public Partial Class VisualBasicSyntaxGenerator
 
         target.AddChild(CloseParenthesis)
 
-        If invokeMethod.ReturnType <> GetType(Void) Then
+        If invokeMethod.IsFunction() Then
             target.AddChild(AsKeyword)
             WriteTypeName(target, invokeMethod.ReturnType)
         End If
