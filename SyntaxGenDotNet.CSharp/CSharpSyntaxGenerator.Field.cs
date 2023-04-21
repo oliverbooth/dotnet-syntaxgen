@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -9,22 +10,22 @@ public partial class CSharpSyntaxGenerator
     /// <inheritdoc />
     public override FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
     {
-        var fieldDeclaration = new FieldDeclaration();
-        FieldUtility.WriteCustomAttributes(fieldDeclaration, fieldInfo);
-        FieldUtility.WriteVisibilityKeyword(fieldDeclaration, fieldInfo);
-        FieldUtility.WriteModifiers(fieldDeclaration, fieldInfo);
-        TypeUtility.WriteTypeName(fieldDeclaration, fieldInfo.FieldType);
+        var declaration = new FieldDeclaration();
+        FieldUtility.WriteCustomAttributes(declaration, fieldInfo);
+        ModifierUtility.WriteVisibilityModifier(declaration, fieldInfo);
+        FieldUtility.WriteModifiers(declaration, fieldInfo);
+        TypeUtility.WriteAlias(declaration, fieldInfo.FieldType);
 
-        fieldDeclaration.AddChild(new IdentifierToken(fieldInfo.Name));
+        declaration.AddChild(new IdentifierToken(fieldInfo.Name));
 
         if (fieldInfo.IsLiteral)
         {
-            fieldDeclaration.AddChild(Operators.Assignment);
+            declaration.AddChild(Operators.Assignment);
             object? value = fieldInfo.GetRawConstantValue();
-            fieldDeclaration.AddChild(TokenUtility.CreateLiteralToken(value));
+            declaration.AddChild(TokenUtility.CreateLiteralToken(value));
         }
 
-        fieldDeclaration.AddChild(Operators.Semicolon);
-        return fieldDeclaration;
+        declaration.AddChild(Operators.Semicolon);
+        return declaration;
     }
 }

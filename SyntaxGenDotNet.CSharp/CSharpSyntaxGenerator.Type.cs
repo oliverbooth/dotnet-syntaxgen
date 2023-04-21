@@ -1,4 +1,7 @@
-﻿using SyntaxGenDotNet.Extensions;
+﻿using System.Diagnostics;
+using System.Reflection;
+using SyntaxGenDotNet.CSharp.Utilities;
+using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
 
@@ -9,79 +12,89 @@ public partial class CSharpSyntaxGenerator
     /// <inheritdoc />
     public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
+        var declaration = new TypeDeclaration();
+
         if (type.IsEnum)
         {
-            return GenerateEnumDeclaration(type);
+            WriteEnumDeclaration(declaration, type);
         }
-
-        if (type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate)))
+        else if (type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate)))
         {
-            return GenerateDelegateDeclaration(type);
+            WriteDelegateDeclaration(declaration, type);
         }
-
-        var declaration = new TypeDeclaration();
-        TypeUtility.WriteCustomAttributes(this, declaration, type);
-        TypeUtility.WriteVisibilityKeyword(declaration, type);
-        TypeUtility.WriteModifiers(declaration, type);
-        WriteTypeKind(declaration, type);
-        TypeUtility.WriteTypeName(declaration, type, new TypeWriteOptions {WriteAlias = false, WriteNamespace = false});
-
-        Type[] baseTypes = type.HasBaseType() ? new[] {type.BaseType!} : Array.Empty<Type>();
-        baseTypes = baseTypes.Concat(type.GetDirectInterfaces()).ToArray();
-        
-        if (baseTypes.Length > 0)
+        else
         {
-            declaration.AddChild(Operators.Colon.With(o => o.LeadingWhitespace = o.TrailingWhitespace = " "));
-        }
-
-        for (var index = 0; index < baseTypes.Length; index++)
-        {
-            Type baseType = baseTypes[index];
-            TypeUtility.WriteTypeName(declaration, baseType, new TypeWriteOptions());
-
-            if (index < baseTypes.Length - 1)
-            {
-                declaration.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = " "));
-            }
+            WriteClassDeclaration(declaration, type);
         }
 
         return declaration;
     }
 
-    private static void WriteBaseType(SyntaxNode declaration, Type type)
+    private void WriteClassDeclaration(TypeDeclaration declaration, Type type)
     {
-        if (type.HasBaseType())
+        TypeUtility.WriteCustomAttributes(this, declaration, type);
+        ModifierUtility.WriteAllModifiers(declaration, type);
+        WriteTypeKind(declaration, type);
+        TypeUtility.WriteName(declaration, type);
+
+        Type[] baseTypes = type.HasBaseType() ? new[] {type.BaseType!} : Array.Empty<Type>();
+        baseTypes = baseTypes.Concat(type.GetDirectInterfaces()).ToArray();
+
+        if (baseTypes.Length > 0)
         {
-            TypeUtility.WriteTypeName(declaration, type.BaseType!, new TypeWriteOptions {WriteNamespace = true});
+            declaration.AddChild(Operators.Colon);
+        }
+
+        for (var index = 0; index < baseTypes.Length; index++)
+        {
+            Type baseType = baseTypes[index];
+            TypeUtility.WriteAlias(declaration, baseType);
+
+            if (index < baseTypes.Length - 1)
+            {
+                declaration.AddChild(Operators.Comma);
+            }
         }
     }
 
-    private static void WriteInterfaces(SyntaxNode declaration, Type type)
+    private static void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
     {
-        Type[] interfaces = type.GetInterfaces();
-        if (interfaces.Length == 0)
+        ModifierUtility.WriteVisibilityModifier(target, delegateType);
+        target.AddChild(Keywords.DelegateKeyword);
+
+        MethodInfo? invokeMethod = delegateType.GetMethod("Invoke");
+        Trace.Assert(invokeMethod is not null);
+        Debug.Assert(invokeMethod is not null);
+
+        TypeUtility.WriteAlias(target, invokeMethod.ReturnType);
+        TypeUtility.WriteName(target, delegateType);
+
+        if (delegateType.IsGenericType)
+        {
+            TypeUtility.WriteGenericArguments(target, delegateType);
+        }
+
+        target.AddChild(Operators.OpenParenthesis);
+        WriteParameters(target, invokeMethod.GetParameters());
+        target.AddChild(Operators.CloseParenthesis);
+        target.AddChild(Operators.Semicolon);
+    }
+
+    private static void WriteEnumDeclaration(SyntaxNode target, Type enumType)
+    {
+        ModifierUtility.WriteVisibilityModifier(target, enumType);
+        target.AddChild(Keywords.EnumKeyword);
+
+        TypeUtility.WriteName(target, enumType);
+
+        Type enumUnderlyingType = enumType.GetEnumUnderlyingType();
+        if (enumUnderlyingType == typeof(int))
         {
             return;
         }
 
-        SyntaxNode comma = Operators.Comma.With(o => o.TrailingWhitespace = " ");
-
-        if (type.HasBaseType())
-        {
-            declaration.AddChild(comma);
-        }
-
-        var options = new TypeWriteOptions {WriteNamespace = true};
-        for (var index = 0; index < interfaces.Length; index++)
-        {
-            Type @interface = interfaces[index];
-            TypeUtility.WriteTypeName(declaration, @interface, options);
-
-            if (index < interfaces.Length - 1)
-            {
-                declaration.AddChild(comma);
-            }
-        }
+        target.AddChild(Operators.Colon);
+        TypeUtility.WriteAlias(target, enumUnderlyingType);
     }
 
     private static void WriteTypeKind(SyntaxNode declaration, Type type)
