@@ -40,6 +40,11 @@ internal static class Keywords
     public static readonly KeywordToken InitOnlyKeyword = new("initonly");
 
     /// <summary>
+    ///     The <c>interface</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken InterfaceKeyword = new("interface");
+
+    /// <summary>
     ///     The <c>internal</c> keyword.
     /// </summary>
     public static readonly KeywordToken InternalKeyword = new("internal");
@@ -48,6 +53,11 @@ internal static class Keywords
     ///     The <c>null</c> keyword.
     /// </summary>
     public static readonly KeywordToken NullKeyword = new("null");
+
+    /// <summary>
+    ///     The <c>override</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken OverrideKeyword = new("override");
 
     /// <summary>
     ///     The <c>private</c> keyword.
@@ -93,4 +103,9 @@ internal static class Keywords
     ///     The <c>value</c> keyword.
     /// </summary>
     public static readonly KeywordToken ValueKeyword = new("value");
+
+    /// <summary>
+    ///     The <c>virtual</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken VirtualKeyword = new("virtual");
 }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -41,178 +40,162 @@ internal static class TypeUtility
     }
 
     /// <summary>
-    ///     Writes the modifiers for the specified type to the specified node.
+    ///     Writes the fully resolved name of the specified type to the specified node, or the alias if the type has one.
     /// </summary>
-    /// <param name="node">The node to which to write the modifiers.</param>
-    /// <param name="type">The type for which to write the modifiers.</param>
-    public static void WriteModifiers(SyntaxNode node, Type type)
-    {
-        if (type.IsInterface || type.IsValueType)
-        {
-            return;
-        }
-
-        if (type.IsAbstract)
-        {
-            node.AddChild(Keywords.AbstractKeyword);
-        }
-
-        if (type.IsSealed)
-        {
-            node.AddChild(Keywords.SealedKeyword);
-        }
-    }
-
-    /// <summary>
-    ///     Writes the type name to the specified node.
-    /// </summary>
-    /// <param name="node">The node to which to write the type name.</param>
-    /// <param name="type">The type for which to write the name.</param>
-    public static void WriteTypeName(SyntaxNode node, Type type)
-    {
-        WriteTypeName(node, type, new TypeWriteOptions());
-    }
-
-    /// <summary>
-    ///     Writes the type name to the specified node.
-    /// </summary>
-    /// <param name="node">The node to which to write the type name.</param>
-    /// <param name="type">The type for which to write the name.</param>
+    /// <param name="target">The node to which to write the type name.</param>
+    /// <param name="type">The type whose name to write.</param>
     /// <param name="options">The options to use when writing the type name.</param>
-    public static void WriteTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
+    public static void WriteAlias(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
-        if (type.IsGenericParameter)
+        if (type.IsByRef)
         {
-            node.AddChild(new TypeIdentifierToken(type.Name));
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.Ampersand);
             return;
         }
 
-        if (options.WriteAlias && TryGetLanguageAliasToken(type, out KeywordToken? alias))
+        if (type.IsPointer)
         {
-            node.AddChild(alias);
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.Asterisk);
             return;
         }
 
-        WriteNamespacedTypeName(node, type, options);
-    }
-
-    /// <summary>
-    ///     Writes the visibility keyword for a type declaration.
-    /// </summary>
-    /// <param name="declaration">The declaration to write to.</param>
-    /// <param name="type">The type whose visibility to write.</param>
-    public static void WriteVisibilityKeyword(SyntaxNode declaration, Type type)
-    {
-        const TypeAttributes mask = TypeAttributes.VisibilityMask;
-
-        switch (type.Attributes & mask)
-        {
-            case TypeAttributes.Public:
-            case TypeAttributes.NestedPublic:
-                declaration.AddChild(Keywords.PublicKeyword);
-                break;
-
-            case TypeAttributes.NestedPrivate:
-                declaration.AddChild(Keywords.PrivateKeyword);
-                break;
-
-            case TypeAttributes.NestedFamANDAssem:
-                declaration.AddChild(Keywords.PrivateKeyword);
-                declaration.AddChild(Keywords.ProtectedKeyword);
-                break;
-
-            case TypeAttributes.NestedFamORAssem:
-                declaration.AddChild(Keywords.ProtectedKeyword);
-                declaration.AddChild(Keywords.InternalKeyword);
-                break;
-
-            case TypeAttributes.NestedFamily:
-                declaration.AddChild(Keywords.ProtectedKeyword);
-                break;
-
-            default:
-                declaration.AddChild(Keywords.InternalKeyword);
-                break;
-        }
-    }
-
-    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
-    {
         if (type.IsArray)
         {
-            WriteArrayType(node, type);
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.OpenBracket);
+            target.AddChild(Operators.CloseBracket);
             return;
         }
 
-        string typeName = type.Name;
+        if (TryGetLanguageAliasToken(type, out KeywordToken? alias))
+        {
+            target.AddChild(alias);
+            return;
+        }
+
+        options ??= new TypeWriteOptions();
+        WriteNamespace(target, type, options);
+        WriteName(target, type, options);
+
+        if (options.Value.WriteGenericArguments)
+        {
+            WriteGenericArguments(target, type);
+        }
+    }
+
+    /// <summary>
+    ///     Writes the generic arguments for the specified type to the specified node.
+    /// </summary>
+    /// <param name="target">The target node to which to write the generic arguments.</param>
+    /// <param name="type">The type whose generic arguments to write.</param>
+    public static void WriteGenericArguments(SyntaxNode target, Type type)
+    {
+        if (!type.IsGenericType)
+        {
+            return;
+        }
+
+        WriteGenericArguments(target, type.GetGenericArguments());
+    }
+
+    /// <summary>
+    ///     Writes the generic arguments to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the generic arguments.</param>
+    /// <param name="genericArguments">The generic arguments to write.</param>
+    public static void WriteGenericArguments(SyntaxNode target, IReadOnlyList<Type> genericArguments)
+    {
+        if (genericArguments.Count == 0)
+        {
+            return;
+        }
+
+        target.AddChild(Operators.OpenChevron);
+
+        for (var index = 0; index < genericArguments.Count; index++)
+        {
+            Type genericArgument = genericArguments[index];
+            WriteAlias(target, genericArgument);
+
+            if (index < genericArguments.Count - 1)
+            {
+                target.AddChild(Operators.Comma);
+            }
+        }
+
+        target.AddChild(Operators.CloseChevron);
+    }
+
+    /// <summary>
+    ///     Writes the name of the specified type to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the name.</param>
+    /// <param name="type">The type whose name to write.</param>
+    /// <param name="options">The options for writing the name.</param>
+    public static void WriteName(SyntaxNode target, Type type, TypeWriteOptions? options = null)
+    {
+        options ??= new TypeWriteOptions();
+
+        string name = type.Name;
         if (type.IsGenericType)
         {
-            typeName = typeName[..typeName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
+            name = name[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
-        string fullName = type.Namespace is null ? typeName : $"{type.Namespace}.{typeName}";
-
-        if (options.WriteNamespace)
+        if (options.Value.TrimAttributeSuffix && name.EndsWith(nameof(Attribute), StringComparison.Ordinal))
         {
-            WriteFullName(node, fullName);
-        }
-        else
-        {
-            node.AddChild(new TypeIdentifierToken(typeName));
+            name = name[..^nameof(Attribute).Length];
         }
 
-        if (options.WriteGenericArguments && type.IsGenericType)
+        target.AddChild(new TypeIdentifierToken(name));
+    }
+
+    /// <summary>
+    ///     Writes the namespace for the specified type to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the namespace.</param>
+    /// <param name="type">The type whose namespace to write.</param>
+    /// <param name="options">The options for writing the namespace.</param>
+    public static void WriteNamespace(SyntaxNode target, Type type, TypeWriteOptions? options = null)
+    {
+        options ??= new TypeWriteOptions();
+
+        if (!options.Value.WriteNamespace || type.IsGenericParameter)
         {
-            WriteGenericArguments(node, type);
+            return;
         }
 
-        if (!type.IsValueType && options.WriteGcTrackedPointer)
+        WriteNamespace(target, type.Namespace);
+
+        if (type.Namespace is not null)
         {
-            node.AddChild(Operators.GcTrackedPointer);
+            target.AddChild(Operators.ColonColon);
         }
     }
 
-    private static void WriteArrayType(SyntaxNode node, Type type)
+    /// <summary>
+    ///     Writes the specified namespace name the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the namespace.</param>
+    /// <param name="namespaceName">The name of the namespace to write.</param>
+    public static void WriteNamespace(SyntaxNode target, string? namespaceName)
     {
-        node.AddChild(new TypeIdentifierToken("cli"));
-        node.AddChild(Operators.ColonColon);
-        node.AddChild(new TypeIdentifierToken("array"));
-
-        node.AddChild(Operators.OpenChevron);
-        WriteTypeName(node, type.GetElementType()!);
-        node.AddChild(Operators.CloseChevron);
-
-        node.AddChild(Operators.GcTrackedPointer);
-    }
-
-    private static void WriteFullName(SyntaxNode node, string fullName)
-    {
-        string[] namespaces = fullName.Split(ILOperators.NamespaceSeparator.Text);
-        for (var index = 0; index < namespaces.Length; index++)
+        if (string.IsNullOrWhiteSpace(namespaceName))
         {
-            node.AddChild(new TypeIdentifierToken(namespaces[index]));
+            return;
+        }
 
-            if (index < namespaces.Length - 1)
+        string[] parts = namespaceName.Split('.');
+        for (var index = 0; index < parts.Length; index++)
+        {
+            target.AddChild(new TypeIdentifierToken(parts[index]));
+
+            if (index < parts.Length - 1)
             {
-                node.AddChild(Operators.ColonColon);
+                target.AddChild(Operators.ColonColon);
             }
         }
-    }
-
-    private static void WriteGenericArguments(SyntaxNode node, Type type)
-    {
-        node.AddChild(Operators.OpenChevron);
-        Type[] genericArguments = type.GetGenericArguments();
-        for (var index = 0; index < genericArguments.Length; index++)
-        {
-            if (index > 0)
-            {
-                node.AddChild(Operators.Comma);
-            }
-
-            WriteTypeName(node, genericArguments[index]);
-        }
-
-        node.AddChild(Operators.CloseChevron.With(o => o.TrailingWhitespace = " "));
     }
 }
