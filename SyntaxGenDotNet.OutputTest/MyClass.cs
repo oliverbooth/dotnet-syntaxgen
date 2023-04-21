@@ -333,4 +333,8 @@ internal abstract class MyClass : Attribute, IComparable<MyClass>, IComparable, 
     {
         throw new NotImplementedException();
     }
+
+    public unsafe void Foo(ref int[] x)
+    {
+    }
 }
