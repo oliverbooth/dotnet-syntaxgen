@@ -1,4 +1,3 @@
-﻿using System.Diagnostics;
 using System.Reflection;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Extensions;
@@ -59,13 +58,9 @@ public partial class CSharpSyntaxGenerator
 
     private static void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
     {
+        MethodInfo invokeMethod = delegateType.GetMethod("Invoke")!;
         ModifierUtility.WriteVisibilityModifier(target, delegateType);
         target.AddChild(Keywords.DelegateKeyword);
-
-        MethodInfo? invokeMethod = delegateType.GetMethod("Invoke");
-        Trace.Assert(invokeMethod is not null);
-        Debug.Assert(invokeMethod is not null);
-
         TypeUtility.WriteAlias(target, invokeMethod.ReturnType);
         TypeUtility.WriteName(target, delegateType);
 
