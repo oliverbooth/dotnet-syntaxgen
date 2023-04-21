@@ -20,6 +20,7 @@ public abstract class SyntaxGenerator
         AttributeExpressionWriters.Add(new PureAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new SerializableAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new StructLayoutAttributeExpressionWriter());
+        AttributeExpressionWriters.Add(new OSPlatformAttributeExpressionWriter());
     }
 
     /// <summary>
