@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Versioning;
-using X10D.Core;
 
 namespace SyntaxGenDotNet.Attributes;
 
