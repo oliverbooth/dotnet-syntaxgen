@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using SyntaxGenDotNet.Attributes;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -152,8 +153,18 @@ internal sealed class TypeUtility
     /// <param name="type">The type for which to write the modifiers.</param>
     public static void WriteModifiers(SyntaxNode node, Type type)
     {
-        if (type.IsInterface || type.IsValueType)
+        if (type.IsInterface)
         {
+            return;
+        }
+
+        if (type.IsValueType)
+        {
+            if (type.GetCustomAttribute<IsReadOnlyAttribute>() is not null)
+            {
+                node.AddChild(Keywords.ReadOnlyKeyword);
+            }
+
             return;
         }
 
