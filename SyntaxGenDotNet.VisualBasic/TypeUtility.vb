@@ -53,11 +53,9 @@ Friend Module TypeUtility
             Return
         End If
 
-        If type.IsByRef Then
-            target.AddChild(ByRefKeyword)
-            WriteAlias(target, type.GetElementType(), options)
-            Return
-        End If
+        While type.IsByRef
+            type = type.GetElementType()
+        End While
 
         If type.IsArray Then
             WriteAlias(target, type.GetElementType(), options)
