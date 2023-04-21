@@ -1,5 +1,4 @@
-﻿using SyntaxGenDotNet.Syntax;
-using SyntaxGenDotNet.Syntax.Tokens;
+﻿using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CppCLI;
 
