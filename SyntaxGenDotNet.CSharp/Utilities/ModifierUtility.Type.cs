@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using SyntaxGenDotNet.Syntax;
 using X10D.Reflection;
@@ -151,9 +151,7 @@ internal sealed partial class ModifierUtility
 
     private static void WriteVisibilityModifier(SyntaxNode target, TypeAttributes attributes)
     {
-        attributes &= TypeAttributes.VisibilityMask;
-
-        switch (attributes)
+        switch (attributes & TypeAttributes.VisibilityMask)
         {
             case TypeAttributes.Public:
             case TypeAttributes.NestedPublic:
