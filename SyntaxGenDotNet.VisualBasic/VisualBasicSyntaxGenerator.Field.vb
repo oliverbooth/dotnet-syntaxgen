@@ -6,22 +6,21 @@ Imports SyntaxGenDotNet.VisualBasic.Utilities
 Public Partial Class VisualBasicSyntaxGenerator
     ''' <inheritdoc/>
     Public Overrides Function GenerateFieldDeclaration(fieldInfo As FieldInfo) As FieldDeclaration
-        Dim fieldDeclaration As New FieldDeclaration()
+        Dim declaration As New FieldDeclaration()
 
-        WriteCustomAttributes(Me, fieldDeclaration, fieldInfo)
-        WriteFieldVisibilityKeyword(fieldDeclaration, fieldInfo)
-        WriteFieldModifiers(fieldDeclaration, fieldInfo)
+        WriteCustomAttributes(Me, declaration, fieldInfo)
+        WriteAllModifiers(declaration, fieldInfo)
 
-        fieldDeclaration.AddChild(new IdentifierToken(fieldInfo.Name))
-        fieldDeclaration.AddChild(AsKeyword)
-        WriteTypeName(fieldDeclaration, fieldInfo.FieldType)
+        declaration.AddChild(new IdentifierToken(fieldInfo.Name))
+        declaration.AddChild(AsKeyword)
+        WriteAlias(declaration, fieldInfo.FieldType)
 
         If fieldInfo.IsLiteral Then
-            fieldDeclaration.AddChild(Assignment)
+            declaration.AddChild(Assignment)
             Dim value = fieldInfo.GetRawConstantValue()
-            fieldDeclaration.AddChild(CreateLiteralToken(value))
+            declaration.AddChild(CreateLiteralToken(value))
         End If
 
-        Return fieldDeclaration
+        Return declaration
     End Function
 End Class

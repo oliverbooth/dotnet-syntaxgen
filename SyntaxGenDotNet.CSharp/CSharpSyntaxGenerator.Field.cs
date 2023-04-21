@@ -12,8 +12,7 @@ public partial class CSharpSyntaxGenerator
     {
         var declaration = new FieldDeclaration();
         AttributeUtility.WriteCustomAttributes(this, declaration, fieldInfo);
-        ModifierUtility.WriteVisibilityModifier(declaration, fieldInfo);
-        FieldUtility.WriteModifiers(declaration, fieldInfo);
+        ModifierUtility.WriteAllModifiers(declaration, fieldInfo);
         TypeUtility.WriteAlias(declaration, fieldInfo.FieldType);
 
         declaration.AddChild(new IdentifierToken(fieldInfo.Name));
