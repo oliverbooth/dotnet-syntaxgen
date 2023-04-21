@@ -1,12 +1,40 @@
-using System.Reflection;
+﻿using System.Reflection;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
+using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp;
 
 public partial class CSharpSyntaxGenerator
 {
+    /// <inheritdoc />
+    public override MethodDeclaration GenerateMethodDeclaration(MethodInfo methodInfo)
+    {
+        var declaration = new MethodDeclaration();
+        AttributeUtility.WriteCustomAttributes(this, declaration, methodInfo);
+        ModifierUtility.WriteAllModifiers(declaration, methodInfo);
+        WriteMethodTypeSignature(declaration, methodInfo, true);
+        declaration.AddChild(Operators.Semicolon);
+        return declaration;
+    }
+
+    private static void WriteMethodTypeSignature(SyntaxNode target, MethodInfo methodInfo, bool writeGenericArguments = false)
+    {
+        TypeUtility.WriteAlias(target, methodInfo.ReturnType);
+        target.AddChild(new IdentifierToken(methodInfo.Name));
+
+        if (writeGenericArguments)
+        {
+            Type[] genericArguments = methodInfo.GetGenericArguments();
+            TypeUtility.WriteGenericArguments(target, genericArguments);
+        }
+
+        target.AddChild(Operators.OpenParenthesis);
+        WriteParameters(target, methodInfo.GetParameters());
+        target.AddChild(Operators.CloseParenthesis);
+    }
+
     private static void WriteParameter(SyntaxNode target, ParameterInfo parameter)
     {
         ModifierUtility.WritePassByModifier(target, parameter);

@@ -1,4 +1,4 @@
-using SyntaxGenDotNet.Syntax.Tokens;
+﻿using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp;
 
@@ -60,6 +60,11 @@ internal static class Keywords
     public static readonly KeywordToken OutKeyword = new("out");
 
     /// <summary>
+    ///     The <c>override</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken OverrideKeyword = new("override");
+
+    /// <summary>
     ///     The <c>private</c> keyword.
     /// </summary>
     public static readonly KeywordToken PrivateKeyword = new("private");
@@ -103,4 +108,9 @@ internal static class Keywords
     ///     The <c>true</c> keyword.
     /// </summary>
     public static readonly KeywordToken TrueKeyword = new("true");
+
+    /// <summary>
+    ///     The <c>virtual</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken VirtualKeyword = new("virtual");
 }

@@ -91,6 +91,13 @@ public abstract class SyntaxGenerator
     public abstract FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo);
 
     /// <summary>
+    ///     Generates the syntax for the specified method.
+    /// </summary>
+    /// <param name="methodInfo">The method for which to generate syntax.</param>
+    /// <returns>The syntax for the specified method.</returns>
+    public abstract MethodDeclaration GenerateMethodDeclaration(MethodInfo methodInfo);
+
+    /// <summary>
     ///     Generates the syntax for the specified type.
     /// </summary>
     /// <param name="type">The type for which to generate syntax.</param>
