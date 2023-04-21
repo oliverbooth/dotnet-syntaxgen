@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.Syntax;
@@ -12,6 +12,7 @@ public partial class CSharpSyntaxGenerator
     public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
         var declaration = new TypeDeclaration();
+        AttributeUtility.WriteCustomAttributes(this, declaration, type);
 
         if (type.IsEnum)
         {
@@ -29,9 +30,8 @@ public partial class CSharpSyntaxGenerator
         return declaration;
     }
 
-    private void WriteClassDeclaration(TypeDeclaration declaration, Type type)
+    private static void WriteClassDeclaration(TypeDeclaration declaration, Type type)
     {
-        AttributeUtility.WriteCustomAttributes(this, declaration, type);
         ModifierUtility.WriteAllModifiers(declaration, type);
         WriteTypeKind(declaration, type);
         TypeUtility.WriteName(declaration, type);
