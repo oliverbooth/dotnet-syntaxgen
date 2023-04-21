@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="X10D" Version="4.0.0-nightly.234" />
+    </ItemGroup>
+
 </Project>
