@@ -148,7 +148,7 @@ internal sealed class TypeUtility
         string name = type.Name;
         if (type.IsGenericType)
         {
-            name = name.AsSpan()[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)].ToString();
+            name = name[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
         if (options.Value.TrimAttributeSuffix && name.EndsWith(nameof(Attribute), StringComparison.Ordinal))
