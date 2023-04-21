@@ -33,6 +33,16 @@ public readonly struct WhitespaceTrivia
     }
 
     /// <summary>
+    ///     Implicitly converts a <see cref="char" /> to a <see cref="WhitespaceTrivia" />.
+    /// </summary>
+    /// <param name="value">The whitespace character to convert.</param>
+    /// <returns>The whitespace trivia.</returns>
+    public static implicit operator WhitespaceTrivia(char value)
+    {
+        return new WhitespaceTrivia(value.ToString());
+    }
+
+    /// <summary>
     ///     Implicitly converts a <see cref="string" /> to a <see cref="WhitespaceTrivia" />.
     /// </summary>
     /// <param name="value">The whitespace string to convert.</param>
