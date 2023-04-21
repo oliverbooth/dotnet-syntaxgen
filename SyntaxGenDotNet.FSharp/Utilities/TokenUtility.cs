@@ -1,4 +1,5 @@
-﻿using SyntaxGenDotNet.Syntax.Tokens;
+﻿using System.Linq.Expressions;
+using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.FSharp.Utilities;
 
@@ -13,6 +14,7 @@ internal sealed class TokenUtility
     {
         return value switch
         {
+            ConstantExpression expression => CreateLiteralToken(expression.Value),
             null => Keywords.NullKeyword,
             bool boolValue => boolValue ? Keywords.TrueKeyword : Keywords.FalseKeyword,
             string stringValue => new StringLiteralToken(stringValue),
