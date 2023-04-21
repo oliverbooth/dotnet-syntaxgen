@@ -16,6 +16,7 @@ public abstract class SyntaxGenerator
     protected SyntaxGenerator()
     {
         AttributeExpressionWriters.Add(new AttributeUsageAttributeExpressionWriter());
+        AttributeExpressionWriters.Add(new CLSCompliantAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new SerializableAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new StructLayoutAttributeExpressionWriter());
     }
