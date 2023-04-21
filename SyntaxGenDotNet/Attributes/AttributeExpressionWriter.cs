@@ -18,9 +18,10 @@ public abstract class AttributeExpressionWriter
     ///     Creates the attribute expression for the specified attribute.
     /// </summary>
     /// <param name="declaringMember">The type that declares the attribute.</param>
-    /// <param name="attribute">The attribute. This may be <see langword="null" /> if the attribute is not custom.</param>
-    /// <returns>The attribute expression.</returns>
-    public abstract Expression CreateAttributeExpression(MemberInfo declaringMember, Attribute? attribute);
+    /// <param name="attributes">An enumerable collection of matching attributes.</param>
+    /// <returns>An read-only collection of attribute expressions which correspond <paramref name="attributes" />.</returns>
+    public abstract IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<Attribute> attributes);
 }
 
 /// <summary>
@@ -33,16 +34,18 @@ public abstract class AttributeExpressionWriter<T> : AttributeExpressionWriter
     public override Type AttributeType { get; } = typeof(T);
 
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(MemberInfo declaringMember, Attribute? attribute)
+    public override IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<Attribute> attributes)
     {
-        return CreateAttributeExpression(declaringMember, (T?)attribute);
+        return CreateAttributeExpressions(declaringMember, attributes.OfType<T>().ToArray());
     }
 
     /// <summary>
     ///     Creates the attribute expression for the specified attribute.
     /// </summary>
     /// <param name="declaringMember">The type that declares the attribute.</param>
-    /// <param name="attribute">The attribute. This may be <see langword="null" /> if the attribute is not custom.</param>
-    /// <returns>The attribute expression.</returns>
-    public abstract Expression CreateAttributeExpression(MemberInfo declaringMember, T? attribute);
+    /// <param name="attributes">An enumerable collection of matching attributes.</param>
+    /// <returns>An read-only collection of attribute expressions which correspond <paramref name="attributes" />.</returns>
+    public abstract IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<T> attributes);
 }

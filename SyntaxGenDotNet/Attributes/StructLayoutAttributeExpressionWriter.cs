@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using X10D.Core;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -10,11 +11,12 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class StructLayoutAttributeExpressionWriter : AttributeExpressionWriter<StructLayoutAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(MemberInfo declaringMember, StructLayoutAttribute? attribute)
+    public override IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<StructLayoutAttribute> attribute)
     {
         if (declaringMember is not Type type)
         {
-            return Expression.Empty();
+            return ArraySegment<Expression>.Empty;
         }
 
         TypeAttributes mask = (type.Attributes & TypeAttributes.LayoutMask);
@@ -23,7 +25,7 @@ public sealed class StructLayoutAttributeExpressionWriter : AttributeExpressionW
 
         if (!writeStructLayout)
         {
-            return Expression.Empty();
+            return ArraySegment<Expression>.Empty;
         }
 
         var arguments = new List<Expression>();
@@ -40,7 +42,7 @@ public sealed class StructLayoutAttributeExpressionWriter : AttributeExpressionW
 
         if (!hasNonAnsiCharset)
         {
-            return Expression.MemberInit(newExpression);
+            return Expression.MemberInit(newExpression).AsEnumerableValue();
         }
 
         var charSet = (type.Attributes & TypeAttributes.StringFormatMask) switch
@@ -53,6 +55,6 @@ public sealed class StructLayoutAttributeExpressionWriter : AttributeExpressionW
         var charSetExpression = Expression.Constant(charSet);
         var charSetField = AttributeType.GetField(nameof(StructLayoutAttribute.CharSet))!;
         MemberAssignment bind = Expression.Bind(charSetField, charSetExpression);
-        return Expression.MemberInit(newExpression, bind);
+        return Expression.MemberInit(newExpression, bind).AsEnumerableValue();
     }
 }

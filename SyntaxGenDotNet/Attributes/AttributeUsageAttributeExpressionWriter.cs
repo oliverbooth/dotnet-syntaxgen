@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using X10D.Core;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -9,13 +10,15 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class AttributeUsageAttributeExpressionWriter : AttributeExpressionWriter<AttributeUsageAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(MemberInfo declaringMember, AttributeUsageAttribute? attribute)
+    public override IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<AttributeUsageAttribute> attributes)
     {
-        if (attribute is null)
+        if (attributes.Count != 1)
         {
-            return Expression.Empty();
+            return ArraySegment<Expression>.Empty;
         }
 
+        AttributeUsageAttribute attribute = attributes.First();
         var allowMultipleProperty = AttributeType.GetProperty(nameof(AttributeUsageAttribute.AllowMultiple))!;
         var inheritedProperty = AttributeType.GetProperty(nameof(AttributeUsageAttribute.Inherited))!;
 
@@ -37,6 +40,6 @@ public sealed class AttributeUsageAttributeExpressionWriter : AttributeExpressio
             bindings.Add(Expression.Bind(inheritedProperty, inheritedExpression));
         }
 
-        return Expression.MemberInit(constructorExpression, bindings);
+        return Expression.MemberInit(constructorExpression, bindings).AsEnumerableValue();
     }
 }

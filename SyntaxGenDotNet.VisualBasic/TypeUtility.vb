@@ -106,7 +106,7 @@ Friend Module TypeUtility
         For Each writer As AttributeExpressionWriter in generator.AttributeExpressionWriters
             Dim attributeType As Type = writer.AttributeType
             Dim attribute As Attribute = type.GetCustomAttribute(attributeType, False)
-            Dim attributeExpression As Expression = writer.CreateAttributeExpression(type, attribute)
+            Dim attributeExpression As Expression = writer.CreateAttributeExpressions(type, attribute)
 
             If attributeExpression.GetType() = GetType(MemberInitExpression) Then
                 WriteCustomTypeAttribute(node, DirectCast(attributeExpression, MemberInitExpression))

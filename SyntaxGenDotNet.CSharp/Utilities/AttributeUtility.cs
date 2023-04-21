@@ -65,12 +65,15 @@ internal static class AttributeUtility
         foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
         {
             Type attributeType = writer.AttributeType;
-            Attribute? attribute = member.GetCustomAttribute(attributeType, false);
-            Expression attributeExpression = writer.CreateAttributeExpression(member, attribute);
+            Attribute[] attributes = member.GetCustomAttributes(attributeType, false).OfType<Attribute>().ToArray();
+            IEnumerable<Expression> expressions = writer.CreateAttributeExpressions(member, attributes);
 
-            if (attributeExpression is MemberInitExpression memberInitExpression)
+            foreach (Expression expression in expressions)
             {
-                WriteCustomAttribute(target, memberInitExpression);
+                if (expression is MemberInitExpression memberInitExpression)
+                {
+                    WriteCustomAttribute(target, memberInitExpression);
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using X10D.Core;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -9,13 +10,14 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class SerializableAttributeExpressionWriter : AttributeExpressionWriter<SerializableAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(MemberInfo declaringMember, SerializableAttribute? attribute)
+    public override IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<SerializableAttribute> attributes)
     {
         if (declaringMember is not Type type || (type.Attributes & TypeAttributes.Serializable) == 0)
         {
-            return Expression.Empty();
+            return ArraySegment<Expression>.Empty;
         }
 
-        return Expression.MemberInit(Expression.New(AttributeType));
+        return Expression.MemberInit(Expression.New(AttributeType)).AsEnumerableValue();
     }
 }

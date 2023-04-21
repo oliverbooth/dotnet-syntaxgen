@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
+using X10D.Core;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -10,14 +11,15 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class PureAttributeExpressionWriter : AttributeExpressionWriter<PureAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(MemberInfo declaringMember, PureAttribute? attribute)
+    public override IEnumerable<Expression> CreateAttributeExpressions(MemberInfo declaringMember,
+        IReadOnlyCollection<PureAttribute> attributes)
     {
-        if (attribute is null)
+        if (attributes.Count != 1)
         {
-            return Expression.Empty();
+            return ArraySegment<Expression>.Empty;
         }
 
         var constructor = AttributeType.GetConstructor(Type.EmptyTypes)!;
-        return Expression.MemberInit(Expression.New(constructor));
+        return Expression.MemberInit(Expression.New(constructor)).AsEnumerableValue();
     }
 }
