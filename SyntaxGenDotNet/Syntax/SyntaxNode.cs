@@ -61,6 +61,19 @@ public class SyntaxNode : ICloneable
     public WhitespaceTrivia TrailingWhitespace { get; set; } = WhitespaceTrivia.Space;
 
     /// <summary>
+    ///     Sets the leading and trailing whitespace simultaneously.
+    /// </summary>
+    /// <value>The new leading and trailing whitespace value.</value>
+    public WhitespaceTrivia Whitespace
+    {
+        set
+        {
+            LeadingWhitespace = value;
+            TrailingWhitespace = value;
+        }
+    }
+
+    /// <summary>
     ///     Adds a child syntax node to the syntax node.
     /// </summary>
     /// <param name="child">The child syntax node to add.</param>
