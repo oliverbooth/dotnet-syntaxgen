@@ -111,13 +111,14 @@ internal static class TypeUtility
         {
             return;
         }
-
+        
+        target.AddChild(Keywords.GenericKeyword);
         target.AddChild(Operators.OpenChevron);
 
         for (var index = 0; index < genericArguments.Count; index++)
         {
-            Type genericArgument = genericArguments[index];
-            WriteAlias(target, genericArgument);
+            target.AddChild(Keywords.TypeNameKeyword);
+            WriteAlias(target, genericArguments[index]);
 
             if (index < genericArguments.Count - 1)
             {
@@ -125,7 +126,7 @@ internal static class TypeUtility
             }
         }
 
-        target.AddChild(Operators.CloseChevron);
+        target.AddChild(Operators.CloseChevron.With(o => o.TrailingWhitespace = WhitespaceTrivia.NewLine));
     }
 
     /// <summary>

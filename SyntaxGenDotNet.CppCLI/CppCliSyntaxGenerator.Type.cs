@@ -12,6 +12,7 @@ public sealed partial class CppCliSyntaxGenerator
     public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
         var declaration = new TypeDeclaration();
+        TypeUtility.WriteGenericArguments(declaration, type);
         ModifierUtility.WriteVisibilityModifier(declaration, type);
 
         if (type.IsDelegate())
@@ -29,9 +30,8 @@ public sealed partial class CppCliSyntaxGenerator
             WriteEnumDeclaration(declaration, type);
             return declaration;
         }
-        
-        ModifierUtility.WriteInheritanceModifiers(declaration, type);
 
+        ModifierUtility.WriteInheritanceModifiers(declaration, type);
         Type[] baseTypes = type.HasBaseType() ? new[] {type.BaseType!} : Array.Empty<Type>();
         baseTypes = baseTypes.Concat(type.GetDirectInterfaces()).ToArray();
 

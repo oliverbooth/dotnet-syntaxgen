@@ -51,7 +51,7 @@ internal static class Operators
     /// <summary>
     ///     The <c>,</c> operator.
     /// </summary>
-    public static readonly OperatorToken Comma = new(",");
+    public static readonly OperatorToken Comma = new(",") {TrailingWhitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>^</c> operator.
