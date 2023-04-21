@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
@@ -52,23 +52,8 @@ internal sealed class TypeUtility
     /// <param name="target">The node to which to write the type name.</param>
     /// <param name="type">The type whose name to write.</param>
     /// <param name="options">The options to use when writing the type name.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteAlias(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         if (type.IsByRef)
         {
             target.AddChild(Keywords.RefKeyword);
@@ -127,23 +112,8 @@ internal sealed class TypeUtility
     /// </summary>
     /// <param name="target">The node to which to write the generic arguments.</param>
     /// <param name="genericArguments">The generic arguments to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="genericArguments" /> is <see langword="null" />.</para>
-    /// </exception> 
     public static void WriteGenericArguments(SyntaxNode target, IReadOnlyList<Type> genericArguments)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (genericArguments is null)
-        {
-            throw new ArgumentNullException(nameof(genericArguments));
-        }
-
         if (genericArguments.Count == 0)
         {
             return;
@@ -171,23 +141,8 @@ internal sealed class TypeUtility
     /// <param name="target">The node to which to write the name.</param>
     /// <param name="type">The type whose name to write.</param>
     /// <param name="options">The options for writing the name.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteName(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         options ??= new TypeWriteOptions();
 
         string name = type.Name;
@@ -210,23 +165,8 @@ internal sealed class TypeUtility
     /// <param name="target">The node to which to write the namespace.</param>
     /// <param name="type">The type whose namespace to write.</param>
     /// <param name="options">The options for writing the namespace.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteNamespace(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         options ??= new TypeWriteOptions();
 
         if (!options.Value.WriteNamespace || type.IsGenericParameter)
@@ -247,14 +187,8 @@ internal sealed class TypeUtility
     /// </summary>
     /// <param name="target">The node to which to write the namespace.</param>
     /// <param name="namespaceName">The name of the namespace to write.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="target" /> is <see langword="null" />.</exception>
     public static void WriteNamespace(SyntaxNode target, string? namespaceName)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
         if (string.IsNullOrWhiteSpace(namespaceName))
         {
             return;

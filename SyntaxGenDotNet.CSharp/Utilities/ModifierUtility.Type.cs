@@ -12,23 +12,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the modifiers will be written.</param>
     /// <param name="type">The <see cref="Type" /> whose modifiers to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteAllModifiers(SyntaxNode target, Type type)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         WriteVisibilityModifier(target, type);
         WriteInheritanceModifiers(target, type);
         WriteValueTypeModifiers(target, type);
@@ -40,23 +25,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the inheritance modifiers will be written.</param>
     /// <param name="type">The <see cref="Type" /> whose modifiers to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteInheritanceModifiers(SyntaxNode target, Type type)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         if (type.IsInterface || type.IsValueType)
         {
             return;
@@ -70,23 +40,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The node to which to write the modifiers.</param>
     /// <param name="type">The type for which to write the modifiers.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteValueTypeModifiers(SyntaxNode target, Type type)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         if (!type.IsValueType)
         {
             return;
@@ -108,23 +63,8 @@ internal sealed partial class ModifierUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the visibility modifier will be written.</param>
     /// <param name="type">The <see cref="Type" /> whose visibility to write.</param>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="target" /> is <see langword="null" />.</para>
-    ///     -or-
-    ///     <para><paramref name="type" /> is <see langword="null" />.</para>
-    /// </exception>
     public static void WriteVisibilityModifier(SyntaxNode target, Type type)
     {
-        if (target is null)
-        {
-            throw new ArgumentNullException(nameof(target));
-        }
-
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
-
         WriteVisibilityModifier(target, type.Attributes);
     }
 
