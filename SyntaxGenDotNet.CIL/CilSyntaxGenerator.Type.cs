@@ -1,4 +1,5 @@
-﻿using SyntaxGenDotNet.Syntax;
+﻿using SyntaxGenDotNet.CIL.Utilities;
+using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
 
 namespace SyntaxGenDotNet.CIL;

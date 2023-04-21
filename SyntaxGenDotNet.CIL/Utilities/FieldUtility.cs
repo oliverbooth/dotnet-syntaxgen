@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 
-namespace SyntaxGenDotNet.CIL;
+namespace SyntaxGenDotNet.CIL.Utilities;
 
 internal static class FieldUtility
 {

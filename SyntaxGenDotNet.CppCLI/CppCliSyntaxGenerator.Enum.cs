@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using SyntaxGenDotNet.CppCLI.Utilities;
 using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
 
