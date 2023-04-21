@@ -6,9 +6,25 @@ namespace SyntaxGenDotNet.FSharp;
 internal static class Operators
 {
     /// <summary>
+    ///     The <c>-&gt</c> operator.
+    /// </summary>
+    public static readonly OperatorToken Arrow = new("->", false)
+    {
+        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
+    };
+
+    /// <summary>
     ///     The <c>=</c> operator.
     /// </summary>
     public static readonly OperatorToken Assignment = new("=", false)
+    {
+        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
+    };
+
+    /// <summary>
+    ///     The <c>*</c> operator.
+    /// </summary>
+    public static readonly OperatorToken Asterisk = new("*", false)
     {
         LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
     };

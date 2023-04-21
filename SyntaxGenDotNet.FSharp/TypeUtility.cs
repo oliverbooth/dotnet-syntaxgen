@@ -44,6 +44,33 @@ internal sealed class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the generic arguments for the specified type to the specified node.
+    /// </summary>
+    /// <param name="node">The node to which to write the generic arguments.</param>
+    /// <param name="type">The type for which to write the generic arguments.</param>
+    public static void WriteGenericArguments(SyntaxNode node, Type type)
+    {
+        Type[] genericArguments = type.GetGenericArguments();
+        if (genericArguments.Length == 0)
+        {
+            return;
+        }
+
+        node.AddChild(Operators.OpenChevron);
+        for (var index = 0; index < genericArguments.Length; index++)
+        {
+            if (index > 0)
+            {
+                node.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
+            }
+
+            WriteTypeName(node, genericArguments[index]);
+        }
+
+        node.AddChild(Operators.CloseChevron);
+    }
+
+    /// <summary>
     ///     Writes the type name to the specified node.
     /// </summary>
     /// <param name="node">The node to which to write the type name.</param>
@@ -163,22 +190,5 @@ internal sealed class TypeUtility
                 node.AddChild(Operators.Dot);
             }
         }
-    }
-
-    private static void WriteGenericArguments(SyntaxNode node, Type type)
-    {
-        node.AddChild(Operators.OpenChevron);
-        Type[] genericArguments = type.GetGenericArguments();
-        for (var index = 0; index < genericArguments.Length; index++)
-        {
-            if (index > 0)
-            {
-                node.AddChild(Operators.Comma);
-            }
-
-            WriteTypeName(node, genericArguments[index]);
-        }
-
-        node.AddChild(Operators.CloseChevron);
     }
 }

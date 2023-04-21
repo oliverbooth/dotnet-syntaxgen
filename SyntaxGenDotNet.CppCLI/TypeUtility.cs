@@ -161,7 +161,7 @@ internal sealed class TypeUtility
             node.AddChild(new TypeIdentifierToken(typeName));
         }
 
-        if (type.IsGenericType)
+        if (options.WriteGenericArguments && type.IsGenericType)
         {
             WriteGenericArguments(node, type);
         }

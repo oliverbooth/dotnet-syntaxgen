@@ -11,6 +11,11 @@ internal static class Keywords
     public static readonly KeywordToken ClassKeyword = new("class");
 
     /// <summary>
+    ///     The <c>delegate</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken DelegateKeyword = new("delegate");
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static readonly KeywordToken FalseKeyword = new("false");
@@ -44,6 +49,11 @@ internal static class Keywords
     ///     The <c>null</c> keyword.
     /// </summary>
     public static readonly KeywordToken NullKeyword = new("null");
+
+    /// <summary>
+    ///     The <c>of</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken OfKeyword = new("of");
 
     /// <summary>
     ///     The <c>private</c> keyword.

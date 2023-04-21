@@ -1,4 +1,5 @@
-﻿using SyntaxGenDotNet.Syntax.Tokens;
+﻿using SyntaxGenDotNet.Syntax;
+using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CppCLI;
 
@@ -20,9 +21,19 @@ internal static class Keywords
     public static readonly KeywordToken EnumKeyword = new("enum");
 
     /// <summary>
+    ///     The <c>delegate</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken DelegateKeyword = new("delegate");
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static readonly KeywordToken FalseKeyword = new("false");
+
+    /// <summary>
+    ///     The <c>generic</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken GenericKeyword = new("generic");
 
     /// <summary>
     ///     The <c>initonly</c> keyword.
@@ -73,6 +84,11 @@ internal static class Keywords
     ///     The <c>true</c> keyword.
     /// </summary>
     public static readonly KeywordToken TrueKeyword = new("true");
+
+    /// <summary>
+    ///     The <c>typename</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken TypeNameKeyword = new("typename");
 
     /// <summary>
     ///     The <c>value</c> keyword.
