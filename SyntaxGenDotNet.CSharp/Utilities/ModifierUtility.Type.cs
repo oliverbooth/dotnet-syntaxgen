@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using SyntaxGenDotNet.Syntax;
 using X10D.Reflection;
@@ -116,8 +116,7 @@ internal sealed partial class ModifierUtility
                 target.AddChild(Keywords.PrivateKeyword);
                 break;
 
-            case TypeAttributes.NestedAssembly:
-            case TypeAttributes.NotPublic:
+            default:
                 target.AddChild(Keywords.InternalKeyword);
                 break;
         }
