@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -37,14 +37,13 @@ public partial class CSharpSyntaxGenerator
 
     private static void WriteParameter(SyntaxNode target, ParameterInfo parameter)
     {
-        ModifierUtility.WritePassByModifier(target, parameter);
-        TypeUtility.WriteAlias(target, parameter.ParameterType);
-
         if (parameter.Name is null)
         {
             return;
         }
 
+        ModifierUtility.WritePassByModifier(target, parameter);
+        TypeUtility.WriteAlias(target, parameter.ParameterType);
         target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(parameter.Name));
 
