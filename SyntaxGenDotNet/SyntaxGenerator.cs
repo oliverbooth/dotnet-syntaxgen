@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using SyntaxGenDotNet.Attributes;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -17,6 +17,7 @@ public abstract class SyntaxGenerator
     {
         AttributeExpressionWriters.Add(new AttributeUsageAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new CLSCompliantAttributeExpressionWriter());
+        AttributeExpressionWriters.Add(new PureAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new SerializableAttributeExpressionWriter());
         AttributeExpressionWriters.Add(new StructLayoutAttributeExpressionWriter());
     }
