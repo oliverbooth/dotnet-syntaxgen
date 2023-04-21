@@ -5,7 +5,7 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CIL;
 
-internal sealed class TypeUtility
+internal static class TypeUtility
 {
     private static readonly Dictionary<Type, KeywordToken> LanguageAliases = new()
     {

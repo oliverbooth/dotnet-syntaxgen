@@ -5,7 +5,7 @@ using X10D.Reflection;
 
 namespace SyntaxGenDotNet.CSharp.Utilities;
 
-internal sealed partial class ModifierUtility
+internal static partial class ModifierUtility
 {
     /// <summary>
     ///     Writes all modifiers for the specified <see cref="MethodBase" /> to the specified <see cref="SyntaxNode" />. 

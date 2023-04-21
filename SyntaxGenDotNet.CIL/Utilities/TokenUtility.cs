@@ -2,7 +2,7 @@
 
 namespace SyntaxGenDotNet.CIL.Utilities;
 
-internal sealed class TokenUtility
+internal static class TokenUtility
 {
     /// <summary>
     ///     Creates a literal token from a value.

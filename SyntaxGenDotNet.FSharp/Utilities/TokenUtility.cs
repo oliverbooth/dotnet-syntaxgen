@@ -3,7 +3,7 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.FSharp.Utilities;
 
-internal sealed class TokenUtility
+internal static class TokenUtility
 {
     /// <summary>
     ///     Creates a literal token from a value.
