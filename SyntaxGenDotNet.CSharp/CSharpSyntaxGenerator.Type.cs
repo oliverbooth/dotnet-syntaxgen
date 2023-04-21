@@ -18,7 +18,7 @@ public partial class CSharpSyntaxGenerator
         {
             WriteEnumDeclaration(declaration, type);
         }
-        else if (type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate)))
+        else if (type.IsDelegate())
         {
             WriteDelegateDeclaration(declaration, type);
         }

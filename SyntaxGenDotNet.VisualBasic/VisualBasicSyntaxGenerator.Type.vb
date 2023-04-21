@@ -14,7 +14,7 @@ Public Partial Class VisualBasicSyntaxGenerator
 
         If type.IsEnum Then
             WriteEnumDeclaration(declaration, type)
-        ElseIf type.IsSubclassOf(GetType(MulticastDelegate)) Or type.IsSubclassOf(GetType([Delegate])) Then
+        ElseIf type.IsDelegate() Then
             WriteDelegateDeclaration(declaration, type)
         Else
             WriteClassDeclaration(declaration, type)
