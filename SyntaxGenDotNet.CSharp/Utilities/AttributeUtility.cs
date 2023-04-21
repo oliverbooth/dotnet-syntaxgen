@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using SyntaxGenDotNet.Attributes;
@@ -101,7 +101,7 @@ internal static class AttributeUtility
                 target.AddChild(Operators.Dot);
             }
 
-            target.AddChild(TokenUtility.CreateLiteralToken((ConstantExpression)assignment.Expression));
+            target.AddChild(TokenUtility.CreateLiteralToken(assignment.Expression));
         }
     }
 }
