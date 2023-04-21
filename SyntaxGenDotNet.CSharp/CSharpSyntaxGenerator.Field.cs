@@ -11,7 +11,7 @@ public partial class CSharpSyntaxGenerator
     public override FieldDeclaration GenerateFieldDeclaration(FieldInfo fieldInfo)
     {
         var declaration = new FieldDeclaration();
-        FieldUtility.WriteCustomAttributes(declaration, fieldInfo);
+        AttributeUtility.WriteCustomAttributes(this, declaration, fieldInfo);
         ModifierUtility.WriteVisibilityModifier(declaration, fieldInfo);
         FieldUtility.WriteModifiers(declaration, fieldInfo);
         TypeUtility.WriteAlias(declaration, fieldInfo.FieldType);

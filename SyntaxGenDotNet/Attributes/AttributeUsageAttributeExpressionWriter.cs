@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -8,7 +9,7 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class AttributeUsageAttributeExpressionWriter : AttributeExpressionWriter<AttributeUsageAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(Type declaringType, AttributeUsageAttribute? attribute)
+    public override Expression CreateAttributeExpression(MemberInfo declaringMember, AttributeUsageAttribute? attribute)
     {
         if (attribute is null)
         {

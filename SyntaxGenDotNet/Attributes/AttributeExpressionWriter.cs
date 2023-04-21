@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -16,10 +17,10 @@ public abstract class AttributeExpressionWriter
     /// <summary>
     ///     Creates the attribute expression for the specified attribute.
     /// </summary>
-    /// <param name="declaringType">The type that declares the attribute.</param>
+    /// <param name="declaringMember">The type that declares the attribute.</param>
     /// <param name="attribute">The attribute. This may be <see langword="null" /> if the attribute is not custom.</param>
     /// <returns>The attribute expression.</returns>
-    public abstract Expression CreateAttributeExpression(Type declaringType, Attribute? attribute);
+    public abstract Expression CreateAttributeExpression(MemberInfo declaringMember, Attribute? attribute);
 }
 
 /// <summary>
@@ -32,16 +33,16 @@ public abstract class AttributeExpressionWriter<T> : AttributeExpressionWriter
     public override Type AttributeType { get; } = typeof(T);
 
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(Type declaringType, Attribute? attribute)
+    public override Expression CreateAttributeExpression(MemberInfo declaringMember, Attribute? attribute)
     {
-        return CreateAttributeExpression(declaringType, (T?)attribute);
+        return CreateAttributeExpression(declaringMember, (T?)attribute);
     }
 
     /// <summary>
     ///     Creates the attribute expression for the specified attribute.
     /// </summary>
-    /// <param name="declaringType">The type that declares the attribute.</param>
+    /// <param name="declaringMember">The type that declares the attribute.</param>
     /// <param name="attribute">The attribute. This may be <see langword="null" /> if the attribute is not custom.</param>
     /// <returns>The attribute expression.</returns>
-    public abstract Expression CreateAttributeExpression(Type declaringType, T? attribute);
+    public abstract Expression CreateAttributeExpression(MemberInfo declaringMember, T? attribute);
 }

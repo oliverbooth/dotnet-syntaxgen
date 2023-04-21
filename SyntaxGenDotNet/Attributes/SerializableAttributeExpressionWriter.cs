@@ -9,13 +9,13 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class SerializableAttributeExpressionWriter : AttributeExpressionWriter<SerializableAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(Type declaringType, SerializableAttribute? attribute)
+    public override Expression CreateAttributeExpression(MemberInfo declaringMember, SerializableAttribute? attribute)
     {
-        if ((declaringType.Attributes & TypeAttributes.Serializable) != 0)
+        if (declaringMember is not Type type || (type.Attributes & TypeAttributes.Serializable) == 0)
         {
-            return Expression.MemberInit(Expression.New(AttributeType));
+            return Expression.Empty();
         }
 
-        return Expression.Empty();
+        return Expression.MemberInit(Expression.New(AttributeType));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SyntaxGenDotNet.Attributes;
 
@@ -10,7 +11,7 @@ namespace SyntaxGenDotNet.Attributes;
 public sealed class CLSCompliantAttributeExpressionWriter : AttributeExpressionWriter<CLSCompliantAttribute>
 {
     /// <inheritdoc />
-    public override Expression CreateAttributeExpression(Type declaringType, CLSCompliantAttribute? attribute)
+    public override Expression CreateAttributeExpression(MemberInfo declaringMember, CLSCompliantAttribute? attribute)
     {
         if (attribute is null)
         {
@@ -20,6 +21,6 @@ public sealed class CLSCompliantAttributeExpressionWriter : AttributeExpressionW
         Type[] constructorArgumentTypes = {typeof(bool)};
         var constructor = AttributeType.GetConstructor(constructorArgumentTypes)!;
         var isCompliantExpression = Expression.Constant(attribute.IsCompliant);
-        return Expression.New(constructor, isCompliantExpression);
+        return Expression.MemberInit(Expression.New(constructor, isCompliantExpression));
     }
 }

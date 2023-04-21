@@ -32,7 +32,7 @@ public partial class CSharpSyntaxGenerator
 
     private void WriteClassDeclaration(TypeDeclaration declaration, Type type)
     {
-        TypeUtility.WriteCustomAttributes(this, declaration, type);
+        AttributeUtility.WriteCustomAttributes(this, declaration, type);
         ModifierUtility.WriteAllModifiers(declaration, type);
         WriteTypeKind(declaration, type);
         TypeUtility.WriteName(declaration, type);
