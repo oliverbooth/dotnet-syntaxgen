@@ -50,19 +50,6 @@ Namespace Utilities
             target.AddChild(CloseChevron.With(Sub(o) o.TrailingWhitespace = WhitespaceTrivia.NewLine))
         End Sub
 
-        Private Sub WriteArguments(target As SyntaxNode, arguments As ReadOnlyCollection(Of Expression))
-            For index = 0 To arguments.Count - 1
-                Dim argument As Expression = arguments(index)
-
-                If argument.Type.IsEnum Then
-                    WriteName(target, argument.Type)
-                    target.AddChild(Dot)
-                End If
-
-                target.AddChild(CreateLiteralToken(argument))
-            Next
-        End Sub
-
         ''' <summary>
         '''     Writes all known supported custom attribute to the specified node.
         ''' </summary>
@@ -83,6 +70,19 @@ Namespace Utilities
                     Dim memberInitExpression = DirectCast(expression, MemberInitExpression)
                     WriteCustomAttribute(target, memberInitExpression)
                 Next
+            Next
+        End Sub
+
+        Private Sub WriteArguments(target As SyntaxNode, arguments As ReadOnlyCollection(Of Expression))
+            For index = 0 To arguments.Count - 1
+                Dim argument As Expression = arguments(index)
+
+                If argument.Type.IsEnum Then
+                    WriteName(target, argument.Type)
+                    target.AddChild(Dot)
+                End If
+
+                target.AddChild(CreateLiteralToken(argument))
             Next
         End Sub
 
