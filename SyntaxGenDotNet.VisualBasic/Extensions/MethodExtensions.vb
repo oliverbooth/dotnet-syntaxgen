@@ -1,4 +1,4 @@
-Imports System.Reflection
+﻿Imports System.Reflection
 Imports System.Runtime.CompilerServices
 
 Namespace Extensions
@@ -13,4 +13,4 @@ Namespace Extensions
             Return method.ReturnType = GetType(Void)
         End Function
     End Module
-End NameSpace
+End Namespace

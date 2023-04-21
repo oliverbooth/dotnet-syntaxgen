@@ -1,4 +1,4 @@
-
+﻿
 Imports System.Linq.Expressions
 Imports SyntaxGenDotNet.Syntax.Tokens
 
@@ -45,4 +45,4 @@ Namespace Utilities
             End If
         End Function
     End Module
-End NameSpace
+End Namespace

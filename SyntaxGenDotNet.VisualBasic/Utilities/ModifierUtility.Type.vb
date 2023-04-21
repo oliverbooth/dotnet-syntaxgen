@@ -1,4 +1,4 @@
-Imports System.Reflection
+﻿Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax
 
 Namespace Utilities
@@ -72,4 +72,4 @@ Namespace Utilities
             End Select
         End Sub
     End Module
-End NameSpace
+End Namespace

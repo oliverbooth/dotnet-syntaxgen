@@ -1,4 +1,4 @@
-Imports System.Collections.ObjectModel
+﻿Imports System.Collections.ObjectModel
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports SyntaxGenDotNet.Attributes
@@ -116,4 +116,4 @@ Namespace Utilities
             Next
         End Sub
     End Module
-End NameSpace
+End Namespace

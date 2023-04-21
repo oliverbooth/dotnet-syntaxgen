@@ -1,4 +1,4 @@
-
+﻿
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Reflection
 Imports SyntaxGenDotNet.Syntax
@@ -303,4 +303,4 @@ Namespace Utilities
             End Select
         End Sub
     End Module
-End NameSpace
+End Namespace
