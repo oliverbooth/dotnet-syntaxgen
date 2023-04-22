@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using SyntaxGenDotNet.Attributes;
 using SyntaxGenDotNet.Syntax.Declaration;
 
@@ -51,9 +50,6 @@ public abstract class SyntaxGenerator
 
         return member switch
         {
-            Type type when type.IsSubclassOf(typeof(MulticastDelegate)) || type.IsSubclassOf(typeof(Delegate)) =>
-                GenerateDelegateDeclaration(type),
-            Type {IsEnum: true} type => GenerateEnumDeclaration(type),
             Type type => GenerateTypeDeclaration(type),
             FieldInfo fieldInfo => GenerateFieldDeclaration(fieldInfo),
             MethodInfo methodInfo => GenerateMethodDeclaration(methodInfo),
@@ -62,28 +58,6 @@ public abstract class SyntaxGenerator
             // EventInfo eventInfo => GenerateEventDeclaration(eventInfo),
             _ => throw new NotSupportedException()
         };
-    }
-
-    /// <summary>
-    ///     Generates the syntax for the specified enum.
-    /// </summary>
-    /// <param name="enumType">The enum for which to generate syntax.</param>
-    /// <returns>The syntax for the specified enum.</returns>
-    public virtual TypeDeclaration GenerateEnumDeclaration(Type enumType)
-    {
-        Trace.Assert(enumType.IsEnum);
-        return GenerateTypeDeclaration(enumType);
-    }
-
-    /// <summary>
-    ///     Generates the syntax for the specified delegate.
-    /// </summary>
-    /// <param name="delegateType">The delegate for which to generate syntax.</param>
-    /// <returns>The syntax for the specified delegate.</returns>
-    public virtual TypeDeclaration GenerateDelegateDeclaration(Type delegateType)
-    {
-        Trace.Assert(delegateType.IsSubclassOf(typeof(MulticastDelegate)) || delegateType.IsSubclassOf(typeof(Delegate)));
-        return GenerateTypeDeclaration(delegateType);
     }
 
     /// <summary>
