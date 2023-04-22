@@ -74,7 +74,7 @@ public partial class FSharpSyntaxGenerator
         TypeUtility.WriteTypeName(target, invokeMethod.ReturnType);
     }
 
-    private static void WriteInterfaces(TypeDeclaration target, Type type)
+    private static void WriteInterfaces(SyntaxNode target, Type type)
     {
         Type[] interfaces = type.GetDirectInterfaces();
         if (interfaces.Length == 0)
