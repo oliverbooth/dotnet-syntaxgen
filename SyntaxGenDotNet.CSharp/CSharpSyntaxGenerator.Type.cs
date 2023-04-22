@@ -30,28 +30,28 @@ public partial class CSharpSyntaxGenerator
         return declaration;
     }
 
-    private static void WriteClassDeclaration(TypeDeclaration declaration, Type type)
+    private static void WriteClassDeclaration(SyntaxNode target, Type type)
     {
-        ModifierUtility.WriteAllModifiers(declaration, type);
-        WriteTypeKind(declaration, type);
-        TypeUtility.WriteName(declaration, type);
+        ModifierUtility.WriteAllModifiers(target, type);
+        WriteTypeKind(target, type);
+        TypeUtility.WriteName(target, type);
 
         Type[] baseTypes = type.HasBaseType() ? new[] {type.BaseType!} : Array.Empty<Type>();
         baseTypes = baseTypes.Concat(type.GetDirectInterfaces()).ToArray();
 
         if (baseTypes.Length > 0)
         {
-            declaration.AddChild(Operators.Colon);
+            target.AddChild(Operators.Colon);
         }
 
         for (var index = 0; index < baseTypes.Length; index++)
         {
             Type baseType = baseTypes[index];
-            TypeUtility.WriteAlias(declaration, baseType);
+            TypeUtility.WriteAlias(target, baseType);
 
             if (index < baseTypes.Length - 1)
             {
-                declaration.AddChild(Operators.Comma);
+                target.AddChild(Operators.Comma);
             }
         }
     }
@@ -92,19 +92,19 @@ public partial class CSharpSyntaxGenerator
         TypeUtility.WriteAlias(target, enumUnderlyingType);
     }
 
-    private static void WriteTypeKind(SyntaxNode declaration, Type type)
+    private static void WriteTypeKind(SyntaxNode target, Type type)
     {
         if (type.IsInterface)
         {
-            declaration.AddChild(Keywords.InterfaceKeyword);
+            target.AddChild(Keywords.InterfaceKeyword);
         }
         else if (type.IsValueType)
         {
-            declaration.AddChild(Keywords.StructKeyword);
+            target.AddChild(Keywords.StructKeyword);
         }
         else
         {
-            declaration.AddChild(Keywords.ClassKeyword);
+            target.AddChild(Keywords.ClassKeyword);
         }
     }
 }
