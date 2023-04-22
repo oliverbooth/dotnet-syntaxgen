@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
 using SyntaxGenDotNet.Syntax.Tokens;
+using X10D.Reflection;
 
 namespace SyntaxGenDotNet.CSharp;
 
@@ -32,7 +34,7 @@ public partial class CSharpSyntaxGenerator
         }
 
         target.AddChild(Operators.OpenParenthesis);
-        WriteParameters(target, methodInfo.GetParameters());
+        WriteParameters(target, methodInfo);
         target.AddChild(Operators.CloseParenthesis);
     }
 
@@ -57,9 +59,10 @@ public partial class CSharpSyntaxGenerator
         target.AddChild(TokenUtility.CreateLiteralToken(parameter.DefaultValue));
     }
 
-    private static void WriteParameters(SyntaxNode target, IReadOnlyList<ParameterInfo> parameters)
+    private static void WriteParameters(SyntaxNode target, MethodBase method)
     {
-        SyntaxNode comma = parameters.Count switch
+        ParameterInfo[] parameters = method.GetParameters();
+        SyntaxNode comma = parameters.Length switch
         {
             // With method returns a newly-allocated clone. but there's no use allocating
             // if only one parameter is present, as no comma will be necessary.
@@ -67,11 +70,16 @@ public partial class CSharpSyntaxGenerator
             _ => null!
         };
 
-        for (var index = 0; index < parameters.Count; index++)
+        for (var index = 0; index < parameters.Length; index++)
         {
+            if (index == 0 && method.HasCustomAttribute<ExtensionAttribute>())
+            {
+                target.AddChild(Keywords.ThisKeyword);
+            }
+
             WriteParameter(target, parameters[index]);
 
-            if (index < parameters.Count - 1)
+            if (index < parameters.Length - 1)
             {
                 target.AddChild(comma);
             }

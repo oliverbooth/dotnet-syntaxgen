@@ -105,6 +105,11 @@ internal static class Keywords
     public static readonly KeywordToken StructKeyword = new("struct");
 
     /// <summary>
+    ///     The <c>this</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ThisKeyword = new("this");
+
+    /// <summary>
     ///     The <c>true</c> keyword.
     /// </summary>
     public static readonly KeywordToken TrueKeyword = new("true");

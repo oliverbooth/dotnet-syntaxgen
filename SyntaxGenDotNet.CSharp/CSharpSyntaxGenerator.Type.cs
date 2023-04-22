@@ -71,7 +71,7 @@ public partial class CSharpSyntaxGenerator
         }
 
         target.AddChild(Operators.OpenParenthesis);
-        WriteParameters(target, invokeMethod.GetParameters());
+        WriteParameters(target, invokeMethod);
         target.AddChild(Operators.CloseParenthesis);
         target.AddChild(Operators.Semicolon);
     }
