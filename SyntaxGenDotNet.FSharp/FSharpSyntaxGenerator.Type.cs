@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.FSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
@@ -55,14 +55,21 @@ public partial class FSharpSyntaxGenerator
     {
         MethodInfo invokeMethod = type.GetMethod("Invoke")!;
         ParameterInfo[] parameters = invokeMethod.GetParameters();
-        for (var index = 0; index < parameters.Length; index++)
+        if (parameters.Length == 0)
         {
-            ParameterInfo parameter = parameters[index];
-            TypeUtility.WriteTypeName(target, parameter.ParameterType);
-
-            if (index < parameters.Length - 1)
+            TypeUtility.WriteAlias(target, typeof(void));
+        }
+        else
+        {
+            for (var index = 0; index < parameters.Length; index++)
             {
-                target.AddChild(Operators.Asterisk);
+                ParameterInfo parameter = parameters[index];
+                TypeUtility.WriteTypeName(target, parameter.ParameterType);
+
+                if (index < parameters.Length - 1)
+                {
+                    target.AddChild(Operators.Asterisk);
+                }
             }
         }
 
