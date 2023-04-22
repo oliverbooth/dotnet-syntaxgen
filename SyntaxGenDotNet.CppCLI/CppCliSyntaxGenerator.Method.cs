@@ -11,7 +11,22 @@ public sealed partial class CppCliSyntaxGenerator
     /// <inheritdoc />
     public override MethodDeclaration GenerateMethodDeclaration(MethodInfo methodInfo)
     {
-        return new MethodDeclaration();
+        var declaration = new MethodDeclaration();
+        TypeUtility.WriteGenericArguments(declaration, methodInfo.GetGenericArguments());
+        ModifierUtility.WriteVisibilityModifier(declaration, methodInfo);
+        declaration.AddChild(Operators.Colon.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
+        WriteMethodTypeSignature(declaration, methodInfo);
+        declaration.AddChild(Operators.Semicolon);
+        return declaration;
+    }
+
+    private static void WriteMethodTypeSignature(SyntaxNode target, MethodInfo methodInfo)
+    {
+        TypeUtility.WriteAlias(target, methodInfo.ReturnType);
+        target.AddChild(new IdentifierToken(methodInfo.Name));
+        target.AddChild(Operators.OpenParenthesis);
+        WriteParameters(target, methodInfo.GetParameters());
+        target.AddChild(Operators.CloseParenthesis);
     }
 
     private static void WriteParameter(SyntaxNode target, ParameterInfo parameter)
