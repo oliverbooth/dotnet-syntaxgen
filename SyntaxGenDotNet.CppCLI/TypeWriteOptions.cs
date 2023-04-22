@@ -45,6 +45,15 @@ internal struct TypeWriteOptions
     public bool WriteGenericArguments { get; set; } = true;
 
     /// <summary>
+    ///     Gets or sets a value indicating whether to write the <c>generic&lt;typename&gt;</c> list for the type.
+    /// </summary>
+    /// <value>
+    ///     <see langword="true" /> if the generic declaration for the type should be written; otherwise,
+    ///     <see langword="false" />.
+    /// </value>
+    public bool WriteGenericTypeName { get; set; } = true;
+
+    /// <summary>
     ///     Gets or sets a value indicating whether to write the full namespace for the type.
     /// </summary>
     /// <value>

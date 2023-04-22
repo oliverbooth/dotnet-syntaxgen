@@ -81,7 +81,7 @@ internal static class TypeUtility
 
         if (options.Value.WriteGenericArguments)
         {
-            WriteGenericArguments(target, type);
+            WriteGenericArguments(target, type, options);
         }
     }
 
@@ -90,14 +90,15 @@ internal static class TypeUtility
     /// </summary>
     /// <param name="target">The target node to which to write the generic arguments.</param>
     /// <param name="type">The type whose generic arguments to write.</param>
-    public static void WriteGenericArguments(SyntaxNode target, Type type)
+    /// <param name="options">The options to use when writing the generic arguments.</param>
+    public static void WriteGenericArguments(SyntaxNode target, Type type, TypeWriteOptions? options = default)
     {
         if (!type.IsGenericType)
         {
             return;
         }
 
-        WriteGenericArguments(target, type.GetGenericArguments());
+        WriteGenericArguments(target, type.GetGenericArguments(), options);
     }
 
     /// <summary>
@@ -105,19 +106,32 @@ internal static class TypeUtility
     /// </summary>
     /// <param name="target">The node to which to write the generic arguments.</param>
     /// <param name="genericArguments">The generic arguments to write.</param>
-    public static void WriteGenericArguments(SyntaxNode target, IReadOnlyList<Type> genericArguments)
+    /// <param name="options">The options to use when writing the generic arguments.</param>
+    public static void WriteGenericArguments(SyntaxNode target,
+        IReadOnlyList<Type> genericArguments,
+        TypeWriteOptions? options = default)
     {
         if (genericArguments.Count == 0)
         {
             return;
         }
-        
-        target.AddChild(Keywords.GenericKeyword);
+
+        options ??= new TypeWriteOptions();
+
+        if (options.Value.WriteGenericTypeName)
+        {
+            target.AddChild(Keywords.GenericKeyword);
+        }
+
         target.AddChild(Operators.OpenChevron);
 
         for (var index = 0; index < genericArguments.Count; index++)
         {
-            target.AddChild(Keywords.TypeNameKeyword);
+            if (options.Value.WriteGenericTypeName)
+            {
+                target.AddChild(Keywords.TypeNameKeyword);
+            }
+
             WriteAlias(target, genericArguments[index]);
 
             if (index < genericArguments.Count - 1)
@@ -126,7 +140,13 @@ internal static class TypeUtility
             }
         }
 
-        target.AddChild(Operators.CloseChevron.With(o => o.TrailingWhitespace = WhitespaceTrivia.NewLine));
+        SyntaxNode chevron = Operators.CloseChevron;
+        if (options.Value.WriteGenericTypeName)
+        {
+            chevron = Operators.CloseChevron.With(o => o.TrailingWhitespace = WhitespaceTrivia.NewLine);
+        }
+
+        target.AddChild(chevron);
     }
 
     /// <summary>

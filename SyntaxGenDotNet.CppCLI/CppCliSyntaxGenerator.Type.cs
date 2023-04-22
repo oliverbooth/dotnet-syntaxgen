@@ -40,14 +40,15 @@ public sealed partial class CppCliSyntaxGenerator
             declaration.AddChild(Operators.Colon.With(o => o.LeadingWhitespace = o.TrailingWhitespace = " "));
         }
 
+        var options = new TypeWriteOptions {WriteGenericTypeName = false, WriteGcTrackedPointer = false};
         for (var index = 0; index < baseTypes.Length; index++)
         {
             Type baseType = baseTypes[index];
-            TypeUtility.WriteName(declaration, baseType, new TypeWriteOptions {WriteGcTrackedPointer = false});
+            TypeUtility.WriteAlias(declaration, baseType, options);
 
             if (index < baseTypes.Length - 1)
             {
-                declaration.AddChild(Operators.Comma.With(o => o.TrailingWhitespace = " "));
+                declaration.AddChild(Operators.Comma);
             }
         }
 
