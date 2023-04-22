@@ -43,6 +43,50 @@ internal static class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the generic arguments for the specified type to the specified node.
+    /// </summary>
+    /// <param name="target">The target node to which to write the generic arguments.</param>
+    /// <param name="type">The type whose generic arguments to write.</param>
+    public static void WriteGenericArguments(SyntaxNode target, Type type)
+    {
+        if (!type.IsGenericType)
+        {
+            return;
+        }
+
+        WriteGenericArguments(target, type.GetGenericArguments());
+    }
+
+    /// <summary>
+    ///     Writes the generic arguments to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the generic arguments.</param>
+    /// <param name="genericArguments">The generic arguments to write.</param>
+    public static void WriteGenericArguments(SyntaxNode target, IReadOnlyList<Type> genericArguments)
+    {
+        if (genericArguments.Count == 0)
+        {
+            return;
+        }
+
+        target.AddChild(Operators.OpenChevron);
+
+        for (var index = 0; index < genericArguments.Count; index++)
+        {
+            Type genericArgument = genericArguments[index];
+            WriteParameterVariance(target, genericArgument);
+            WriteTypeName(target, genericArgument);
+
+            if (index < genericArguments.Count - 1)
+            {
+                target.AddChild(Operators.Comma);
+            }
+        }
+
+        target.AddChild(Operators.CloseChevron);
+    }
+
+    /// <summary>
     ///     Writes the attributes for the specified type to the specified node.
     /// </summary>
     /// <param name="node">The node to which to write the attributes.</param>
@@ -155,26 +199,6 @@ internal static class TypeUtility
             node.AddChild(Keywords.InterfaceKeyword);
         }
     }
-
-    private static void WriteGenericArguments(SyntaxNode node, Type type)
-    {
-        node.AddChild(Operators.OpenChevron);
-        Type[] genericArguments = type.GetGenericArguments();
-        for (var index = 0; index < genericArguments.Length; index++)
-        {
-            Type genericArgument = genericArguments[index];
-            WriteParameterVariance(node, genericArgument);
-            WriteTypeName(node, genericArgument);
-
-            if (index < genericArguments.Length - 1)
-            {
-                node.AddChild(Operators.Comma);
-            }
-        }
-
-        node.AddChild(Operators.CloseChevron);
-    }
-
 
     private static void WriteImplementationAttributes(SyntaxNode node, Type type)
     {
