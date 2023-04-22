@@ -17,6 +17,8 @@ public sealed partial class CilSyntaxGenerator
         TypeUtility.WriteTypeName(declaration, type, options with {WriteKindPrefix = false});
         TypeUtility.WriteGenericArguments(declaration, type);
 
+        declaration.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
+
         if (type.BaseType is not null)
         {
             declaration.AddChild(Keywords.ExtendsKeyword);
@@ -27,6 +29,7 @@ public sealed partial class CilSyntaxGenerator
 
         if (type.GetInterfaces() is not {Length: > 0} interfaces)
         {
+            declaration.Children[^1].TrailingWhitespace = WhitespaceTrivia.None;
             return declaration;
         }
 
@@ -42,6 +45,7 @@ public sealed partial class CilSyntaxGenerator
             }
         }
 
+        declaration.Children[^1].TrailingWhitespace = WhitespaceTrivia.None;
         return declaration;
     }
 }
