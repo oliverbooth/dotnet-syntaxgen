@@ -77,6 +77,11 @@ internal static class TypeUtility
         options ??= new TypeWriteOptions();
         WriteNamespace(target, type, options);
         WriteName(target, type, options);
+
+        if (options.Value.WriteGenericArguments)
+        {
+            WriteGenericArguments(target, type);
+        }
     }
 
     /// <summary>

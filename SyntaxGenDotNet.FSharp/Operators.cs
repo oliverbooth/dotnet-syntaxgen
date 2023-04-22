@@ -8,7 +8,7 @@ internal static class Operators
     /// <summary>
     ///     The <c>-&gt;</c> operator.
     /// </summary>
-    public static readonly OperatorToken Arrow = new("->", false) {TrailingWhitespace = WhitespaceTrivia.Space};
+    public static readonly OperatorToken Arrow = new("->") {Whitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>=</c> operator.
@@ -18,10 +18,7 @@ internal static class Operators
     /// <summary>
     ///     The <c>*</c> operator.
     /// </summary>
-    public static readonly OperatorToken Asterisk = new("*", false)
-    {
-        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
-    };
+    public static readonly OperatorToken Asterisk = new("*") {Whitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>]</c> operator.
