@@ -13,7 +13,7 @@ internal static class Operators
     /// <summary>
     ///     The <c>=</c> operator.
     /// </summary>
-    public static readonly OperatorToken Assignment = new("=", false) {Whitespace = WhitespaceTrivia.Space};
+    public static readonly OperatorToken Assignment = new("=") {Whitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>*</c> operator.
