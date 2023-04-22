@@ -22,6 +22,7 @@ public partial class CSharpSyntaxGenerator
     private static void WriteMethodTypeSignature(SyntaxNode target, MethodInfo methodInfo, bool writeGenericArguments = false)
     {
         TypeUtility.WriteAlias(target, methodInfo.ReturnType);
+        target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(methodInfo.Name));
 
         if (writeGenericArguments)

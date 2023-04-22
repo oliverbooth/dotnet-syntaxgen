@@ -7,6 +7,17 @@ namespace SyntaxGenDotNet.CSharp.Utilities;
 
 internal static class TypeUtility
 {
+    private static readonly List<Type> TupleTypes = new()
+    {
+        typeof(ValueTuple<,>),
+        typeof(ValueTuple<,,>),
+        typeof(ValueTuple<,,,>),
+        typeof(ValueTuple<,,,,>),
+        typeof(ValueTuple<,,,,,>),
+        typeof(ValueTuple<,,,,,,>),
+        typeof(ValueTuple<,,,,,,,>),
+    };
+
     private static readonly Dictionary<Type, KeywordToken> LanguageAliases = new()
     {
         [typeof(byte)] = new KeywordToken("byte"),
@@ -72,6 +83,12 @@ internal static class TypeUtility
             WriteAlias(target, type.GetElementType()!, options);
             target.AddChild(Operators.OpenBracket);
             target.AddChild(Operators.CloseBracket);
+            return;
+        }
+
+        if (type.IsGenericType && TupleTypes.Contains(type.GetGenericTypeDefinition()))
+        {
+            WriteTuple(target, type, options);
             return;
         }
 
@@ -226,5 +243,25 @@ internal static class TypeUtility
                 target.AddChild(Keywords.OutKeyword);
                 break;
         }
+    }
+
+    private static void WriteTuple(SyntaxNode target, Type type, TypeWriteOptions? options)
+    {
+        var openParenthesis = new OperatorToken(Operators.OpenParenthesis.Text, false);
+        target.AddChild(openParenthesis);
+
+        Type[] genericArguments = type.GetGenericArguments();
+        for (var index = 0; index < genericArguments.Length; index++)
+        {
+            Type genericArgument = genericArguments[index];
+            WriteAlias(target, genericArgument, options);
+
+            if (index < genericArguments.Length - 1)
+            {
+                target.AddChild(Operators.Comma);
+            }
+        }
+
+        target.AddChild(Operators.CloseParenthesis);
     }
 }
