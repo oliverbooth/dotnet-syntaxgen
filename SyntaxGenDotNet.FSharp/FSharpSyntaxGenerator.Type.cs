@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.FSharp.Utilities;
 using SyntaxGenDotNet.Syntax;
@@ -15,6 +15,11 @@ public partial class FSharpSyntaxGenerator
         AttributeUtility.WriteCustomAttributes(this, declaration, type);
         ModifierUtility.WriteAllModifiers(declaration, type);
         TypeUtility.WriteName(declaration, type, new TypeWriteOptions {WriteAlias = false, WriteNamespace = false});
+        if (!type.IsEnum && !type.IsDelegate())
+        {
+            TypeUtility.WriteGenericArguments(declaration, type);
+        }
+
         declaration.AddChild(Operators.Assignment);
 
         if (type.IsEnum)

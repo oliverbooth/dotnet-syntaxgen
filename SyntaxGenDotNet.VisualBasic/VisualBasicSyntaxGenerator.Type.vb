@@ -28,6 +28,7 @@ Public Partial Class VisualBasicSyntaxGenerator
         WriteTypeModifiers(target, type)
         WriteTypeKind(target, type)
         WriteName(target, type)
+        WriteGenericArguments(target, type)
         WriteBaseType(target, type)
         WriteInterfaces(target, type)
     End Sub

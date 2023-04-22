@@ -35,6 +35,7 @@ public partial class CSharpSyntaxGenerator
         ModifierUtility.WriteAllModifiers(target, type);
         WriteTypeKind(target, type);
         TypeUtility.WriteName(target, type);
+        TypeUtility.WriteGenericArguments(target, type);
 
         Type[] baseTypes = type.HasBaseType() ? new[] {type.BaseType!} : Array.Empty<Type>();
         baseTypes = baseTypes.Concat(type.GetDirectInterfaces()).ToArray();

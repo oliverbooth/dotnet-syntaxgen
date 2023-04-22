@@ -15,6 +15,7 @@ public sealed partial class CilSyntaxGenerator
         var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false};
         TypeUtility.WriteTypeAttributes(declaration, type);
         TypeUtility.WriteTypeName(declaration, type, options with {WriteKindPrefix = false});
+        TypeUtility.WriteGenericArguments(declaration, type);
 
         if (type.BaseType is not null)
         {
