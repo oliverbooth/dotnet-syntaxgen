@@ -37,7 +37,7 @@ public partial class FSharpSyntaxGenerator
 
         if (parameters.Count > 0)
         {
-            target.AddChild(Operators.Arrow.With(o => o.LeadingWhitespace = WhitespaceTrivia.None));
+            target.AddChild(Operators.Arrow);
         }
     }
 }

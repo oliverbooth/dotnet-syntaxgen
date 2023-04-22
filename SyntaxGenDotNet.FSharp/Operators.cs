@@ -6,20 +6,14 @@ namespace SyntaxGenDotNet.FSharp;
 internal static class Operators
 {
     /// <summary>
-    ///     The <c>-&gt</c> operator.
+    ///     The <c>-&gt;</c> operator.
     /// </summary>
-    public static readonly OperatorToken Arrow = new("->", false)
-    {
-        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
-    };
+    public static readonly OperatorToken Arrow = new("->", false) {TrailingWhitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>=</c> operator.
     /// </summary>
-    public static readonly OperatorToken Assignment = new("=", false)
-    {
-        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
-    };
+    public static readonly OperatorToken Assignment = new("=", false) {TrailingWhitespace = WhitespaceTrivia.Space};
 
     /// <summary>
     ///     The <c>*</c> operator.
