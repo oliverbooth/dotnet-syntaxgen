@@ -22,7 +22,13 @@ public sealed partial class CppCliSyntaxGenerator
 
     private static void WriteMethodTypeSignature(SyntaxNode target, MethodInfo methodInfo)
     {
-        TypeUtility.WriteAlias(target, methodInfo.ReturnType);
+        TypeUtility.WriteAlias(target, methodInfo.ReturnType, new TypeWriteOptions {WriteGenericTypeName = false});
+        if (!methodInfo.ReturnType.IsValueType)
+        {
+            target.AddChild(Operators.GcTrackedPointer);
+        }
+
+        target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(methodInfo.Name));
         target.AddChild(Operators.OpenParenthesis);
         WriteParameters(target, methodInfo.GetParameters());
@@ -36,7 +42,12 @@ public sealed partial class CppCliSyntaxGenerator
             return;
         }
 
-        TypeUtility.WriteAlias(target, parameter.ParameterType);
+        TypeUtility.WriteAlias(target, parameter.ParameterType, new TypeWriteOptions {WriteGenericTypeName = false});
+        if (!parameter.ParameterType.IsValueType)
+        {
+            target.AddChild(Operators.GcTrackedPointer);
+        }
+
         target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(parameter.Name));
 
