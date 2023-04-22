@@ -1,4 +1,4 @@
-﻿using SyntaxGenDotNet.Syntax.Tokens;
+using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CIL;
 
@@ -35,14 +35,14 @@ internal static class Keywords
     public static readonly KeywordToken BeforeFieldInitKeyword = new("beforefieldinit");
 
     /// <summary>
+    ///     The <c>.class</c> keyword.
+    /// </summary>
+    public static readonly KeywordToken ClassDeclaration = new(".class");
+
+    /// <summary>
     ///     The <c>class</c> keyword.
     /// </summary>
     public static readonly KeywordToken ClassKeyword = new("class");
-
-    /// <summary>
-    ///     The <c>.class</c> keyword.
-    /// </summary>
-    public static readonly KeywordToken DotClassKeyword = new(".class");
 
     /// <summary>
     ///     The <c>explicit</c> keyword.

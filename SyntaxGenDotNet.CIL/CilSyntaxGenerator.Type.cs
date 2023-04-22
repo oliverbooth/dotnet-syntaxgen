@@ -10,7 +10,7 @@ public sealed partial class CilSyntaxGenerator
     public override TypeDeclaration GenerateTypeDeclaration(Type type)
     {
         var declaration = new TypeDeclaration();
-        declaration.AddChild(Keywords.DotClassKeyword);
+        declaration.AddChild(Keywords.ClassDeclaration);
 
         var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false};
         TypeUtility.WriteTypeAttributes(declaration, type);
