@@ -16,8 +16,6 @@ Namespace Utilities
 
             If parameter.IsOut Or parameter.ParameterType.IsByRef Then
                 target.AddChild(ByRefKeyword)
-            Else
-                target.AddChild(ByValKeyword)
             End If
         End Sub
     End Module
