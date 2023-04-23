@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using SyntaxGenDotNet.CppCLI.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -13,6 +13,7 @@ public sealed partial class CppCliSyntaxGenerator
     {
         var declaration = new MethodDeclaration();
         TypeUtility.WriteGenericArguments(declaration, methodInfo.GetGenericArguments());
+        AttributeUtility.WriteCustomAttributes(this, declaration, methodInfo);
         ModifierUtility.WriteVisibilityModifier(declaration, methodInfo);
         declaration.AddChild(Operators.Colon.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
         ModifierUtility.WriteAllModifiers(declaration, methodInfo);
