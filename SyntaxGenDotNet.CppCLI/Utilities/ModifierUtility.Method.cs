@@ -12,7 +12,11 @@ internal static partial class ModifierUtility
     /// <param name="method">The <see cref="MethodBase" /> whose modifiers to write.</param>
     public static void WriteAllModifiers(SyntaxNode target, MethodInfo method)
     {
-        WriteVisibilityModifier(target, method);
+        if (method.IsStatic)
+        {
+            target.AddChild(Keywords.StaticKeyword);
+        }
+
         WriteInheritanceModifiers(target, method);
     }
 
@@ -86,11 +90,6 @@ internal static partial class ModifierUtility
             case MethodAttributes.Private:
                 target.AddChild(Keywords.PrivateKeyword);
                 break;
-        }
-
-        if ((attributes & MethodAttributes.Static) != 0)
-        {
-            target.AddChild(Keywords.StaticKeyword);
         }
     }
 }
