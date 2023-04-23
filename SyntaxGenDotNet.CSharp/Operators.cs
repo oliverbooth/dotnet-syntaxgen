@@ -8,68 +8,105 @@ internal static class Operators
     /// <summary>
     ///     The <c>=</c> operator.
     /// </summary>
-    public static readonly OperatorToken Assignment = new("=", false)
+    public static OperatorToken Assignment
     {
-        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
-    };
+        get =>
+            new("=", false) {LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>=</c> operator.
     /// </summary>
-    public static readonly OperatorToken Asterisk = new("*") {TrailingWhitespace = WhitespaceTrivia.Space};
+    public static OperatorToken Asterisk
+    {
+        get => new("*") {TrailingWhitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>]</c> operator.
     /// </summary>
-    public static readonly OperatorToken CloseBracket = new("]");
+    public static OperatorToken CloseBracket
+    {
+        get => new("]");
+    }
 
     /// <summary>
     ///     The <c>&gt;</c> operator.
     /// </summary>
-    public static readonly OperatorToken CloseChevron = new(">");
+    public static OperatorToken CloseChevron
+    {
+        get => new(">");
+    }
 
     /// <summary>
     ///     The <c>)</c> operator.
     /// </summary>
-    public static readonly OperatorToken CloseParenthesis = new(")");
+    public static OperatorToken CloseParenthesis
+    {
+        get => new(")");
+    }
 
     /// <summary>
     ///     The <c>:</c> operator.
     /// </summary>
-    public static readonly OperatorToken Colon = new(":") {Whitespace = WhitespaceTrivia.Space};
+    public static OperatorToken Colon
+    {
+        get => new(":") {Whitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>,</c> operator.
     /// </summary>
-    public static readonly OperatorToken Comma = new(",") {TrailingWhitespace = WhitespaceTrivia.Space};
+    public static OperatorToken Comma
+    {
+        get => new(",") {TrailingWhitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>.</c> operator.
     /// </summary>
-    public static readonly OperatorToken Dot = new(".");
+    public static OperatorToken Dot
+    {
+        get => new(".");
+    }
 
     /// <summary>
     ///     The <c>[</c> operator.
     /// </summary>
-    public static readonly OperatorToken OpenBracket = new("[");
+    public static OperatorToken OpenBracket
+    {
+        get => new("[");
+    }
 
     /// <summary>
     ///     The <c>&lt;</c> operator.
     /// </summary>
-    public static readonly OperatorToken OpenChevron = new("<");
+    public static OperatorToken OpenChevron
+    {
+        get => new("<");
+    }
 
     /// <summary>
     ///     The <c>(</c> operator.
     /// </summary>
-    public static readonly OperatorToken OpenParenthesis = new("(");
+    public static OperatorToken OpenParenthesis
+    {
+        get => new("(");
+    }
 
     /// <summary>
     ///     The <c>?</c> operator.
     /// </summary>
-    public static readonly OperatorToken QuestionMark = new("?") {TrailingWhitespace = WhitespaceTrivia.Space};
+    public static OperatorToken QuestionMark
+    {
+        get => new("?") {TrailingWhitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>;</c> operator.
     /// </summary>
-    public static readonly OperatorToken Semicolon = new(";");
+    public static OperatorToken Semicolon
+    {
+        get => new(";");
+    }
 }

@@ -7,175 +7,280 @@ internal static class Keywords
     /// <summary>
     ///     The <c>abstract</c> keyword.
     /// </summary>
-    public static readonly KeywordToken AbstractKeyword = new("abstract");
+    public static KeywordToken AbstractKeyword
+    {
+        get => new("abstract");
+    }
 
     /// <summary>
     ///     The <c>ansi</c> keyword.
     /// </summary>
-    public static readonly KeywordToken AnsiKeyword = new("ansi");
+    public static KeywordToken AnsiKeyword
+    {
+        get => new("ansi");
+    }
 
     /// <summary>
     ///     The <c>assembly</c> keyword.
     /// </summary>
-    public static readonly KeywordToken AssemblyKeyword = new("assembly");
+    public static KeywordToken AssemblyKeyword
+    {
+        get => new("assembly");
+    }
 
     /// <summary>
     ///     The <c>auto</c> keyword.
     /// </summary>
-    public static readonly KeywordToken AutoKeyword = new("auto");
+    public static KeywordToken AutoKeyword
+    {
+        get => new("auto");
+    }
 
     /// <summary>
     ///     The <c>autochar</c> keyword.
     /// </summary>
-    public static readonly KeywordToken AutoCharKeyword = new("autochar");
+    public static KeywordToken AutoCharKeyword
+    {
+        get => new("autochar");
+    }
 
     /// <summary>
     ///     The <c>beforefieldinit</c> keyword.
     /// </summary>
-    public static readonly KeywordToken BeforeFieldInitKeyword = new("beforefieldinit");
+    public static KeywordToken BeforeFieldInitKeyword
+    {
+        get => new("beforefieldinit");
+    }
 
     /// <summary>
     ///     The <c>.class</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ClassDeclaration = new(".class");
+    public static KeywordToken ClassDeclaration
+    {
+        get => new(".class");
+    }
 
     /// <summary>
     ///     The <c>class</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ClassKeyword = new("class");
+    public static KeywordToken ClassKeyword
+    {
+        get => new("class");
+    }
 
     /// <summary>
     ///     The <c>explicit</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ExplicitKeyword = new("explicit");
+    public static KeywordToken ExplicitKeyword
+    {
+        get => new("explicit");
+    }
 
     /// <summary>
     ///     The <c>extends</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ExtendsKeyword = new("extends");
+    public static KeywordToken ExtendsKeyword
+    {
+        get => new("extends");
+    }
 
     /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
-    public static readonly KeywordToken FalseKeyword = new("false");
+    public static KeywordToken FalseKeyword
+    {
+        get => new("false");
+    }
 
     /// <summary>
     ///     The <c>famandassem</c> keyword.
     /// </summary>
-    public static readonly KeywordToken FamAndAssemKeyword = new("famandassem");
+    public static KeywordToken FamAndAssemKeyword
+    {
+        get => new("famandassem");
+    }
 
     /// <summary>
     ///     The <c>famorassem</c> keyword.
     /// </summary>
-    public static readonly KeywordToken FamOrAssemKeyword = new("famorassem");
+    public static KeywordToken FamOrAssemKeyword
+    {
+        get => new("famorassem");
+    }
 
     /// <summary>
     ///     The <c>family</c> keyword.
     /// </summary>
-    public static readonly KeywordToken FamilyKeyword = new("family");
+    public static KeywordToken FamilyKeyword
+    {
+        get => new("family");
+    }
 
     /// <summary>
     ///     The <c>.field</c> keyword.
     /// </summary>
-    public static readonly KeywordToken FieldDeclaration = new(".field");
+    public static KeywordToken FieldDeclaration
+    {
+        get => new(".field");
+    }
 
     /// <summary>
     ///     The <c>hassecurity</c> keyword.
     /// </summary>
-    public static readonly KeywordToken HasSecurityKeyword = new("hassecurity");
+    public static KeywordToken HasSecurityKeyword
+    {
+        get => new("hassecurity");
+    }
 
     /// <summary>
     ///     The <c>initonly</c> keyword.
     /// </summary>
-    public static readonly KeywordToken InitOnlyKeyword = new("initonly");
+    public static KeywordToken InitOnlyKeyword
+    {
+        get => new("initonly");
+    }
 
     /// <summary>
     ///     The <c>interface</c> keyword.
     /// </summary>
-    public static readonly KeywordToken InterfaceKeyword = new("interface");
+    public static KeywordToken InterfaceKeyword
+    {
+        get => new("interface");
+    }
 
     /// <summary>
     ///     The <c>implements</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ImplementsKeyword = new("implements");
+    public static KeywordToken ImplementsKeyword
+    {
+        get => new("implements");
+    }
 
     /// <summary>
     ///     The <c>import</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ImportKeyword = new("import");
+    public static KeywordToken ImportKeyword
+    {
+        get => new("import");
+    }
 
     /// <summary>
     ///     The <c>literal</c> keyword.
     /// </summary>
-    public static readonly KeywordToken LiteralKeyword = new("literal");
+    public static KeywordToken LiteralKeyword
+    {
+        get => new("literal");
+    }
 
     /// <summary>
     ///     The <c>nested</c> keyword.
     /// </summary>
-    public static readonly KeywordToken NestedKeyword = new("nested");
+    public static KeywordToken NestedKeyword
+    {
+        get => new("nested");
+    }
 
     /// <summary>
     ///     The <c>null</c> keyword.
     /// </summary>
-    public static readonly KeywordToken NullKeyword = new("null");
+    public static KeywordToken NullKeyword
+    {
+        get => new("null");
+    }
 
     /// <summary>
     ///     The <c>private</c> keyword.
     /// </summary>
-    public static readonly KeywordToken PrivateKeyword = new("private");
+    public static KeywordToken PrivateKeyword
+    {
+        get => new("private");
+    }
 
     /// <summary>
     ///     The <c>public</c> keyword.
     /// </summary>
-    public static readonly KeywordToken PublicKeyword = new("public");
+    public static KeywordToken PublicKeyword
+    {
+        get => new("public");
+    }
 
     /// <summary>
     ///     The <c>rtspecialname</c> keyword.
     /// </summary>
-    public static readonly KeywordToken RTSpecialNameKeyword = new("rtspecialname");
+    public static KeywordToken RTSpecialNameKeyword
+    {
+        get => new("rtspecialname");
+    }
 
     /// <summary>
     ///     The <c>sealed</c> keyword.
     /// </summary>
-    public static readonly KeywordToken SealedKeyword = new("sealed");
+    public static KeywordToken SealedKeyword
+    {
+        get => new("sealed");
+    }
 
     /// <summary>
     ///     The <c>sequential</c> keyword.
     /// </summary>
-    public static readonly KeywordToken SequentialKeyword = new("sequential");
+    public static KeywordToken SequentialKeyword
+    {
+        get => new("sequential");
+    }
 
     /// <summary>
     ///     The <c>serializable</c> keyword.
     /// </summary>
-    public static readonly KeywordToken SerializableKeyword = new("serializable");
+    public static KeywordToken SerializableKeyword
+    {
+        get => new("serializable");
+    }
 
     /// <summary>
     ///     The <c>specialname</c> keyword.
     /// </summary>
-    public static readonly KeywordToken SpecialNameKeyword = new("specialname");
+    public static KeywordToken SpecialNameKeyword
+    {
+        get => new("specialname");
+    }
 
     /// <summary>
     ///     The <c>static</c> keyword.
     /// </summary>
-    public static readonly KeywordToken StaticKeyword = new("static");
+    public static KeywordToken StaticKeyword
+    {
+        get => new("static");
+    }
 
     /// <summary>
     ///     The <c>true</c> keyword.
     /// </summary>
-    public static readonly KeywordToken TrueKeyword = new("true");
+    public static KeywordToken TrueKeyword
+    {
+        get => new("true");
+    }
 
     /// <summary>
     ///     The <c>unicode</c> keyword.
     /// </summary>
-    public static readonly KeywordToken UnicodeKeyword = new("unicode");
+    public static KeywordToken UnicodeKeyword
+    {
+        get => new("unicode");
+    }
 
     /// <summary>
     ///     The <c>valuetype</c> keyword.
     /// </summary>
-    public static readonly KeywordToken ValueTypeKeyword = new("valuetype");
+    public static KeywordToken ValueTypeKeyword
+    {
+        get => new("valuetype");
+    }
 
     /// <summary>
     ///     The <c>windowsruntime</c> keyword.
     /// </summary>
-    public static readonly KeywordToken WindowsRuntimeKeyword = new("windowsruntime");
+    public static KeywordToken WindowsRuntimeKeyword
+    {
+        get => new("windowsruntime");
+    }
 }

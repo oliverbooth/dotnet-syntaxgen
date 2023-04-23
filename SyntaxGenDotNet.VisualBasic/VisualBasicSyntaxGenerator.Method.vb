@@ -41,7 +41,6 @@ Public Partial Class VisualBasicSyntaxGenerator
         End If
 
         WritePassByModifier(target, parameter)
-        target.Children(target.Children.Count - 1).TrailingWhitespace = WhitespaceTrivia.Space
         target.AddChild(New IdentifierToken(parameter.Name))
         target.AddChild(AsKeyword)
         WriteAlias(target, parameter.ParameterType)

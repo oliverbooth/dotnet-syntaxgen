@@ -8,30 +8,42 @@ internal static class Operators
     /// <summary>
     ///     The <c>=</c> operator.
     /// </summary>
-    public static readonly OperatorToken Assignment = new("=", false)
+    public static OperatorToken Assignment
     {
-        LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space
-    };
+        get => new("=", false) {LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>]</c> operator.
     /// </summary>
-    public static readonly OperatorToken CloseBracket = new("]");
+    public static OperatorToken CloseBracket
+    {
+        get => new("]");
+    }
 
     /// <summary>
     ///     The <c>&gt;</c> operator.
     /// </summary>
-    public static readonly OperatorToken CloseChevron = new(">");
+    public static OperatorToken CloseChevron
+    {
+        get => new(">");
+    }
 
     /// <summary>
     ///     The <c>)</c> operator.
     /// </summary>
-    public static readonly OperatorToken CloseParenthesis = new(")");
+    public static OperatorToken CloseParenthesis
+    {
+        get => new(")");
+    }
 
     /// <summary>
     ///     The <c>,</c> operator.
     /// </summary>
-    public static readonly OperatorToken Comma = new(",");
+    public static OperatorToken Comma
+    {
+        get => new(",") {TrailingWhitespace = WhitespaceTrivia.Space};
+    }
 
     /// <summary>
     ///     The <c>-</c> operator.
@@ -40,7 +52,10 @@ internal static class Operators
     ///     While this is technically an operator, it is treated as a keyword in CIL, so this field is of type
     ///     <see cref="KeywordToken" />.
     /// </remarks>
-    public static readonly KeywordToken Contravariant = new("-");
+    public static KeywordToken Contravariant
+    {
+        get => new("-");
+    }
 
     /// <summary>
     ///     The <c>+</c> operator.
@@ -49,20 +64,32 @@ internal static class Operators
     ///     While this is technically an operator, it is treated as a keyword in CIL, so this field is of type
     ///     <see cref="KeywordToken" />.
     /// </remarks>
-    public static readonly KeywordToken Covariant = new("+");
+    public static KeywordToken Covariant
+    {
+        get => new("+");
+    }
 
     /// <summary>
     ///     The <c>[</c> operator.
     /// </summary>
-    public static readonly OperatorToken OpenBracket = new("[");
+    public static OperatorToken OpenBracket
+    {
+        get => new("[");
+    }
 
     /// <summary>
     ///     The <c>&lt;</c> operator.
     /// </summary>
-    public static readonly OperatorToken OpenChevron = new("<");
+    public static OperatorToken OpenChevron
+    {
+        get => new("<");
+    }
 
     /// <summary>
     ///     The <c>(</c> operator.
     /// </summary>
-    public static readonly OperatorToken OpenParenthesis = new("(");
+    public static OperatorToken OpenParenthesis
+    {
+        get => new("(");
+    }
 }
