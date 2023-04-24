@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CIL;
@@ -54,6 +54,14 @@ internal static class Keywords
     public static KeywordToken BeforeFieldInitKeyword
     {
         get => new("beforefieldinit");
+    }
+
+    /// <summary>
+    ///     The <c>cil</c> keyword.
+    /// </summary>
+    public static KeywordToken CilKeyword
+    {
+        get => new("cil");
     }
 
     /// <summary>
@@ -129,11 +137,35 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>final</c> keyword.
+    /// </summary>
+    public static KeywordToken FinalKeyword
+    {
+        get => new("final");
+    }
+
+    /// <summary>
+    ///     The <c>forwardref</c> keyword.
+    /// </summary>
+    public static KeywordToken ForwardRefKeyword
+    {
+        get => new("forwardref");
+    }
+
+    /// <summary>
     ///     The <c>hassecurity</c> keyword.
     /// </summary>
     public static KeywordToken HasSecurityKeyword
     {
         get => new("hassecurity");
+    }
+
+    /// <summary>
+    ///     The <c>hidebysig</c> keyword.
+    /// </summary>
+    public static KeywordToken HideBySigKeyword
+    {
+        get => new("hidebysig");
     }
 
     /// <summary>
@@ -169,11 +201,51 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>instance</c> keyword.
+    /// </summary>
+    public static KeywordToken InstanceKeyword
+    {
+        get => new("instance");
+    }
+
+    /// <summary>
+    ///     The <c>internalcall</c> keyword.
+    /// </summary>
+    public static KeywordToken InternalCallKeyword
+    {
+        get => new("internalcall");
+    }
+
+    /// <summary>
     ///     The <c>literal</c> keyword.
     /// </summary>
     public static KeywordToken LiteralKeyword
     {
         get => new("literal");
+    }
+
+    /// <summary>
+    ///     The <c>managed</c> keyword.
+    /// </summary>
+    public static KeywordToken ManagedKeyword
+    {
+        get => new("managed");
+    }
+
+    /// <summary>
+    ///     The <c>.method</c> keyword.
+    /// </summary>
+    public static KeywordToken MethodDeclaration
+    {
+        get => new(".method");
+    }
+
+    /// <summary>
+    ///     The <c>native</c> keyword.
+    /// </summary>
+    public static KeywordToken NativeKeyword
+    {
+        get => new("native");
     }
 
     /// <summary>
@@ -185,11 +257,51 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>newslot</c> keyword.
+    /// </summary>
+    public static KeywordToken NewSlotKeyword
+    {
+        get => new("newslot");
+    }
+
+    /// <summary>
+    ///     The <c>noinlining</c> keyword.
+    /// </summary>
+    public static KeywordToken NoInliningKeyword
+    {
+        get => new("noinlining");
+    }
+
+    /// <summary>
+    ///     The <c>nooptimization</c> keyword.
+    /// </summary>
+    public static KeywordToken NoOptimizationKeyword
+    {
+        get => new("nooptimization");
+    }
+
+    /// <summary>
     ///     The <c>null</c> keyword.
     /// </summary>
     public static KeywordToken NullKeyword
     {
         get => new("null");
+    }
+
+    /// <summary>
+    ///     The <c>optil</c> keyword.
+    /// </summary>
+    public static KeywordToken OptilKeyword
+    {
+        get => new("optil");
+    }
+
+    /// <summary>
+    ///     The <c>pinvokeimpl</c> keyword.
+    /// </summary>
+    public static KeywordToken PInvokeImplKeyword
+    {
+        get => new("pinvokeimpl");
     }
 
     /// <summary>
@@ -214,6 +326,14 @@ internal static class Keywords
     public static KeywordToken RTSpecialNameKeyword
     {
         get => new("rtspecialname");
+    }
+
+    /// <summary>
+    ///     The <c>runtime</c> keyword.
+    /// </summary>
+    public static KeywordToken RuntimeKeyword
+    {
+        get => new("runtime");
     }
 
     /// <summary>
@@ -257,6 +377,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>synchronized</c> keyword.
+    /// </summary>
+    public static KeywordToken SynchronizedKeyword
+    {
+        get => new("synchronized");
+    }
+
+    /// <summary>
     ///     The <c>true</c> keyword.
     /// </summary>
     public static KeywordToken TrueKeyword
@@ -273,11 +401,27 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>unmanaged</c> keyword.
+    /// </summary>
+    public static KeywordToken UnmanagedKeyword
+    {
+        get => new("unmanaged");
+    }
+
+    /// <summary>
     ///     The <c>valuetype</c> keyword.
     /// </summary>
     public static KeywordToken ValueTypeKeyword
     {
         get => new("valuetype");
+    }
+
+    /// <summary>
+    ///     The <c>virtual</c> keyword.
+    /// </summary>
+    public static KeywordToken VirtualKeyword
+    {
+        get => new("virtual");
     }
 
     /// <summary>
