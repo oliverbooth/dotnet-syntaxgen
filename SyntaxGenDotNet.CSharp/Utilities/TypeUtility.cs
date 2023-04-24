@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
@@ -64,25 +64,8 @@ internal static class TypeUtility
     /// <param name="options">The options to use when writing the type name.</param>
     public static void WriteAlias(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
-        if (type.IsByRef)
+        if (TryResolveElementType(target, type, options))
         {
-            target.AddChild(Keywords.RefKeyword);
-            WriteAlias(target, type.GetElementType()!, options);
-            return;
-        }
-
-        if (type.IsPointer)
-        {
-            WriteAlias(target, type.GetElementType()!, options);
-            target.AddChild(Operators.Asterisk);
-            return;
-        }
-
-        if (type.IsArray)
-        {
-            WriteAlias(target, type.GetElementType()!, options);
-            target.AddChild(Operators.OpenBracket);
-            target.AddChild(Operators.CloseBracket);
             return;
         }
 
@@ -221,6 +204,33 @@ internal static class TypeUtility
                 target.AddChild(Operators.Dot);
             }
         }
+    }
+
+    private static bool TryResolveElementType(SyntaxNode target, Type type, TypeWriteOptions? options)
+    {
+        if (type.IsByRef)
+        {
+            target.AddChild(Keywords.RefKeyword);
+            WriteAlias(target, type.GetElementType()!, options);
+            return true;
+        }
+
+        if (type.IsPointer)
+        {
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.Asterisk);
+            return true;
+        }
+
+        if (type.IsArray)
+        {
+            WriteAlias(target, type.GetElementType()!, options);
+            target.AddChild(Operators.OpenBracket);
+            target.AddChild(Operators.CloseBracket);
+            return true;
+        }
+
+        return false;
     }
 
     private static void WriteParameterVariance(SyntaxNode target, Type genericArgument)
