@@ -69,11 +69,6 @@ internal static class MethodUtility
 
     private static void WriteContractAttributes(SyntaxNode target, MethodAttributes attributes)
     {
-        if ((attributes & MethodAttributes.Static) != 0)
-        {
-            target.AddChild(Keywords.StaticKeyword);
-        }
-
         if ((attributes & MethodAttributes.Final) != 0)
         {
             target.AddChild(Keywords.FinalKeyword);
