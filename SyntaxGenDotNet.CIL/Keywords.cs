@@ -1,7 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CIL;
 
+[SuppressMessage("ReSharper", "CommentTypo")]
+[SuppressMessage("ReSharper", "StringLiteralTypo")]
+[SuppressMessage("ReSharper", "IdentifierTypo")]
 internal static class Keywords
 {
     /// <summary>
