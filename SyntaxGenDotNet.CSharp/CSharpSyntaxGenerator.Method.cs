@@ -17,6 +17,7 @@ public partial class CSharpSyntaxGenerator
         AttributeUtility.WriteCustomAttributes(this, declaration, methodInfo);
         ModifierUtility.WriteAllModifiers(declaration, methodInfo);
         WriteMethodTypeSignature(declaration, methodInfo, true);
+        TypeUtility.WriteParameterConstraints(declaration, methodInfo.GetGenericArguments());
         declaration.AddChild(Operators.Semicolon);
         return declaration;
     }

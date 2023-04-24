@@ -1,7 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
+using X10D.Linq;
 
 namespace SyntaxGenDotNet.CSharp.Utilities;
 
@@ -204,6 +206,85 @@ internal static class TypeUtility
                 target.AddChild(Operators.Dot);
             }
         }
+    }
+
+    /// <summary>
+    ///     Writes the generic parameter constraints for the specified generic arguments to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the constraints.</param>
+    /// <param name="genericArguments">The generic arguments whose constraints to write.</param>
+    public static void WriteParameterConstraints(SyntaxNode target, Type[] genericArguments)
+    {
+        genericArguments = genericArguments.Where(a => a.IsGenericConstrained()).ToArray();
+        if (genericArguments.Length == 0)
+        {
+            return;
+        }
+
+        SyntaxNode colon = Operators.Colon.With(o => o.Whitespace = WhitespaceTrivia.Space);
+
+        for (var index = 0; index < genericArguments.Length; index++)
+        {
+            Type genericArgument = genericArguments[index];
+            target.AddChild(Keywords.WhereKeyword.With(o => o.LeadingWhitespace = genericArguments.Length == 1 ? WhitespaceTrivia.Space : WhitespaceTrivia.Indent));
+            WriteAlias(target, genericArgument);
+            target.AddChild(colon);
+            WriteConstraintTokens(target, genericArgument);
+        }
+    }
+
+    private static void WriteConstraintTokens(SyntaxNode target, Type genericArgument)
+    {
+        if (!genericArgument.IsGenericConstrained())
+        {
+            return;
+        }
+
+        var wroteConstraint = false;
+        GenericParameterAttributes attributes = genericArgument.GenericParameterAttributes;
+        if ((attributes & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
+        {
+            target.AddChild(Keywords.ClassKeyword);
+            wroteConstraint = true;
+        }
+        else if ((attributes & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0)
+        {
+            target.AddChild(Keywords.StructKeyword);
+            wroteConstraint = true;
+        }
+
+        Type[] constraints = genericArgument.GetGenericParameterConstraints().Except(typeof(ValueType)).ToArray();
+        for (var index = 0; index < constraints.Length; index++)
+        {
+            if (wroteConstraint || index > 0)
+            {
+                target.AddChild(Operators.Comma);
+            }
+
+            Type constraint = constraints[index];
+            WriteAlias(target, constraint);
+            wroteConstraint = true;
+        }
+
+        if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) == 0)
+        {
+            return;
+        }
+
+        if ((attributes & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0)
+        {
+            // struct constraint implies default constructor constraint
+            return;
+        }
+
+        if (wroteConstraint)
+        {
+            target.AddChild(Operators.Comma);
+        }
+
+        target.AddChild(Keywords.NewKeyword);
+        target.AddChild(Operators.OpenParenthesis);
+        target.AddChild(Operators.CloseParenthesis);
     }
 
     private static bool TryResolveElementType(SyntaxNode target, Type type, TypeWriteOptions? options)

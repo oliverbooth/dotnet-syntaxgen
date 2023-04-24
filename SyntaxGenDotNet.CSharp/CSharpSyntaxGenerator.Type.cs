@@ -55,6 +55,8 @@ public partial class CSharpSyntaxGenerator
                 target.AddChild(Operators.Comma);
             }
         }
+
+        TypeUtility.WriteParameterConstraints(target, type.GetGenericArguments());
     }
 
     private static void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
