@@ -78,9 +78,7 @@ public class SyntaxNode : ICloneable
     /// </summary>
     /// <param name="child">The child syntax node to add.</param>
     /// <exception cref="ArgumentNullException"><paramref name="child" /> is <see langword="null" />.</exception>
-    /// <exception cref="InvalidOperationException"><paramref name="child" /> already has a parent.</exception>
-    /// <exception cref="InvalidOperationException"><paramref name="child" /> is already a child of the syntax node.</exception>
-    /// <exception cref="InvalidOperationException"><paramref name="child" /> is a descendant of the syntax node.</exception>
+    /// <exception cref="InvalidOperationException"><paramref name="child" /> is the syntax node.</exception>
     public void AddChild(SyntaxNode child)
     {
         if (child is null)
