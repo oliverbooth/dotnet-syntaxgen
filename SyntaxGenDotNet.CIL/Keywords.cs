@@ -81,6 +81,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>.ctor</c> keyword.
+    /// </summary>
+    public static KeywordToken ConstructorDeclaration
+    {
+        get => new(".ctor");
+    }
+
+    /// <summary>
     ///     The <c>explicit</c> keyword.
     /// </summary>
     public static KeywordToken ExplicitKeyword

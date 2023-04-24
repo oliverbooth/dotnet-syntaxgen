@@ -75,6 +75,7 @@ internal static class TypeUtility
         {
             Type genericArgument = genericArguments[index];
             WriteParameterVariance(target, genericArgument);
+            WriteParameterConstraints(target, genericArgument);
             WriteTypeName(target, genericArgument);
 
             if (index < genericArguments.Count - 1)
@@ -200,6 +201,25 @@ internal static class TypeUtility
         }
     }
 
+    private static void WriteConstraintAttributes(SyntaxNode target, Type genericArgument)
+    {
+        GenericParameterAttributes attributes = genericArgument.GenericParameterAttributes;
+        if ((attributes & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
+        {
+            target.AddChild(Keywords.ClassKeyword);
+        }
+
+        if ((attributes & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0)
+        {
+            target.AddChild(Keywords.ValueTypeKeyword);
+        }
+
+        if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
+        {
+            target.AddChild(Keywords.ConstructorDeclaration);
+        }
+    }
+
     private static void WriteImplementationAttributes(SyntaxNode node, Type type)
     {
         if ((type.Attributes & TypeAttributes.Import) != 0)
@@ -279,6 +299,12 @@ internal static class TypeUtility
         }
     }
 
+    private static void WriteParameterConstraints(SyntaxNode target, Type genericArgument)
+    {
+        WriteConstraintAttributes(target, genericArgument);
+        WriteTypeConstraints(target, genericArgument);
+    }
+
     private static void WriteParameterVariance(SyntaxNode node, Type genericArgument)
     {
         if (!genericArgument.IsGenericParameter)
@@ -322,6 +348,40 @@ internal static class TypeUtility
         {
             node.AddChild(Keywords.RTSpecialNameKeyword);
         }
+    }
+
+    private static void WriteTypeConstraints(SyntaxNode target, Type genericArgument)
+    {
+        Type[] constraints = genericArgument.GetGenericParameterConstraints();
+        if (constraints.Length == 0)
+        {
+            return;
+        }
+
+        SyntaxNode openParenthesis = Operators.OpenParenthesis;
+        if (target.Children[^1] is not OperatorToken)
+        {
+            openParenthesis = new OperatorToken(Operators.OpenParenthesis.Text, false);
+        }
+
+        target.AddChild(openParenthesis);
+
+        for (var index = 0; index < constraints.Length; index++)
+        {
+            if (!constraints[index].IsValueType)
+            {
+                target.AddChild(Keywords.ClassKeyword);
+            }
+
+            WriteTypeName(target, constraints[index], new TypeWriteOptions() {WriteAlias = false});
+
+            if (index < constraints.Length - 1)
+            {
+                target.AddChild(Operators.Comma);
+            }
+        }
+
+        target.AddChild(Operators.CloseParenthesis.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));
     }
 
     private static void WriteVisibilityAttribute(SyntaxNode node, Type type)
