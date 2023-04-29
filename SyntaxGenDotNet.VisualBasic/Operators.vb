@@ -14,6 +14,15 @@ Friend Module Operators
     End Property
 
     ''' <summary>
+    '''     The <c>}</c> operator.
+    ''' </summary>
+    Public ReadOnly Property CloseBrace As OperatorToken
+        Get
+            Return New OperatorToken("}")
+        End Get
+    End Property
+
+    ''' <summary>
     '''     The <c>&gt;</c> operator.
     ''' </summary>
     Public ReadOnly Property CloseChevron As OperatorToken
@@ -61,6 +70,15 @@ Friend Module Operators
     Public ReadOnly Property Dot As OperatorToken
         Get
             Return New OperatorToken(".")
+        End Get
+    End Property
+
+    ''' <summary>
+    '''     The <c>{</c> operator.
+    ''' </summary>
+    Public ReadOnly Property OpenBrace As OperatorToken
+        Get
+            Return New OperatorToken("{", False)
         End Get
     End Property
 

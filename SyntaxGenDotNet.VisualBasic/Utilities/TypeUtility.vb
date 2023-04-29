@@ -1,8 +1,10 @@
-﻿
-Imports System.Diagnostics.CodeAnalysis
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq
 Imports System.Reflection
+Imports SyntaxGenDotNet.Extensions
 Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Tokens
+Imports X10D.Core
 
 Namespace Utilities
     Friend Module TypeUtility
@@ -110,6 +112,33 @@ Namespace Utilities
                 Dim genericArgument As Type = genericArguments(index)
                 WriteParameterVariance(target, genericArgument)
                 WriteTypeName(target, genericArgument)
+                Dim constraints As New SyntaxNode
+                WriteParameterConstraints(constraints, genericArgument)
+
+                Dim hasMoreThanOne = constraints.Children.Count > 1 AndAlso constraints.Children.Any(Function(c)
+                    If c.GetType() <> GetType(OperatorToken) Then
+                        Return False
+                    End If
+
+                    Dim token = DirectCast(c, OperatorToken)
+                    Return token.Text = ","c
+                End Function)
+
+                If constraints.Children.Count > 0 Then
+                    target.AddChild(AsKeyword.With(Sub(k) k.LeadingWhitespace = WhitespaceTrivia.None))
+
+                    If hasMoreThanOne Then
+                        target.AddChild(OpenBrace)
+                    End If
+
+                    For Each constraint in constraints.Children
+                        target.AddChild(constraint)
+                    Next
+
+                    If hasMoreThanOne Then
+                        target.AddChild(CloseBrace)
+                    End If
+                End If
 
                 If index < genericArguments.Count - 1 Then
                     target.AddChild(Comma)
@@ -241,6 +270,21 @@ Namespace Utilities
             WriteNamespacedTypeName(node, type, options.TrimAttributeSuffix)
         End Sub
 
+        Private Sub WriteFullName(node As SyntaxNode, fullName As String, trimAttributeSuffix As Boolean)
+            Dim namespaces As String() = fullName.Split(ILOperators.NamespaceSeparator.Text)
+            For index = 0 To namespaces.Length - 1
+                Dim name As String = namespaces(index)
+                If trimAttributeSuffix And name.EndsWith("Attribute", StringComparison.Ordinal) Then
+                    name = name.Substring(0, name.Length - 9)
+                End If
+                node.AddChild(New TypeIdentifierToken(name))
+
+                If index < namespaces.Length - 1 Then
+                    node.AddChild(Dot)
+                End If
+            Next
+        End Sub
+
         Private Sub WriteNamespacedTypeName(node As SyntaxNode, type As Type, Optional trimAttributeSuffix As Boolean = False)
             If type.IsArray Then
                 WriteTypeName(node, type.GetElementType())
@@ -271,19 +315,41 @@ Namespace Utilities
             End If
         End Sub
 
-        Private Sub WriteFullName(node As SyntaxNode, fullName As String, trimAttributeSuffix As Boolean)
-            Dim namespaces As String() = fullName.Split(ILOperators.NamespaceSeparator.Text)
-            For index = 0 To namespaces.Length - 1
-                Dim name As String = namespaces(index)
-                If trimAttributeSuffix And name.EndsWith("Attribute", StringComparison.Ordinal) Then
-                    name = name.Substring(0, name.Length - 9)
-                End If
-                node.AddChild(New TypeIdentifierToken(name))
+        Private Sub WriteParameterConstraints(target As SyntaxNode, genericArgument As Type)
+            If Not genericArgument.IsGenericConstrained() Then
+                Return
+            End If
 
-                If index < namespaces.Length - 1 Then
-                    node.AddChild(Dot)
+            Dim attributes As GenericParameterAttributes = genericArgument.GenericParameterAttributes
+            Dim wroteConstraint As Boolean
+
+            If (attributes And GenericParameterAttributes.ReferenceTypeConstraint) <> 0 Then
+                target.AddChild(ClassKeyword)
+                wroteConstraint = True
+            ElseIf (attributes And GenericParameterAttributes.NotNullableValueTypeConstraint) <> 0 Then
+                target.AddChild(StructureKeyword)
+                wroteConstraint = True
+            End If
+
+            Dim constraints As Type() = genericArgument.GetGenericParameterConstraints()
+            constraints = constraints.Except(GetType(ValueType).AsEnumerableValue()).ToArray()
+
+            For index = 0 To constraints.Length - 1
+                If wroteConstraint Or index > 0 Then
+                    target.AddChild(Comma)
                 End If
+
+                WriteAlias(target, constraints(index))
+                wroteConstraint = True
             Next
+
+            If (attributes And GenericParameterAttributes.DefaultConstructorConstraint) <> 0 Then
+                If wroteConstraint Then
+                    target.AddChild(Comma)
+                End If
+
+                target.AddChild(NewKeyword)
+            End If
         End Sub
 
         Private Sub WriteParameterVariance(node As SyntaxNode, type As Type)

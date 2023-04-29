@@ -149,6 +149,15 @@ Friend Module Keywords
     End Property
 
     ''' <summary>
+    '''     The <c>New</c> keyword.
+    ''' </summary>
+    Public ReadOnly Property NewKeyword As KeywordToken
+        Get
+            Return New KeywordToken("New")
+        End Get
+    End Property
+
+    ''' <summary>
     '''     The <c>Nothing</c> keyword.
     ''' </summary>
     Public ReadOnly Property NothingKeyword As KeywordToken
