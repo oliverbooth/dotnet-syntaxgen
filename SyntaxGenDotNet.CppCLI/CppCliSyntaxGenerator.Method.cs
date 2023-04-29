@@ -13,6 +13,7 @@ public sealed partial class CppCliSyntaxGenerator
     {
         var declaration = new MethodDeclaration();
         TypeUtility.WriteGenericArguments(declaration, methodInfo.GetGenericArguments());
+        TypeUtility.WriteParameterConstraints(declaration, methodInfo.GetGenericArguments());
         AttributeUtility.WriteCustomAttributes(this, declaration, methodInfo);
         ModifierUtility.WriteVisibilityModifier(declaration, methodInfo);
         declaration.AddChild(Operators.Colon.With(o => o.TrailingWhitespace = WhitespaceTrivia.Space));

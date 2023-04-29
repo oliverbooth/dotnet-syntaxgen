@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -150,6 +152,19 @@ internal static class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the constraints for the specified generic parameters to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the constraints.</param>
+    /// <param name="genericArguments">The generic parameters whose constraints to write.</param>
+    public static void WriteParameterConstraints(SyntaxNode target, IReadOnlyList<Type> genericArguments)
+    {
+        for (var index = 0; index < genericArguments.Count; index++)
+        {
+            WriteParameterConstraints(target, genericArguments[index]);
+        }
+    }
+
+    /// <summary>
     ///     Writes the name of the specified type to the specified node.
     /// </summary>
     /// <param name="target">The node to which to write the name.</param>
@@ -218,5 +233,57 @@ internal static class TypeUtility
                 target.AddChild(Operators.ColonColon);
             }
         }
+    }
+
+    private static void WriteParameterConstraints(SyntaxNode target, Type genericParameter)
+    {
+        if (!genericParameter.IsGenericConstrained())
+        {
+            return;
+        }
+
+        var wroteConstraint = false;
+        target.AddChild(Keywords.WhereKeyword);
+        WriteAlias(target, genericParameter);
+        target.AddChild(Operators.Colon.With(o => o.Whitespace = WhitespaceTrivia.Space));
+
+        GenericParameterAttributes attributes = genericParameter.GenericParameterAttributes;
+        if ((attributes & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
+        {
+            target.AddChild(Keywords.RefKeyword);
+            target.AddChild(Keywords.ClassKeyword);
+            wroteConstraint = true;
+        }
+        else if ((attributes & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0)
+        {
+            target.AddChild(Keywords.ValueKeyword);
+            target.AddChild(Keywords.ClassKeyword);
+            wroteConstraint = true;
+        }
+
+        if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
+        {
+            if (wroteConstraint)
+            {
+                target.AddChild(Operators.Comma);
+            }
+
+            target.AddChild(Keywords.GcNewKeyword);
+            target.AddChild(Operators.OpenParenthesis);
+            target.AddChild(Operators.CloseParenthesis);
+        }
+
+        Type[] constraints = genericParameter.GetGenericParameterConstraints();
+        for (var index = 0; index < constraints.Length; index++)
+        {
+            if (wroteConstraint || index > 0)
+            {
+                target.AddChild(Operators.Comma);
+            }
+
+            WriteAlias(target, constraints[index]);
+        }
+
+        target.Children[^1].TrailingWhitespace = WhitespaceTrivia.NewLine;
     }
 }

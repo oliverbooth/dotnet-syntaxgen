@@ -45,6 +45,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>gcnew</c> keyword.
+    /// </summary>
+    public static KeywordToken GcNewKeyword
+    {
+        get => new("gcnew");
+    }
+
+    /// <summary>
     ///     The <c>generic</c> keyword.
     /// </summary>
     public static KeywordToken GenericKeyword
@@ -170,5 +178,13 @@ internal static class Keywords
     public static KeywordToken VirtualKeyword
     {
         get => new("virtual");
+    }
+
+    /// <summary>
+    ///     The <c>where</c> keyword.
+    /// </summary>
+    public static KeywordToken WhereKeyword
+    {
+        get => new("where");
     }
 }
