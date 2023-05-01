@@ -81,6 +81,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>new</c> keyword.
+    /// </summary>
+    public static KeywordToken NewKeyword
+    {
+        get => new("new");
+    }
+
+    /// <summary>
     ///     The <c>null</c> keyword.
     /// </summary>
     public static KeywordToken NullKeyword
