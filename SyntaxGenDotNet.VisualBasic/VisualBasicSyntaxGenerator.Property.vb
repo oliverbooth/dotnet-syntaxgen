@@ -1,9 +1,7 @@
 ﻿Imports System.Reflection
 Imports SyntaxGenDotNet.Extensions
-Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Declaration
 Imports SyntaxGenDotNet.Syntax.Tokens
-Imports SyntaxGenDotNet.VisualBasic.Extensions
 Imports SyntaxGenDotNet.VisualBasic.Utilities
 
 Public Partial Class VisualBasicSyntaxGenerator
