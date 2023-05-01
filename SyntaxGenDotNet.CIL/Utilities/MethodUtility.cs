@@ -11,7 +11,7 @@ internal static class MethodUtility
     /// </summary>
     /// <param name="target">The <see cref="SyntaxNode" /> to which the attributes will be written.</param>
     /// <param name="method">The <see cref="MethodInfo" /> whose attributes to write.</param>
-    public static void WriteAllAttributes(SyntaxNode target, MethodInfo method)
+    public static void WriteAllAttributes(SyntaxNode target, MethodBase method)
     {
         MethodAttributes attributes = method.Attributes;
         WriteVisibilityAttribute(target, attributes);
@@ -28,7 +28,7 @@ internal static class MethodUtility
     /// <param name="method">The <see cref="MethodInfo" /> whose flags to write.</param>
     [SuppressMessage("ReSharper", "BitwiseOperatorOnEnumWithoutFlags")]
     [SuppressMessage("ReSharper", "NonConstantEqualityExpressionHasConstantResult")]
-    public static void WriteImplementationFlags(SyntaxNode target, MethodInfo method)
+    public static void WriteImplementationFlags(SyntaxNode target, MethodBase method)
     {
         MethodImplAttributes attributes = method.MethodImplementationFlags;
         WriteCodeTypeFlags(target, attributes);

@@ -29,6 +29,12 @@ public sealed partial class CilSyntaxGenerator
 
     private static bool TryGetGenericIdentifier(MethodBase method, Type type, [NotNullWhen(true)] out TypeIdentifierToken? token)
     {
+        if (method is ConstructorInfo)
+        {
+            token = null;
+            return false;
+        }
+        
         Type[] arguments = method.GetGenericArguments();
         int index = Array.IndexOf(arguments, type);
         if (index >= 0)
@@ -62,7 +68,7 @@ public sealed partial class CilSyntaxGenerator
             return;
         }
 
-        WriteTypeName(target, (MethodInfo)parameter.Member, parameter.ParameterType);
+        WriteTypeName(target, (MethodBase)parameter.Member, parameter.ParameterType);
         target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(parameter.Name));
 
@@ -96,7 +102,7 @@ public sealed partial class CilSyntaxGenerator
         }
     }
 
-    private static void WriteTypeName(SyntaxNode target, MethodInfo method, Type type)
+    private static void WriteTypeName(SyntaxNode target, MethodBase method, Type type)
     {
         if (TryGetGenericIdentifier(method, type, out TypeIdentifierToken? token))
         {
