@@ -109,6 +109,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>property</c> keyword.
+    /// </summary>
+    public static KeywordToken PropertyKeyword
+    {
+        get => new("property");
+    }
+
+    /// <summary>
     ///     The <c>protected</c> keyword.
     /// </summary>
     public static KeywordToken ProtectedKeyword

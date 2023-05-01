@@ -53,6 +53,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>get</c> keyword.
+    /// </summary>
+    public static KeywordToken GetKeyword
+    {
+        get => new("get");
+    }
+
+    /// <summary>
     ///     The <c>in</c> keyword.
     /// </summary>
     public static KeywordToken InKeyword
@@ -154,6 +162,14 @@ internal static class Keywords
     public static KeywordToken SealedKeyword
     {
         get => new("sealed");
+    }
+
+    /// <summary>
+    ///     The <c>set</c> keyword.
+    /// </summary>
+    public static KeywordToken SetKeyword
+    {
+        get => new("set");
     }
 
     /// <summary>

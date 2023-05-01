@@ -15,6 +15,12 @@ public partial class FSharpSyntaxGenerator
         AttributeUtility.WriteCustomAttributes(this, declaration, methodInfo);
         ModifierUtility.WriteAllModifiers(declaration, methodInfo);
 
+        if (!methodInfo.IsStatic)
+        {
+            declaration.AddChild(Keywords.ThisKeyword);
+            declaration.AddChild(Operators.Dot);
+        }
+
         declaration.AddChild(new IdentifierToken(methodInfo.Name));
         declaration.AddChild(Operators.Colon);
         WriteParameters(declaration, methodInfo.GetParameters());

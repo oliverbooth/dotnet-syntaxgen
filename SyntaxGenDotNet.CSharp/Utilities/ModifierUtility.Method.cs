@@ -98,10 +98,5 @@ internal static partial class ModifierUtility
                 target.AddChild(Keywords.PrivateKeyword);
                 break;
         }
-
-        if ((attributes & MethodAttributes.Static) != 0)
-        {
-            target.AddChild(Keywords.StaticKeyword);
-        }
     }
 }

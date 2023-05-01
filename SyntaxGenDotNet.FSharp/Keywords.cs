@@ -153,6 +153,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>this</c> keyword.
+    /// </summary>
+    public static KeywordToken ThisKeyword
+    {
+        get => new("this");
+    }
+
+    /// <summary>
     ///     The <c>true</c> keyword.
     /// </summary>
     public static KeywordToken TrueKeyword

@@ -31,6 +31,14 @@ internal static class Operators
     }
 
     /// <summary>
+    ///     The <c>}</c> operator.
+    /// </summary>
+    public static OperatorToken CloseBrace
+    {
+        get => new("}", false);
+    }
+
+    /// <summary>
     ///     The <c>]</c> operator.
     /// </summary>
     public static OperatorToken CloseBracket
@@ -85,6 +93,14 @@ internal static class Operators
     {
         get =>
             new("^") {LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space};
+    }
+
+    /// <summary>
+    ///     The <c>{</c> operator.
+    /// </summary>
+    public static OperatorToken OpenBrace
+    {
+        get => new("{") {Whitespace = WhitespaceTrivia.Space};
     }
 
     /// <summary>

@@ -239,6 +239,15 @@ Friend Module Keywords
     End Property
 
     ''' <summary>
+    '''     The <c>Property</c> keyword.
+    ''' </summary>
+    Public ReadOnly Property PropertyKeyword As KeywordToken
+        Get
+            Return New KeywordToken("Property")
+        End Get
+    End Property
+
+    ''' <summary>
     '''     The <c>Protected</c> keyword.
     ''' </summary>
     Public ReadOnly Property ProtectedKeyword As KeywordToken
@@ -298,6 +307,15 @@ Friend Module Keywords
     Public ReadOnly Property TrueKeyword As KeywordToken
         Get
             Return New KeywordToken("True")
+        End Get
+    End Property
+
+    ''' <summary>
+    '''     The <c>WriteOnly</c> keyword.
+    ''' </summary>
+    Public ReadOnly Property WriteOnlyKeyword As KeywordToken
+        Get
+            Return New KeywordToken("WriteOnly")
         End Get
     End Property
 End Module

@@ -161,6 +161,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>.get</c> keyword.
+    /// </summary>
+    public static KeywordToken GetDeclaration
+    {
+        get => new(".get");
+    }
+
+    /// <summary>
     ///     The <c>hassecurity</c> keyword.
     /// </summary>
     public static KeywordToken HasSecurityKeyword
@@ -321,6 +329,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>.property</c> keyword.
+    /// </summary>
+    public static KeywordToken PropertyDeclaration
+    {
+        get => new(".property");
+    }
+
+    /// <summary>
     ///     The <c>public</c> keyword.
     /// </summary>
     public static KeywordToken PublicKeyword
@@ -366,6 +382,14 @@ internal static class Keywords
     public static KeywordToken SerializableKeyword
     {
         get => new("serializable");
+    }
+
+    /// <summary>
+    ///     The <c>.set</c> keyword.
+    /// </summary>
+    public static KeywordToken SetDeclaration
+    {
+        get => new(".set");
     }
 
     /// <summary>

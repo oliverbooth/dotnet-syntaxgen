@@ -54,7 +54,7 @@ public abstract class SyntaxGenerator
             Type type => GenerateTypeDeclaration(type),
             FieldInfo fieldInfo => GenerateFieldDeclaration(fieldInfo),
             MethodInfo methodInfo => GenerateMethodDeclaration(methodInfo),
-            // PropertyInfo propertyInfo => GeneratePropertyDeclaration(propertyInfo),
+            PropertyInfo propertyInfo => GeneratePropertyDeclaration(propertyInfo),
             // ConstructorInfo constructorInfo => GenerateConstructorDeclaration(constructorInfo),
             // EventInfo eventInfo => GenerateEventDeclaration(eventInfo),
             _ => throw new NotSupportedException()
@@ -74,6 +74,13 @@ public abstract class SyntaxGenerator
     /// <param name="methodInfo">The method for which to generate syntax.</param>
     /// <returns>The syntax for the specified method.</returns>
     public abstract MethodDeclaration GenerateMethodDeclaration(MethodInfo methodInfo);
+
+    /// <summary>
+    ///     Generates the syntax for the specified property.
+    /// </summary>
+    /// <param name="propertyInfo">The property for which to generate syntax.</param>
+    /// <returns>The syntax for the specified property.</returns>
+    public abstract PropertyDeclaration GeneratePropertyDeclaration(PropertyInfo propertyInfo);
 
     /// <summary>
     ///     Generates the syntax for the specified type.

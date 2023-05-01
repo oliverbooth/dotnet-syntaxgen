@@ -14,6 +14,14 @@ internal static class Operators
     }
 
     /// <summary>
+    ///     The <c>}</c> operator.
+    /// </summary>
+    public static OperatorToken CloseBrace
+    {
+        get => new("}", false);
+    }
+
+    /// <summary>
     ///     The <c>]</c> operator.
     /// </summary>
     public static OperatorToken CloseBracket
@@ -35,6 +43,14 @@ internal static class Operators
     public static OperatorToken CloseParenthesis
     {
         get => new(")");
+    }
+
+    /// <summary>
+    ///     The <c>::</c> operator.
+    /// </summary>
+    public static OperatorToken ColonColon
+    {
+        get => new("::");
     }
 
     /// <summary>
@@ -67,6 +83,14 @@ internal static class Operators
     public static KeywordToken Covariant
     {
         get => new("+");
+    }
+
+    /// <summary>
+    ///     The <c>{</c> operator.
+    /// </summary>
+    public static OperatorToken OpenBrace
+    {
+        get => new("{", false);
     }
 
     /// <summary>
