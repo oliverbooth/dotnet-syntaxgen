@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SyntaxGenDotNet.CSharp.Utilities;
 using SyntaxGenDotNet.Syntax.Declaration;
 
 namespace SyntaxGenDotNet.CSharp;
@@ -8,6 +9,20 @@ public partial class CSharpSyntaxGenerator
     /// <inheritdoc />
     public override ConstructorDeclaration GenerateConstructorDeclaration(ConstructorInfo constructorInfo)
     {
-        return new ConstructorDeclaration();
+        var declaration = new ConstructorDeclaration();
+
+        ModifierUtility.WriteVisibilityModifier(declaration, constructorInfo);
+        if (constructorInfo.IsStatic)
+        {
+            declaration.AddChild(Keywords.StaticKeyword);
+        }
+
+        TypeUtility.WriteName(declaration, constructorInfo.DeclaringType!);
+        declaration.AddChild(Operators.OpenParenthesis);
+        WriteParameters(declaration, constructorInfo);
+        declaration.AddChild(Operators.CloseParenthesis);
+        declaration.AddChild(Operators.Semicolon);
+
+        return declaration;
     }
 }
