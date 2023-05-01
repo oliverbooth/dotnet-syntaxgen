@@ -49,25 +49,36 @@ internal static class TypeUtility
     /// <param name="options">The options to use when writing the type name.</param>
     public static void WriteAlias(SyntaxNode target, Type type, TypeWriteOptions? options = null)
     {
+        var elementType = type.GetElementType()!;
+
         if (type.IsByRef)
         {
-            WriteAlias(target, type.GetElementType()!, options);
+            WriteAlias(target, elementType, options);
             target.AddChild(Operators.Ampersand);
             return;
         }
 
         if (type.IsPointer)
         {
-            WriteAlias(target, type.GetElementType()!, options);
+            WriteAlias(target, elementType, options);
             target.AddChild(Operators.Asterisk);
             return;
         }
 
         if (type.IsArray)
         {
-            WriteAlias(target, type.GetElementType()!, options);
-            target.AddChild(Operators.OpenBracket);
-            target.AddChild(Operators.CloseBracket);
+            target.AddChild(new TypeIdentifierToken("cli"));
+            target.AddChild(Operators.ColonColon);
+            target.AddChild(new TypeIdentifierToken("array"));
+            target.AddChild(Operators.OpenChevron);
+            WriteAlias(target, elementType, options);
+
+            if (!elementType.IsValueType)
+            {
+                target.AddChild(Operators.GcTrackedPointer);
+            }
+
+            target.AddChild(Operators.CloseChevron);
             return;
         }
 
