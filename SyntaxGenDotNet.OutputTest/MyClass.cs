@@ -1,7 +1,6 @@
-﻿// ReSharper disable All
+// ReSharper disable All
 
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
 
 #pragma warning disable CS0414
 #pragma warning disable CS0649
