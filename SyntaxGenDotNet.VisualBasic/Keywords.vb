@@ -50,6 +50,15 @@ Friend Module Keywords
     End Property
 
     ''' <summary>
+    '''     The <c>Custom</c> keyword.
+    ''' </summary>
+    Public ReadOnly Property CustomKeyword As KeywordToken
+        Get
+            Return New KeywordToken("Custom")
+        End Get
+    End Property
+
+    ''' <summary>
     '''     The <c>Delegate</c> keyword.
     ''' </summary>
     Public ReadOnly Property DelegateKeyword As KeywordToken
@@ -64,6 +73,15 @@ Friend Module Keywords
     Public ReadOnly Property EnumKeyword As KeywordToken
         Get
             Return New KeywordToken("Enum")
+        End Get
+    End Property
+
+    ''' <summary>
+    '''     The <c>Event</c> keyword.
+    ''' </summary>
+    Public ReadOnly Property EventKeyword As KeywordToken
+        Get
+            Return New KeywordToken("Event")
         End Get
     End Property
 

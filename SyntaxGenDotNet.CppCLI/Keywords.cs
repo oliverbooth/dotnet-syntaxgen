@@ -37,6 +37,14 @@ internal static class Keywords
     }
 
     /// <summary>
+    ///     The <c>event</c> keyword.
+    /// </summary>
+    public static KeywordToken EventKeyword
+    {
+        get => new("event");
+    }
+
+    /// <summary>
     ///     The <c>false</c> keyword.
     /// </summary>
     public static KeywordToken FalseKeyword

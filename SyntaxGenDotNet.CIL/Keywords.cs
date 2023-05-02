@@ -9,6 +9,14 @@ namespace SyntaxGenDotNet.CIL;
 internal static class Keywords
 {
     /// <summary>
+    ///     The <c>.addon</c> keyword.
+    /// </summary>
+    public static KeywordToken AddOnDeclaration
+    {
+        get => new(".addon");
+    }
+
+    /// <summary>
     ///     The <c>abstract</c> keyword.
     /// </summary>
     public static KeywordToken AbstractKeyword
@@ -86,6 +94,14 @@ internal static class Keywords
     public static KeywordToken ConstructorDeclaration
     {
         get => new(".ctor");
+    }
+
+    /// <summary>
+    ///     The <c>.event</c> keyword.
+    /// </summary>
+    public static KeywordToken EventDeclaration
+    {
+        get => new(".event");
     }
 
     /// <summary>
@@ -342,6 +358,14 @@ internal static class Keywords
     public static KeywordToken PublicKeyword
     {
         get => new("public");
+    }
+
+    /// <summary>
+    ///     The <c>.removeon</c> keyword.
+    /// </summary>
+    public static KeywordToken RemoveOnDeclaration
+    {
+        get => new(".removeon");
     }
 
     /// <summary>
