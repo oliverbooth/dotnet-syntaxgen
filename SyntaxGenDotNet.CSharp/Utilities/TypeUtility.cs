@@ -153,9 +153,9 @@ internal static class TypeUtility
             name = name[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
-        if (options.Value.TrimAttributeSuffix && name.EndsWith(nameof(Attribute), StringComparison.Ordinal))
+        if (options.Value.TrimAttributeSuffix && name != "Attribute" && name.EndsWith("Attribute", StringComparison.Ordinal))
         {
-            name = name[..^nameof(Attribute).Length];
+            name = name[..^9];
         }
 
         target.AddChild(new TypeIdentifierToken(name));
@@ -226,7 +226,8 @@ internal static class TypeUtility
         for (var index = 0; index < genericArguments.Length; index++)
         {
             Type genericArgument = genericArguments[index];
-            target.AddChild(Keywords.WhereKeyword.With(o => o.LeadingWhitespace = genericArguments.Length == 1 ? WhitespaceTrivia.Space : WhitespaceTrivia.Indent));
+            target.AddChild(Keywords.WhereKeyword.With(o =>
+                o.LeadingWhitespace = genericArguments.Length == 1 ? WhitespaceTrivia.Space : WhitespaceTrivia.Indent));
             WriteAlias(target, genericArgument);
             target.AddChild(colon);
             WriteConstraintTokens(target, genericArgument);

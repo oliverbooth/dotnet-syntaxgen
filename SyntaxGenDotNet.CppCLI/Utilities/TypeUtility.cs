@@ -191,9 +191,9 @@ internal static class TypeUtility
             name = name[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }
 
-        if (options.Value.TrimAttributeSuffix && name.EndsWith(nameof(Attribute), StringComparison.Ordinal))
+        if (options.Value.TrimAttributeSuffix && name != "Attribute" && name.EndsWith("Attribute", StringComparison.Ordinal))
         {
-            name = name[..^nameof(Attribute).Length];
+            name = name[..^9];
         }
 
         target.AddChild(new TypeIdentifierToken(name));

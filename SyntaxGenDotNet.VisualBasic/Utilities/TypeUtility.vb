@@ -162,8 +162,10 @@ Namespace Utilities
                 name = name.Substring(0, name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
             End If
 
-            If options.Value.TrimAttributeSuffix AndAlso name.EndsWith(NameOf(Attribute), StringComparison.Ordinal) Then
-                name = name.Substring(0, name.Length - NameOf(Attribute).Length)
+            If _
+                options.Value.TrimAttributeSuffix AndAlso name <> "Attribute" AndAlso
+                name.EndsWith("Attribute", StringComparison.Ordinal) Then
+                name = name.Substring(0, name.Length - 9)
             End If
 
             target.AddChild(New TypeIdentifierToken(name))
