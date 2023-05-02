@@ -98,4 +98,12 @@ internal static class Operators
     {
         get => new("(");
     }
+
+    /// <summary>
+    ///     The <c>|||</c> operator.
+    /// </summary>
+    public static OperatorToken Or
+    {
+        get => new("|||", false) {Whitespace = WhitespaceTrivia.Space};
+    }
 }

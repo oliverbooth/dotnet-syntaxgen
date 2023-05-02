@@ -80,14 +80,7 @@ internal static class AttributeUtility
         for (var index = 0; index < arguments.Count; index++)
         {
             Expression argument = arguments[index];
-
-            if (argument.Type.IsEnum)
-            {
-                TypeUtility.WriteName(target, argument.Type);
-                target.AddChild(Operators.Dot);
-            }
-
-            target.AddChild(TokenUtility.CreateLiteralToken(argument));
+            WriteResolvedExpression(target, argument);
         }
     }
 
@@ -123,5 +116,30 @@ internal static class AttributeUtility
 
             target.AddChild(TokenUtility.CreateLiteralToken(assignment.Expression));
         }
+    }
+
+    private static void WriteResolvedExpression(SyntaxNode target, Expression expression)
+    {
+        if (expression is UnaryExpression {NodeType: ExpressionType.Convert} unary)
+        {
+            WriteResolvedExpression(target, unary.Operand);
+            return;
+        }
+
+        if (expression is BinaryExpression binary)
+        {
+            WriteResolvedExpression(target, binary.Left);
+            target.AddChild(Operators.Or);
+            WriteResolvedExpression(target, binary.Right);
+            return;
+        }
+
+        if (expression.Type.IsEnum)
+        {
+            TypeUtility.WriteName(target, expression.Type);
+            target.AddChild(Operators.Dot);
+        }
+
+        target.AddChild(TokenUtility.CreateLiteralToken(expression));
     }
 }

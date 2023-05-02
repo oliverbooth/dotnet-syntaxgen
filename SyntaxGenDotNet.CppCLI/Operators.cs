@@ -128,6 +128,14 @@ internal static class Operators
     }
 
     /// <summary>
+    ///     The <c>|</c> operator.
+    /// </summary>
+    public static OperatorToken Or
+    {
+        get => new("|", false) {Whitespace = WhitespaceTrivia.Space};
+    }
+
+    /// <summary>
     ///     The <c>;</c> operator.
     /// </summary>
     public static OperatorToken Semicolon

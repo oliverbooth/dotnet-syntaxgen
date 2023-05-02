@@ -73,13 +73,7 @@ Namespace Utilities
         Private Sub WriteArguments(target As SyntaxNode, arguments As ReadOnlyCollection(Of Expression))
             For index = 0 To arguments.Count - 1
                 Dim argument As Expression = arguments(index)
-
-                If argument.Type.IsEnum Then
-                    WriteName(target, argument.Type)
-                    target.AddChild(Dot)
-                End If
-
-                target.AddChild(CreateLiteralToken(argument))
+                WriteResolvedExpression(target, argument)
             Next
         End Sub
 
@@ -114,6 +108,31 @@ Namespace Utilities
 
                 target.AddChild(CreateLiteralToken(assignment.Expression))
             Next
+        End Sub
+
+        Private Sub WriteResolvedExpression(target As SyntaxNode, expression As Expression)
+            Dim unary = TryCast(expression, UnaryExpression)
+            If unary IsNot Nothing
+                If unary.NodeType = ExpressionType.Convert Then
+                    WriteResolvedExpression(target, unary.Operand)
+                    Return
+                End If
+            End If
+
+            Dim binary = TryCast(expression, BinaryExpression)
+            If binary IsNot Nothing Then
+                WriteResolvedExpression(target, binary.Left)
+                target.AddChild(OrKeyword)
+                WriteResolvedExpression(target, binary.Right)
+                Return
+            End If
+
+            If expression.Type.IsEnum Then
+                WriteName(target, expression.Type)
+                target.AddChild(Dot)
+            End If
+
+            target.AddChild(CreateLiteralToken(expression))
         End Sub
     End Module
 End Namespace

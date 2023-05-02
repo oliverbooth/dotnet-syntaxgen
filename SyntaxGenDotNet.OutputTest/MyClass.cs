@@ -1,5 +1,6 @@
 // ReSharper disable All
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #pragma warning disable CS0414
@@ -331,6 +332,11 @@ internal abstract class MyClass : Attribute, IComparable<MyClass>, IComparable, 
     public int CompareTo(MyClass? other)
     {
         throw new NotImplementedException();
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+    public void MethodWithImplOptions()
+    {
     }
 
     public unsafe void Foo(ref int[] x)

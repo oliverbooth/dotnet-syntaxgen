@@ -18,7 +18,7 @@ internal static class OutputApp
             new CppCliSyntaxGenerator(), new FSharpSyntaxGenerator()
         };
 
-        var member = typeof(List<>);
+        var member = typeof(MyClass).GetMethod(nameof(MyClass.MethodWithImplOptions))!;
         foreach (SyntaxGenerator generator in generators)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;

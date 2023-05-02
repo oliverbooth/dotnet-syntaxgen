@@ -221,6 +221,16 @@ Friend Module Keywords
     End Property
 
     ''' <summary>
+    '''     The <c>Or</c> keyword.
+    ''' </summary>
+    Public ReadOnly Property OrKeyword As KeywordToken
+        Get
+            Return New KeywordToken("Or") With{.Whitespace = WhitespaceTrivia.Space}
+        End Get
+    End Property
+
+
+    ''' <summary>
     '''     The <c>Out</c> keyword.
     ''' </summary>
     Public ReadOnly Property OutKeyword As KeywordToken
