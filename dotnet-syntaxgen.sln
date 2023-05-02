@@ -27,6 +27,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CppCLI", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.FSharp", "SyntaxGenDotNet.FSharp\SyntaxGenDotNet.FSharp.csproj", "{BB259937-B1E7-4E63-9938-A3C93873F9B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{142A6092-A5CB-4D20-908C-55A58CC33445}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		.github\workflows\nightly.yml = .github\workflows\nightly.yml
+		.github\workflows\prerelease.yml = .github\workflows\prerelease.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

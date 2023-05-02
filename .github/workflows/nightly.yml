@@ -1,0 +1,49 @@
+name: Publish Nightly
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    if: "!contains(format('{0} {1}', github.event.head_commit.message, github.event.pull_request.title), '[ci-skip]')"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Add GitHub NuGet source
+        run: dotnet nuget add source --username oliverbooth --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/oliverbooth/index.json"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Debug --no-restore -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+
+      - name: Build NuGet package
+        run: |
+          mkdir build
+          dotnet pack SyntaxGenDotNet --configuration Debug --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack SyntaxGenDotNet.CIL --configuration Debug --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack SyntaxGenDotNet.CppCLI --configuration Debug --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack SyntaxGenDotNet.CSharp --configuration Debug --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack SyntaxGenDotNet.FSharp --configuration Debug --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack SyntaxGenDotNet.VisualBasic --configuration Debug --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+
+      - name: Push NuGet Package to GitHub
+        run: dotnet nuget push "build/*" --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/

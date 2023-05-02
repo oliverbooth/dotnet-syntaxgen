@@ -1,0 +1,54 @@
+name: Tagged Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  release:
+    name: "Tagged Release"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Add GitHub NuGet source
+        run: dotnet nuget add source --username oliverbooth --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/oliverbooth/index.json"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Build NuGet package
+        run: |
+          mkdir build
+          dotnet pack SyntaxGenDotNet --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+          dotnet pack SyntaxGenDotNet.CIL --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+          dotnet pack SyntaxGenDotNet.CppCLI --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+          dotnet pack SyntaxGenDotNet.CSharp --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+          dotnet pack SyntaxGenDotNet.FSharp --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+          dotnet pack SyntaxGenDotNet.VisualBasic --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+
+      - name: Push NuGet Package to GitHub
+        run: dotnet nuget push "build/*" --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/
+
+      - name: Create Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
