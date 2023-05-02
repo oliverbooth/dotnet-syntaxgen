@@ -203,6 +203,11 @@ internal static class TypeUtility
 
     private static void WriteConstraintAttributes(SyntaxNode target, Type genericArgument)
     {
+        if (!genericArgument.IsGenericParameter)
+        {
+            return;
+        }
+
         GenericParameterAttributes attributes = genericArgument.GenericParameterAttributes;
         if ((attributes & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
         {
