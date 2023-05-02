@@ -11,6 +11,7 @@ public partial class CSharpSyntaxGenerator
     {
         var declaration = new ConstructorDeclaration();
 
+        AttributeUtility.WriteCustomAttributes(this, declaration, constructorInfo);
         ModifierUtility.WriteVisibilityModifier(declaration, constructorInfo);
         if (constructorInfo.IsStatic)
         {

@@ -12,6 +12,7 @@ public partial class FSharpSyntaxGenerator
     {
         var declaration = new ConstructorDeclaration();
 
+        AttributeUtility.WriteCustomAttributes(this, declaration, constructorInfo);
         declaration.AddChild(Keywords.NewKeyword);
         TypeUtility.WriteName(declaration, constructorInfo.DeclaringType!, new TypeWriteOptions {WriteAlias = false});
         declaration.AddChild(constructorInfo.DeclaringType!.IsGenericType

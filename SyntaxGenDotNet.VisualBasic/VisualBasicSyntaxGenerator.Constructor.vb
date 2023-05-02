@@ -7,6 +7,7 @@ Public Partial Class VisualBasicSyntaxGenerator
     Public Overrides Function GenerateConstructorDeclaration(constructorInfo As ConstructorInfo) As ConstructorDeclaration
         Dim declaration As New ConstructorDeclaration()
 
+        WriteCustomAttributes(Me, declaration, constructorInfo)
         WriteVisibilityModifier(declaration, constructorInfo)
         If constructorInfo.IsStatic Then
             declaration.AddChild(SharedKeyword)

@@ -13,6 +13,7 @@ public sealed partial class CppCliSyntaxGenerator
     {
         var declaration = new ConstructorDeclaration();
 
+        AttributeUtility.WriteCustomAttributes(this, declaration, constructorInfo);
         ModifierUtility.WriteVisibilityModifier(declaration, constructorInfo);
         declaration.AddChild(Operators.Colon.With(o => o.TrailingWhitespace = WhitespaceTrivia.Indent));
         if (constructorInfo.IsStatic)
