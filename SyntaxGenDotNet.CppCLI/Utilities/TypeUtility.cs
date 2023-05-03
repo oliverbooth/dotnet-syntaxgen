@@ -118,7 +118,7 @@ internal static class TypeUtility
             return;
         }
 
-        WriteGenericArguments(target, type.GetGenericArguments(), options);
+        WriteGenericArguments(target, genericArguments, options);
     }
 
     /// <summary>
