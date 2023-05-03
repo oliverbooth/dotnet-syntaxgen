@@ -34,6 +34,8 @@ public partial class CSharpSyntaxGenerator
     {
         ModifierUtility.WriteAllModifiers(target, type);
         WriteTypeKind(target, type);
+
+        WriteDeclaringType(target, type);
         TypeUtility.WriteName(target, type);
         TypeUtility.WriteGenericArguments(target, type);
 
@@ -59,12 +61,32 @@ public partial class CSharpSyntaxGenerator
         TypeUtility.WriteParameterConstraints(target, type.GetGenericArguments());
     }
 
+    private static void WriteDeclaringType(SyntaxNode target, Type type)
+    {
+        if (!type.IsNested)
+        {
+            return;
+        }
+
+        Type? declaringType = type.DeclaringType;
+        var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false, TrimAttributeSuffix = false};
+
+        while (declaringType is not null)
+        {
+            TypeUtility.WriteAlias(target, declaringType, options);
+            target.AddChild(Operators.Dot);
+            declaringType = declaringType.DeclaringType;
+        }
+    }
+
     private static void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
     {
         MethodInfo invokeMethod = delegateType.GetMethod("Invoke")!;
         ModifierUtility.WriteVisibilityModifier(target, delegateType);
         target.AddChild(Keywords.DelegateKeyword);
         TypeUtility.WriteAlias(target, invokeMethod.ReturnType);
+
+        WriteDeclaringType(target, delegateType);
         TypeUtility.WriteName(target, delegateType);
 
         if (delegateType.IsGenericType)
@@ -83,6 +105,7 @@ public partial class CSharpSyntaxGenerator
         ModifierUtility.WriteVisibilityModifier(target, enumType);
         target.AddChild(Keywords.EnumKeyword);
 
+        WriteDeclaringType(target, enumType);
         TypeUtility.WriteName(target, enumType);
 
         Type enumUnderlyingType = enumType.GetEnumUnderlyingType();

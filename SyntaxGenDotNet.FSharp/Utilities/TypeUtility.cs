@@ -96,6 +96,13 @@ internal static class TypeUtility
             return;
         }
 
+        Type[] genericArguments = type.GetGenericArguments();
+        if (type.DeclaringType?.GetGenericArguments().Select(t => t.FullName)
+                .SequenceEqual(genericArguments.Select(t => t.FullName)) == true)
+        {
+            return;
+        }
+
         WriteGenericArguments(target, type.GetGenericArguments());
     }
 
@@ -138,7 +145,7 @@ internal static class TypeUtility
         options ??= new TypeWriteOptions();
 
         string name = type.Name;
-        if (type.IsGenericType)
+        if (type.IsGenericType && name.Contains(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
         {
             name = name[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
         }

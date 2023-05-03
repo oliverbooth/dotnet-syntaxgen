@@ -23,6 +23,7 @@ public sealed partial class CppCliSyntaxGenerator
 
         WriteTypeKind(declaration, type);
         declaration.AddChild(Keywords.ClassKeyword);
+        WriteDeclaringType(declaration, type);
         TypeUtility.WriteName(declaration, type);
 
         if (type.IsEnum)
@@ -55,10 +56,32 @@ public sealed partial class CppCliSyntaxGenerator
         return declaration;
     }
 
+    private static void WriteDeclaringType(SyntaxNode target, Type type)
+    {
+        if (!type.IsNested)
+        {
+            return;
+        }
+
+        Type? declaringType = type.DeclaringType;
+        var options = new TypeWriteOptions
+        {
+            WriteAlias = false, WriteNamespace = false, TrimAttributeSuffix = false, WriteGenericTypeName = false
+        };
+
+        while (declaringType is not null)
+        {
+            TypeUtility.WriteAlias(target, declaringType, options);
+            target.AddChild(Operators.ColonColon);
+            declaringType = declaringType.DeclaringType;
+        }
+    }
+
     private static void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
     {
         MethodInfo invokeMethod = delegateType.GetMethod("Invoke")!;
         TypeUtility.WriteAlias(target, invokeMethod.ReturnType);
+        WriteDeclaringType(target, delegateType);
         TypeUtility.WriteName(target, delegateType);
         target.AddChild(Operators.OpenParenthesis);
         WriteParameters(target, invokeMethod.GetParameters());

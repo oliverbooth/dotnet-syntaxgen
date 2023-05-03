@@ -116,4 +116,12 @@ internal static class Operators
     {
         get => new("(");
     }
+    
+    /// <summary>
+    ///     The <c>/</c> operator.
+    /// </summary>
+    public static OperatorToken Slash
+    {
+        get => new("/");
+    }
 }

@@ -92,6 +92,14 @@ Namespace Utilities
                 Return
             End If
 
+            Dim genericArguments As Type() = type.GetGenericArguments()
+            If _
+                type.DeclaringType IsNot Nothing AndAlso
+                type.DeclaringType.GetGenericArguments().Select(Function(t) t.FullName).SequenceEqual(
+                    genericArguments.Select(Function(t) t.FullName)) Then
+                Return
+            End If
+
             WriteGenericArguments(target, type.GetGenericArguments())
         End Sub
 
@@ -158,7 +166,7 @@ Namespace Utilities
             options = If(options.HasValue, options, TypeWriteOptions.DefaultOptions)
 
             Dim name As String = type.Name
-            If type.IsGenericType Then
+            If type.IsGenericType AndAlso name.Contains(ILOperators.GenericMarker.Text, StringComparison.Ordinal) Then
                 name = name.Substring(0, name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
             End If
 

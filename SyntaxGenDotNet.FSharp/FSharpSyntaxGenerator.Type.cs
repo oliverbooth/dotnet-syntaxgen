@@ -14,6 +14,21 @@ public partial class FSharpSyntaxGenerator
         var declaration = new TypeDeclaration();
         AttributeUtility.WriteCustomAttributes(this, declaration, type);
         ModifierUtility.WriteAllModifiers(declaration, type);
+
+
+        if (type.IsNested)
+        {
+            Type? declaringType = type.DeclaringType;
+            var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false, TrimAttributeSuffix = false};
+
+            while (declaringType is not null)
+            {
+                TypeUtility.WriteAlias(declaration, declaringType, options);
+                declaration.AddChild(Operators.Dot);
+                declaringType = declaringType.DeclaringType;
+            }
+        }
+
         TypeUtility.WriteName(declaration, type, new TypeWriteOptions {WriteAlias = false, WriteNamespace = false});
         TypeUtility.WriteGenericArguments(declaration, type);
 

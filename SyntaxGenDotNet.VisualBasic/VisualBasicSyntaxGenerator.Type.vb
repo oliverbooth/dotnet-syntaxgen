@@ -27,10 +27,34 @@ Public Partial Class VisualBasicSyntaxGenerator
         WriteAllModifiers(target, type)
         WriteTypeModifiers(target, type)
         WriteTypeKind(target, type)
+        WriteDeclaringType(target, type)
         WriteName(target, type)
         WriteGenericArguments(target, type)
         WriteBaseType(target, type)
         WriteInterfaces(target, type)
+    End Sub
+
+    Private Shared Sub WriteDeclaringType(target As SyntaxNode, type As Type)
+        If Not type.IsNested Then
+            Return
+        End If
+
+        Dim declaringType As Type = type.DeclaringType
+        If declaringType IsNot Nothing Then
+            Dim options As New TypeWriteOptions() With
+                    {
+                    .WriteAlias = False, 
+                    .WriteNamespace = False, 
+                    .TrimAttributeSuffix = False,
+                    .WriteGenericArguments = True
+                    }
+
+            While declaringType IsNot Nothing
+                WriteAlias(target, declaringType, options)
+                target.AddChild(Dot)
+                declaringType = declaringType.DeclaringType
+            End While
+        End If
     End Sub
 
     Private Shared Sub WriteDelegateDeclaration(target As SyntaxNode, delegateType As Type)
@@ -45,6 +69,7 @@ Public Partial Class VisualBasicSyntaxGenerator
             name = name.Substring(0, name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
         End If
 
+        WriteDeclaringType(target, delegateType)
         target.AddChild(New TypeIdentifierToken(name))
         WriteGenericArguments(target, delegateType)
         target.AddChild(OpenParenthesis)
@@ -76,6 +101,7 @@ Public Partial Class VisualBasicSyntaxGenerator
     Private Shared Sub WriteEnumDeclaration(target As SyntaxNode, enumType As Type)
         WriteVisibilityModifier(target, enumType)
         target.AddChild(EnumKeyword)
+        WriteDeclaringType(target, enumType)
         target.AddChild(new TypeIdentifierToken(enumType.Name))
 
         Dim enumUnderlyingType As Type = enumType.GetEnumUnderlyingType()
