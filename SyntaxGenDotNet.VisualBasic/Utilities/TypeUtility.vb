@@ -318,7 +318,9 @@ Namespace Utilities
 
             If type.IsGenericType Then
                 Dim index As Integer = fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)
-                fullName = fullName.Substring(0, index)
+                If index > - 1 Then
+                    fullName = fullName.Substring(0, index)
+                End If
             End If
 
             WriteFullName(node, fullName, trimAttributeSuffix)
