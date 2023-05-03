@@ -270,7 +270,10 @@ Namespace Utilities
 
             If Not options.WriteNamespace Then
                 If type.IsGenericType Then
-                    typeName = type.Name.Substring(0, typeName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
+                    Dim index As Integer = typeName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)
+                    If index > - 1 Then
+                        typeName = typeName.Substring(0, index)
+                    End If
                 End If
 
                 node.AddChild(New TypeIdentifierToken(typeName))

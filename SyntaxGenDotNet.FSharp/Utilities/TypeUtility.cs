@@ -145,9 +145,13 @@ internal static class TypeUtility
         options ??= new TypeWriteOptions();
 
         string name = type.Name;
-        if (type.IsGenericType && name.Contains(ILOperators.GenericMarker.Text, StringComparison.Ordinal))
+        if (type.IsGenericType)
         {
-            name = name[..name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
+            int index = name.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal);
+            if (index >= 0)
+            {
+                name = name[..index];
+            }
         }
 
         if (options.Value.TrimAttributeSuffix && name != "Attribute" && name.EndsWith("Attribute", StringComparison.Ordinal))
