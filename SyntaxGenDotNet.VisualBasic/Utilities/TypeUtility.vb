@@ -100,7 +100,7 @@ Namespace Utilities
                 Return
             End If
 
-            WriteGenericArguments(target, type.GetGenericArguments())
+            WriteGenericArguments(target, genericArguments)
         End Sub
 
         ''' <summary>
@@ -331,7 +331,7 @@ Namespace Utilities
         End Sub
 
         Private Sub WriteParameterConstraints(target As SyntaxNode, genericArgument As Type)
-            If Not genericArgument.IsGenericConstrained() Then
+            If Not genericArgument.IsGenericParameter OrElse Not genericArgument.IsGenericConstrained() Then
                 Return
             End If
 
@@ -354,7 +354,7 @@ Namespace Utilities
                     target.AddChild(Comma)
                 End If
 
-                WriteAlias(target, constraints(index))
+                WriteAlias(target, constraints(index), New TypeWriteOptions With {.WriteGenericArguments = False})
                 wroteConstraint = True
             Next
 
