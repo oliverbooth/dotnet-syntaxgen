@@ -260,7 +260,11 @@ internal static class TypeUtility
         string fullName = options.WriteNamespace ? type.FullName ?? type.Name : type.Name;
         if (type.IsGenericType)
         {
-            fullName = fullName[..fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal)];
+            int index = fullName.IndexOf(ILOperators.GenericMarker.Text, StringComparison.Ordinal);
+            if (index >= 0)
+            {
+                fullName = fullName[..index];
+            }
         }
 
         WriteFullName(node, fullName, options.TrimAttributeSuffix);
