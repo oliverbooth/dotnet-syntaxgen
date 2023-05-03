@@ -15,7 +15,7 @@ public sealed partial class CilSyntaxGenerator
         var options = new TypeWriteOptions {WriteAlias = false, WriteNamespace = false};
         TypeUtility.WriteTypeAttributes(declaration, type);
         WriteDeclaringType(declaration, type);
-        TypeUtility.WriteTypeName(declaration, type, options with {WriteKindPrefix = false});
+        TypeUtility.WriteName(declaration, type);
         TypeUtility.WriteGenericArguments(declaration, type);
 
         declaration.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
@@ -62,7 +62,7 @@ public sealed partial class CilSyntaxGenerator
 
         while (declaringType is not null)
         {
-            TypeUtility.WriteTypeName(target, declaringType, options);
+            TypeUtility.WriteAlias(target, declaringType, options);
             target.AddChild(Operators.Slash);
             declaringType = declaringType.DeclaringType;
         }

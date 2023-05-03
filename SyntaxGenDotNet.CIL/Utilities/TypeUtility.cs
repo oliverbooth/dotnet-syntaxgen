@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using SyntaxGenDotNet.Extensions;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Tokens;
 
@@ -43,6 +44,30 @@ internal static class TypeUtility
     }
 
     /// <summary>
+    ///     Writes the fully resolved name of the specified type to the specified node, or the alias if the type has one.
+    /// </summary>
+    /// <param name="target">The node to which to write the type name.</param>
+    /// <param name="type">The type whose name to write.</param>
+    /// <param name="options">The options to use when writing the type name.</param>
+    public static void WriteAlias(SyntaxNode target, Type type, TypeWriteOptions? options = null)
+    {
+        if (TryGetLanguageAliasToken(type, out KeywordToken? alias))
+        {
+            target.AddChild(alias);
+            return;
+        }
+
+        options ??= new TypeWriteOptions();
+        WriteNamespace(target, type, options);
+        WriteName(target, type);
+
+        if (options.Value.WriteGenericArguments)
+        {
+            WriteGenericArguments(target, type);
+        }
+    }
+
+    /// <summary>
     ///     Writes the generic arguments for the specified type to the specified node.
     /// </summary>
     /// <param name="target">The target node to which to write the generic arguments.</param>
@@ -54,7 +79,14 @@ internal static class TypeUtility
             return;
         }
 
-        WriteGenericArguments(target, type.GetGenericArguments());
+        Type[] genericArguments = type.GetGenericArguments();
+        if (type.DeclaringType?.GetGenericArguments().Select(t => t.FullName)
+                .SequenceEqual(genericArguments.Select(t => t.FullName)) == true)
+        {
+            return;
+        }
+
+        WriteGenericArguments(target, genericArguments);
     }
 
     /// <summary>
@@ -76,7 +108,7 @@ internal static class TypeUtility
             Type genericArgument = genericArguments[index];
             WriteParameterVariance(target, genericArgument);
             WriteParameterConstraints(target, genericArgument);
-            WriteTypeName(target, genericArgument);
+            WriteAlias(target, genericArgument);
 
             if (index < genericArguments.Count - 1)
             {
@@ -85,6 +117,63 @@ internal static class TypeUtility
         }
 
         target.AddChild(Operators.CloseChevron);
+    }
+
+    /// <summary>
+    ///     Writes the name of the specified type to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the name.</param>
+    /// <param name="type">The type whose name to write.</param>
+    public static void WriteName(SyntaxNode target, Type type)
+    {
+        target.AddChild(new TypeIdentifierToken(type.Name));
+    }
+
+    /// <summary>
+    ///     Writes the namespace for the specified type to the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the namespace.</param>
+    /// <param name="type">The type whose namespace to write.</param>
+    /// <param name="options">The options for writing the namespace.</param>
+    public static void WriteNamespace(SyntaxNode target, Type type, TypeWriteOptions? options = null)
+    {
+        options ??= new TypeWriteOptions();
+
+        if (!options.Value.WriteNamespace || type.IsGenericParameter)
+        {
+            return;
+        }
+
+        WriteNamespace(target, type.Namespace);
+
+        if (type.Namespace is not null)
+        {
+            target.AddChild(Operators.Dot);
+        }
+    }
+
+    /// <summary>
+    ///     Writes the specified namespace name the specified node.
+    /// </summary>
+    /// <param name="target">The node to which to write the namespace.</param>
+    /// <param name="namespaceName">The name of the namespace to write.</param>
+    public static void WriteNamespace(SyntaxNode target, string? namespaceName)
+    {
+        if (string.IsNullOrWhiteSpace(namespaceName))
+        {
+            return;
+        }
+
+        string[] parts = namespaceName.Split('.');
+        for (var index = 0; index < parts.Length; index++)
+        {
+            target.AddChild(new TypeIdentifierToken(parts[index]));
+
+            if (index < parts.Length - 1)
+            {
+                target.AddChild(Operators.Dot);
+            }
+        }
     }
 
     /// <summary>
@@ -144,7 +233,7 @@ internal static class TypeUtility
             return;
         }
 
-        WriteNamespacedTypeName(node, type, options.WriteKindPrefix);
+        WriteNamespacedTypeName(node, type, options);
 
         SyntaxNode last = node.Children[^1];
         if (last is OperatorToken)
@@ -254,7 +343,7 @@ internal static class TypeUtility
         }
     }
 
-    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, bool writeKindPrefix)
+    private static void WriteNamespacedTypeName(SyntaxNode node, Type type, TypeWriteOptions options)
     {
         if (type.IsArray)
         {
@@ -264,7 +353,7 @@ internal static class TypeUtility
             return;
         }
 
-        if (writeKindPrefix)
+        if (options.WriteKindPrefix)
         {
             if (type.IsValueType)
             {
@@ -293,7 +382,7 @@ internal static class TypeUtility
             }
         }
 
-        if (type.IsGenericType)
+        if (options.WriteGenericArguments && type is {IsGenericType: true, IsGenericParameter: false})
         {
             WriteGenericArguments(node, type);
         }
@@ -301,7 +390,7 @@ internal static class TypeUtility
 
     private static void WriteParameterConstraints(SyntaxNode target, Type genericArgument)
     {
-        if (!genericArgument.IsGenericParameter)
+        if (!genericArgument.IsGenericParameter || !genericArgument.IsGenericConstrained())
         {
             return;
         }
@@ -378,7 +467,7 @@ internal static class TypeUtility
                 target.AddChild(Keywords.ClassKeyword);
             }
 
-            WriteTypeName(target, constraints[index], new TypeWriteOptions() {WriteAlias = false});
+            WriteName(target, constraints[index]);
 
             if (index < constraints.Length - 1)
             {

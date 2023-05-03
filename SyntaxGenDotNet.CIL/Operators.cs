@@ -86,6 +86,14 @@ internal static class Operators
     }
 
     /// <summary>
+    ///     The <c>.</c> operator.
+    /// </summary>
+    public static OperatorToken Dot
+    {
+        get => new(".");
+    }
+
+    /// <summary>
     ///     The <c>{</c> operator.
     /// </summary>
     public static OperatorToken OpenBrace
