@@ -96,6 +96,15 @@ internal static class Operators
     }
 
     /// <summary>
+    ///     The <c>&amp;</c> operator.
+    /// </summary>
+    public static OperatorToken GcTrackedReference
+    {
+        get =>
+            new("%") {LeadingWhitespace = WhitespaceTrivia.Space, TrailingWhitespace = WhitespaceTrivia.Space};
+    }
+
+    /// <summary>
     ///     The <c>{</c> operator.
     /// </summary>
     public static OperatorToken OpenBrace

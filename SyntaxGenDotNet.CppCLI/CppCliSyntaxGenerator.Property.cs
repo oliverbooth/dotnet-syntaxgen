@@ -39,7 +39,7 @@ public sealed partial class CppCliSyntaxGenerator
         return declaration;
     }
 
-    private static void WritePropertyAccessor(SyntaxNode target, MethodInfo accessor)
+    private void WritePropertyAccessor(SyntaxNode target, MethodInfo accessor)
     {
         TypeUtility.WriteAlias(target, accessor.ReturnType);
         target.AddChild(new IdentifierToken(accessor.Name[..accessor.Name.IndexOf('_')]));

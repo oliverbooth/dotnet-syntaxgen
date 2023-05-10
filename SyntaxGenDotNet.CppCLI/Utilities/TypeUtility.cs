@@ -54,7 +54,7 @@ internal static class TypeUtility
         if (type.IsByRef)
         {
             WriteAlias(target, elementType, options);
-            target.AddChild(Operators.Ampersand);
+            target.AddChild(type.IsPrimitive ? Operators.Ampersand : Operators.GcTrackedReference);
             return;
         }
 

@@ -77,7 +77,7 @@ public sealed partial class CppCliSyntaxGenerator
         }
     }
 
-    private static void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
+    private void WriteDelegateDeclaration(SyntaxNode target, Type delegateType)
     {
         MethodInfo invokeMethod = delegateType.GetMethod("Invoke")!;
         TypeUtility.WriteAlias(target, invokeMethod.ReturnType);

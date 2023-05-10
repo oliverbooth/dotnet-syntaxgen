@@ -73,6 +73,30 @@ internal static class AttributeUtility
         }
     }
 
+    /// <summary>
+    ///     Writes all known supported custom attribute to the specified node.
+    /// </summary>
+    /// <param name="generator">The syntax generator.</param>
+    /// <param name="target">The node to which to write the attributes.</param>
+    /// <param name="parameter">The parameter whose custom attributes to write.</param>
+    public static void WriteCustomAttributes(SyntaxGenerator generator, SyntaxNode target, ParameterInfo parameter)
+    {
+        foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
+        {
+            Type attributeType = writer.AttributeType;
+            Attribute[] attributes = parameter.GetCustomAttributes(attributeType, false).OfType<Attribute>().ToArray();
+            IEnumerable<Expression> expressions = writer.CreateAttributeExpressions(parameter.Member, attributes);
+
+            foreach (Expression expression in expressions)
+            {
+                if (expression is MemberInitExpression memberInitExpression)
+                {
+                    WriteCustomAttribute(target, memberInitExpression);
+                }
+            }
+        }
+    }
+
     private static void WriteArguments(SyntaxNode target, IReadOnlyList<Expression> arguments)
     {
         for (var index = 0; index < arguments.Count; index++)

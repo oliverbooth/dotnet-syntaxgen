@@ -48,7 +48,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="X10D" Version="4.0.0-nightly.234" />
+        <PackageReference Include="X10D" Version="4.0.0-nightly.234"/>
     </ItemGroup>
 
 </Project>

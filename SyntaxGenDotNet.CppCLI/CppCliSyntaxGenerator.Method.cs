@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices;
 using SyntaxGenDotNet.CppCLI.Utilities;
 using SyntaxGenDotNet.Syntax;
 using SyntaxGenDotNet.Syntax.Declaration;
@@ -23,7 +24,7 @@ public sealed partial class CppCliSyntaxGenerator
         return declaration;
     }
 
-    private static void WriteMethodTypeSignature(SyntaxNode target, MethodInfo methodInfo)
+    private void WriteMethodTypeSignature(SyntaxNode target, MethodInfo methodInfo)
     {
         TypeUtility.WriteAlias(target, methodInfo.ReturnType, new TypeWriteOptions {WriteGenericTypeName = false});
         if (!methodInfo.ReturnType.IsValueType)
@@ -38,15 +39,21 @@ public sealed partial class CppCliSyntaxGenerator
         target.AddChild(Operators.CloseParenthesis);
     }
 
-    private static void WriteParameter(SyntaxNode target, ParameterInfo parameter)
+    private void WriteParameter(SyntaxNode target, ParameterInfo parameter)
     {
         if (parameter.Name is null)
         {
             return;
         }
 
+        AttributeUtility.WriteCustomAttributes(this, target, parameter);
+        if (target.Children[^1] is OperatorToken operatorToken)
+        {
+            operatorToken.TrailingWhitespace = WhitespaceTrivia.Space;
+        }
+
         TypeUtility.WriteAlias(target, parameter.ParameterType, new TypeWriteOptions {WriteGenericTypeName = false});
-        if (!parameter.ParameterType.IsValueType)
+        if (!parameter.ParameterType.IsValueType && !parameter.IsOut)
         {
             target.AddChild(Operators.GcTrackedPointer);
         }
@@ -63,7 +70,7 @@ public sealed partial class CppCliSyntaxGenerator
         target.AddChild(TokenUtility.CreateLiteralToken(parameter.DefaultValue));
     }
 
-    private static void WriteParameters(SyntaxNode target, IReadOnlyList<ParameterInfo> parameters)
+    private void WriteParameters(SyntaxNode target, IReadOnlyList<ParameterInfo> parameters)
     {
         SyntaxNode comma = parameters.Count switch
         {
