@@ -303,7 +303,11 @@ internal static class TypeUtility
     {
         if (type.IsByRef)
         {
-            target.AddChild(Keywords.RefKeyword);
+            if (options is {WriteRef: true})
+            {
+                target.AddChild(Keywords.RefKeyword);
+            }
+
             WriteAlias(target, type.GetElementType()!, options);
             return true;
         }

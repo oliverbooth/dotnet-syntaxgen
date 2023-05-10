@@ -51,4 +51,13 @@ internal struct TypeWriteOptions
     ///     <see langword="true" /> if the full namespace for the type should be written; otherwise, <see langword="false" />.
     /// </value>
     public bool WriteNamespace { get; set; } = true;
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether to write the <c>ref</c> modifier for the type.
+    /// </summary>
+    /// <value>
+    ///     <see langword="true" /> if the <c>ref</c> modifier for the type should be written; otherwise,
+    ///     <see langword="false" />.
+    /// </value>
+    public bool WriteRef { get; set; } = true;
 }

@@ -53,7 +53,7 @@ public partial class CSharpSyntaxGenerator
         }
 
         ModifierUtility.WritePassByModifier(target, parameter);
-        TypeUtility.WriteAlias(target, parameter.ParameterType);
+        TypeUtility.WriteAlias(target, parameter.ParameterType, new TypeWriteOptions {WriteRef = !parameter.IsOut});
         target.Children[^1].TrailingWhitespace = WhitespaceTrivia.Space;
         target.AddChild(new IdentifierToken(parameter.Name));
 
