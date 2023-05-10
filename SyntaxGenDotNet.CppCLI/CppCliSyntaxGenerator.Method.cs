@@ -46,8 +46,8 @@ public sealed partial class CppCliSyntaxGenerator
             return;
         }
 
-        AttributeUtility.WriteCustomAttributes(this, target, parameter);
-        if (target.Children[^1] is OperatorToken operatorToken)
+        if (AttributeUtility.WriteCustomAttributes(this, target, parameter) > 0 &&
+            target.Children[^1] is OperatorToken operatorToken)
         {
             operatorToken.TrailingWhitespace = WhitespaceTrivia.Space;
         }

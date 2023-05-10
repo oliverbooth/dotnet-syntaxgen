@@ -79,8 +79,10 @@ internal static class AttributeUtility
     /// <param name="generator">The syntax generator.</param>
     /// <param name="target">The node to which to write the attributes.</param>
     /// <param name="parameter">The parameter whose custom attributes to write.</param>
-    public static void WriteCustomAttributes(SyntaxGenerator generator, SyntaxNode target, ParameterInfo parameter)
+    public static int WriteCustomAttributes(SyntaxGenerator generator, SyntaxNode target, ParameterInfo parameter)
     {
+        var attributeCount = 0;
+        
         foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
         {
             Type attributeType = writer.AttributeType;
@@ -92,9 +94,12 @@ internal static class AttributeUtility
                 if (expression is MemberInitExpression memberInitExpression)
                 {
                     WriteCustomAttribute(target, memberInitExpression);
+                    attributeCount++;
                 }
             }
         }
+        
+        return attributeCount;
     }
 
     private static void WriteArguments(SyntaxNode target, IReadOnlyList<Expression> arguments)
