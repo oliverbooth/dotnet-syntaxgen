@@ -25,6 +25,9 @@ jobs:
       - name: Add GitHub NuGet source
         run: dotnet nuget add source --username oliverbooth --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/oliverbooth/index.json"
 
+      - name: Add BaGet source
+        run: dotnet nuget add source --username oliverbooth --password ${{ secrets.BAGET_API_KEY }} --store-password-in-clear-text --name baget "https://nuget.booth.dev/v3/index.json"
+
       - name: Restore dependencies
         run: dotnet restore
 
@@ -35,14 +38,17 @@ jobs:
         run: |
           mkdir build
           dotnet pack SyntaxGenDotNet --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
-          dotnet pack SyntaxGenDotNet.CIL --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
-          dotnet pack SyntaxGenDotNet.CppCLI --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
-          dotnet pack SyntaxGenDotNet.CSharp --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
-          dotnet pack SyntaxGenDotNet.FSharp --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
-          dotnet pack SyntaxGenDotNet.VisualBasic --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack Languages/SyntaxGenDotNet.CIL --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack Languages/SyntaxGenDotNet.CppCLI --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack Languages/SyntaxGenDotNet.CSharp --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack Languages/SyntaxGenDotNet.FSharp --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
+          dotnet pack Languages/SyntaxGenDotNet.VisualBasic --configuration Release --no-build -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='prerelease' -p:BuildNumber=${{ github.run_number }}
 
       - name: Push NuGet Package to GitHub
         run: dotnet nuget push "build/*" --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+      - name: Push NuGet Package to BaGet
+        run: dotnet nuget push "build/*" --source "baget" --api-key ${{ secrets.BAGET_API_KEY }} --skip-duplicate
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
