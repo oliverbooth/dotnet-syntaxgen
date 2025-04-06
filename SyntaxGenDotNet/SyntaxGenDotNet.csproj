@@ -1,10 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <VersionPrefix>1.0.0</VersionPrefix>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageIconUrl/>
         <PackageTags>dotnet syntax generator</PackageTags>
@@ -12,28 +10,6 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DebugType>pdbonly</DebugType>
         <DebugSymbols>true</DebugSymbols>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(VersionSuffix)' != '' And '$(BuildNumber)' == ''">
-        <Version>$(VersionPrefix)-$(VersionSuffix)</Version>
-        <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
-        <FileVersion>$(VersionPrefix).0</FileVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(VersionSuffix)' != '' And '$(BuildNumber)' != ''">
-        <Version>$(VersionPrefix)-$(VersionSuffix).$(BuildNumber)</Version>
-        <AssemblyVersion>$(VersionPrefix).$(BuildNumber)</AssemblyVersion>
-        <FileVersion>$(VersionPrefix).$(BuildNumber)</FileVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(VersionSuffix)' == ''">
-        <Version>$(VersionPrefix)</Version>
-        <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
-        <FileVersion>$(VersionPrefix).0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
