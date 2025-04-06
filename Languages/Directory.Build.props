@@ -5,10 +5,10 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DebugType>pdbonly</DebugType>
         <DebugSymbols>true</DebugSymbols>
-        <PackageLicenseFile>..\LICENSE.md</PackageLicenseFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageIconUrl/>
         <PackageTags>dotnet syntax generator</PackageTags>
-        <PackageReadmeFile>..\README.md</PackageReadmeFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
