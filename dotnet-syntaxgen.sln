@@ -18,15 +18,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.OutputTest", "SyntaxGenDotNet.OutputTest\SyntaxGenDotNet.OutputTest.csproj", "{47A57804-978D-4F65-ADA1-FBA3DEDCC76A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CSharp", "SyntaxGenDotNet.CSharp\SyntaxGenDotNet.CSharp.csproj", "{BF741F42-243C-4E4F-940C-B7C340DBA874}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CSharp", "Languages\SyntaxGenDotNet.CSharp\SyntaxGenDotNet.CSharp.csproj", "{BF741F42-243C-4E4F-940C-B7C340DBA874}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SyntaxGenDotNet.VisualBasic", "SyntaxGenDotNet.VisualBasic\SyntaxGenDotNet.VisualBasic.vbproj", "{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SyntaxGenDotNet.VisualBasic", "Languages\SyntaxGenDotNet.VisualBasic\SyntaxGenDotNet.VisualBasic.vbproj", "{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CIL", "SyntaxGenDotNet.CIL\SyntaxGenDotNet.CIL.csproj", "{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CIL", "Languages\SyntaxGenDotNet.CIL\SyntaxGenDotNet.CIL.csproj", "{E9F77221-BC50-4A6B-89BC-139EC5AAEA86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CppCLI", "SyntaxGenDotNet.CppCLI\SyntaxGenDotNet.CppCLI.csproj", "{ACDC340A-D5D9-4AC9-B31D-682EB31C9765}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.CppCLI", "Languages\SyntaxGenDotNet.CppCLI\SyntaxGenDotNet.CppCLI.csproj", "{ACDC340A-D5D9-4AC9-B31D-682EB31C9765}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.FSharp", "SyntaxGenDotNet.FSharp\SyntaxGenDotNet.FSharp.csproj", "{BB259937-B1E7-4E63-9938-A3C93873F9B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenDotNet.FSharp", "Languages\SyntaxGenDotNet.FSharp\SyntaxGenDotNet.FSharp.csproj", "{BB259937-B1E7-4E63-9938-A3C93873F9B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{142A6092-A5CB-4D20-908C-55A58CC33445}"
 	ProjectSection(SolutionItems) = preProject
@@ -34,6 +34,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\nightly.yml = .github\workflows\nightly.yml
 		.github\workflows\prerelease.yml = .github\workflows\prerelease.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Languages", "Languages", "{0FC7D30D-BAC8-467C-90BC-CDDE67C8475B}"
+	ProjectSection(SolutionItems) = preProject
+		Languages\Directory.Build.props = Languages\Directory.Build.props
 	EndProjectSection
 EndProject
 Global
@@ -133,5 +138,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BF741F42-243C-4E4F-940C-B7C340DBA874} = {0FC7D30D-BAC8-467C-90BC-CDDE67C8475B}
+		{E9F77221-BC50-4A6B-89BC-139EC5AAEA86} = {0FC7D30D-BAC8-467C-90BC-CDDE67C8475B}
+		{904E4925-1789-4ECF-9DBC-7EAB3CBADF4F} = {0FC7D30D-BAC8-467C-90BC-CDDE67C8475B}
+		{BB259937-B1E7-4E63-9938-A3C93873F9B0} = {0FC7D30D-BAC8-467C-90BC-CDDE67C8475B}
+		{ACDC340A-D5D9-4AC9-B31D-682EB31C9765} = {0FC7D30D-BAC8-467C-90BC-CDDE67C8475B}
 	EndGlobalSection
 EndGlobal
