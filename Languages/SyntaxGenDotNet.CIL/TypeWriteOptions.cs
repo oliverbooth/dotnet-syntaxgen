@@ -3,7 +3,7 @@
 /// <summary>
 ///     Provides options for writing a type.
 /// </summary>
-internal struct TypeWriteOptions
+public struct TypeWriteOptions
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="TypeWriteOptions" /> struct.

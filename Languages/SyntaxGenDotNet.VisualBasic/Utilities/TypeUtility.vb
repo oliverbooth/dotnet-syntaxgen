@@ -7,7 +7,10 @@ Imports SyntaxGenDotNet.Syntax.Tokens
 Imports X10D.Core
 
 Namespace Utilities
-    Friend Module TypeUtility
+    ''' <summary>
+    '''     Provides utility methods for working with types in the Visual Basic language.
+    ''' </summary>
+    Public Module TypeUtility
         Private ReadOnly LanguageAliases As New Dictionary(Of Type, KeywordToken) From {
             {GetType(Byte), New KeywordToken("Byte")},
             {GetType(SByte), New KeywordToken("SByte")},

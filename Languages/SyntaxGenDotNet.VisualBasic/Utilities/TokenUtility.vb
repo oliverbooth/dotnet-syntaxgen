@@ -3,6 +3,9 @@ Imports System.Linq.Expressions
 Imports SyntaxGenDotNet.Syntax.Tokens
 
 Namespace Utilities
+    ''' <summary>
+    '''     Provides utility methods for working with tokens in the Visual Basic language.
+    ''' </summary>
     Public Module TokenUtility
         ''' <summary>
         '''     Creates a literal token from a value.

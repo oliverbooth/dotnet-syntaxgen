@@ -3,7 +3,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CppCLI.Utilities;
 
-internal static class TokenUtility
+/// <summary>
+///     Provides utility methods for working with tokens in the C++/CLI language.
+/// </summary>
+public static class TokenUtility
 {
     /// <summary>
     ///     Creates a literal token from a value.

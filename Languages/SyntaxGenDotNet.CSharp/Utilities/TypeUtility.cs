@@ -7,7 +7,10 @@ using X10D.Linq;
 
 namespace SyntaxGenDotNet.CSharp.Utilities;
 
-internal static class TypeUtility
+/// <summary>
+///     Provides utility methods for working with types in the C# language.
+/// </summary>
+public static class TypeUtility
 {
     private static readonly List<Type> TupleTypes = new()
     {

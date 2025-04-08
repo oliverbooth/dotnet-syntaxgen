@@ -2,7 +2,7 @@
 Imports SyntaxGenDotNet.Syntax
 
 Namespace Utilities
-    Friend Partial Module ModifierUtility
+    Partial Public Module ModifierUtility
         ''' <summary>
         '''     Writes the pass-by modifiers for the specified <see cref="ParameterInfo" /> to the specified
         '''     <see cref="SyntaxNode" />. 

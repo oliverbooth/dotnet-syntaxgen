@@ -7,7 +7,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp.Utilities;
 
-internal static class AttributeUtility
+/// <summary>
+///     Provides utility methods for working with attributes in the C# language.
+/// </summary>
+public static class AttributeUtility
 {
     /// <summary>
     ///     Writes a custom attribute to the specified node.

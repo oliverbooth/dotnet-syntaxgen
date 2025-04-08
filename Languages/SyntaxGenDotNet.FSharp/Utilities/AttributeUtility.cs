@@ -7,7 +7,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.FSharp.Utilities;
 
-internal static class AttributeUtility
+/// <summary>
+///     Provides utility methods for working with attributes in the F# language.
+/// </summary>
+public static class AttributeUtility
 {
     /// <summary>
     ///     Writes a custom attribute to the specified node.

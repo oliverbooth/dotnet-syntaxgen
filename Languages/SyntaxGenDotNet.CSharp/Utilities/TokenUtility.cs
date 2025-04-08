@@ -3,7 +3,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CSharp.Utilities;
 
-internal static class TokenUtility
+/// <summary>
+///     Provides utility methods for working with tokens in the C# language.
+/// </summary>
+public static class TokenUtility
 {
     /// <summary>
     ///     Creates a literal token from a value.

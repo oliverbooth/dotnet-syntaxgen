@@ -1,7 +1,7 @@
 ﻿''' <summary>
 '''     Provides options for writing a type.
 ''' </summary>
-Friend Structure TypeWriteOptions
+Public Structure TypeWriteOptions
     Public Shared ReadOnly DefaultOptions As New TypeWriteOptions() With {
         .TrimAttributeSuffix = False,
         .WriteAlias = True,

@@ -4,7 +4,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.FSharp.Utilities;
 
-internal static class TypeUtility
+/// <summary>
+///     Provides utility methods for working with types in the F# language.
+/// </summary>
+public static class TypeUtility
 {
     private static readonly Dictionary<Type, KeywordToken> LanguageAliases = new()
     {

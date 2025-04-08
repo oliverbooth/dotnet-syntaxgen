@@ -6,7 +6,10 @@ Imports SyntaxGenDotNet.Syntax
 Imports SyntaxGenDotNet.Syntax.Tokens
 
 Namespace Utilities
-    Friend Module AttributeUtility
+    ''' <summary>
+    '''     Provides utility methods for working with attributes in the Visual Basic language.
+    ''' </summary>
+    Public Module AttributeUtility
         ''' <summary>
         '''     Writes a custom attribute to the specified node.
         ''' </summary>

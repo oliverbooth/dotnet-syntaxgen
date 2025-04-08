@@ -2,7 +2,10 @@
 
 namespace SyntaxGenDotNet.CIL.Utilities;
 
-internal static class TokenUtility
+/// <summary>
+///     Provides utility methods for working with tokens in the CIL language.
+/// </summary>
+public static class TokenUtility
 {
     /// <summary>
     ///     Creates a literal token from a value.

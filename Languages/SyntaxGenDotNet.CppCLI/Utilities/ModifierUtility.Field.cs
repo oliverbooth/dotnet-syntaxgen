@@ -3,7 +3,7 @@ using SyntaxGenDotNet.Syntax;
 
 namespace SyntaxGenDotNet.CppCLI.Utilities;
 
-internal static partial class ModifierUtility
+public static partial class ModifierUtility
 {
     /// <summary>
     ///     Writes all modifiers for the specified <see cref="FieldInfo" /> to the specified <see cref="SyntaxNode" />. 

@@ -6,7 +6,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CIL.Utilities;
 
-internal static class TypeUtility
+/// <summary>
+///     Provides utility methods for working with types in the CIL language.
+/// </summary>
+public static class TypeUtility
 {
     private static readonly Dictionary<Type, KeywordToken> LanguageAliases = new()
     {
@@ -199,7 +202,7 @@ internal static class TypeUtility
     /// <param name="type">The type for which to write the name.</param>
     public static void WriteTypeName(SyntaxNode node, Type type)
     {
-        WriteTypeName(node, type, new TypeWriteOptions {WriteAlias = true, WriteNamespace = true, WriteKindPrefix = true});
+        WriteTypeName(node, type, new TypeWriteOptions { WriteAlias = true, WriteNamespace = true, WriteKindPrefix = true });
     }
 
     /// <summary>
@@ -224,7 +227,7 @@ internal static class TypeUtility
 
         if (!options.WriteNamespace)
         {
-            if (options.WriteKindPrefix && type is {IsValueType: false, IsGenericType: true})
+            if (options.WriteKindPrefix && type is { IsValueType: false, IsGenericType: true })
             {
                 node.AddChild(Keywords.ClassKeyword);
             }
@@ -382,7 +385,7 @@ internal static class TypeUtility
             }
         }
 
-        if (options.WriteGenericArguments && type is {IsGenericType: true, IsGenericParameter: false})
+        if (options.WriteGenericArguments && type is { IsGenericType: true, IsGenericParameter: false })
         {
             WriteGenericArguments(node, type);
         }

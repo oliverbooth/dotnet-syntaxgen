@@ -3,7 +3,7 @@ using SyntaxGenDotNet.Syntax;
 
 namespace SyntaxGenDotNet.CSharp.Utilities;
 
-internal static partial class ModifierUtility
+public static partial class ModifierUtility
 {
     /// <summary>
     ///     Writes the pass-by modifiers for the specified <see cref="ParameterInfo" /> to the specified

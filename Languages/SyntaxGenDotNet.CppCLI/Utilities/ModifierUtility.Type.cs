@@ -3,7 +3,7 @@ using SyntaxGenDotNet.Syntax;
 
 namespace SyntaxGenDotNet.CppCLI.Utilities;
 
-internal static partial class ModifierUtility
+public static partial class ModifierUtility
 {
     /// <summary>
     ///     Writes the inheritance modifiers for the specified <see cref="Type" /> to the specified

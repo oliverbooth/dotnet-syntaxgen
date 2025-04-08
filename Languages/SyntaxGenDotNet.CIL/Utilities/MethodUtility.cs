@@ -4,7 +4,10 @@ using SyntaxGenDotNet.Syntax;
 
 namespace SyntaxGenDotNet.CIL.Utilities;
 
-internal static class MethodUtility
+/// <summary>
+///     Provides utility methods for working with methods in the CIL language.
+/// </summary>
+public static class MethodUtility
 {
     /// <summary>
     ///     Writes all attributes for the specified <see cref="MethodInfo" /> to the specified <see cref="SyntaxNode" />.

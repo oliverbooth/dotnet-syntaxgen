@@ -3,7 +3,10 @@ using SyntaxGenDotNet.Syntax;
 
 namespace SyntaxGenDotNet.CIL.Utilities;
 
-internal static class FieldUtility
+/// <summary>
+///     Provides utility methods for working with fields in the CIL language.
+/// </summary>
+public static class FieldUtility
 {
     /// <summary>
     ///     Writes the modifiers for a field declaration.

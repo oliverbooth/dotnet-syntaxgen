@@ -7,7 +7,10 @@ using SyntaxGenDotNet.Syntax.Tokens;
 
 namespace SyntaxGenDotNet.CppCLI.Utilities;
 
-internal static class AttributeUtility
+/// <summary>
+///     Provides utility methods for working with attributes in the C++/CLI language.
+/// </summary>
+public static class AttributeUtility
 {
     /// <summary>
     ///     Writes a custom attribute to the specified node.
@@ -16,7 +19,7 @@ internal static class AttributeUtility
     /// <param name="attributeExpression">The attribute expression to write.</param>
     public static void WriteCustomAttribute(SyntaxNode target, MemberInitExpression attributeExpression)
     {
-        var options = new TypeWriteOptions {TrimAttributeSuffix = true, WriteNamespace = true, WriteAlias = false};
+        var options = new TypeWriteOptions { TrimAttributeSuffix = true, WriteNamespace = true, WriteAlias = false };
 
         // explicit creation of the open bracket token to avoid the trailing whitespace
         // of the previous token being trimmed, as Operators.OpenBracket defaults to trimming.
@@ -82,7 +85,7 @@ internal static class AttributeUtility
     public static int WriteCustomAttributes(SyntaxGenerator generator, SyntaxNode target, ParameterInfo parameter)
     {
         var attributeCount = 0;
-        
+
         foreach (AttributeExpressionWriter writer in generator.AttributeExpressionWriters)
         {
             Type attributeType = writer.AttributeType;
@@ -98,7 +101,7 @@ internal static class AttributeUtility
                 }
             }
         }
-        
+
         return attributeCount;
     }
 
@@ -147,7 +150,7 @@ internal static class AttributeUtility
 
     private static void WriteResolvedExpression(SyntaxNode target, Expression expression)
     {
-        if (expression is UnaryExpression {NodeType: ExpressionType.Convert} unary)
+        if (expression is UnaryExpression { NodeType: ExpressionType.Convert } unary)
         {
             WriteResolvedExpression(target, unary.Operand);
             return;

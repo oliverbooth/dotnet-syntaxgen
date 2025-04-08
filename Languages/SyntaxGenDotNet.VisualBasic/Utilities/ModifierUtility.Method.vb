@@ -2,7 +2,7 @@
 Imports SyntaxGenDotNet.Syntax
 
 Namespace Utilities
-    Friend Partial Module ModifierUtility
+    Partial Public Module ModifierUtility
         ''' <summary>
         '''     Writes all modifiers for the specified <see cref="MethodBase" /> to the specified <see cref="SyntaxNode" />. 
         ''' </summary>
